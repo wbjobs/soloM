@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-electron
+release
+.DS_Store
+*.log
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+.env.local
+.env.*.local
