@@ -1,0 +1,28 @@
+{
+  "name": "markdown-editor-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/language-data": "^6.5.1",
+    "@codemirror/view": "^6.28.1",
+    "@myriaddreamin/typst-ts-renderer": "^0.5.0-rc.6",
+    "@myriaddreamin/typst.ts": "^0.5.0-rc.6",
+    "codemirror": "^6.0.1",
+    "marked": "^12.0.1",
+    "marked-highlight": "^2.1.1",
+    "dompurify": "^3.0.11",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0",
+    "vite-plugin-wasm": "^3.3.0",
+    "vite-plugin-top-level-await": "^1.4.1"
+  }
+}

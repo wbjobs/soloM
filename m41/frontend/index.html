@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 编辑器 - WASM PDF 导出</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <header class="toolbar">
+    <h1>📝 Markdown 编辑器</h1>
+    <div class="toolbar-actions">
+      <button id="themeBtn" class="btn btn-secondary">🎨 主题样式</button>
+      <button id="saveBtn" class="btn btn-primary">💾 保存文档</button>
+      <button id="historyBtn" class="btn btn-secondary">📜 历史记录</button>
+      <button id="exportPdfBtn" class="btn btn-success">📄 导出 PDF (WASM)</button>
+    </div>
+  </header>
+
+  <main class="editor-container">
+    <div class="editor-pane">
+      <div class="pane-header">
+        <span>📝 编辑区</span>
+      </div>
+      <div id="editor"></div>
+    </div>
+    <div class="preview-pane">
+      <div class="pane-header">
+        <span>👁️ 预览区</span>
+      </div>
+      <div id="preview" class="markdown-body"></div>
+    </div>
+  </main>
+
+  <div id="historyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📜 历史记录</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="historyList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="themeModal" class="modal">
+    <div class="modal-content theme-modal">
+      <div class="modal-header">
+        <h2>🎨 主题样式管理</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="theme-section">
+          <h3>预设主题</h3>
+          <div class="preset-themes" id="presetThemes">
+            <div class="theme-card active" data-theme="default">
+              <div class="theme-preview default-theme"></div>
+              <span class="theme-name">默认主题</span>
+            </div>
+            <div class="theme-card" data-theme="github">
+              <div class="theme-preview github-theme"></div>
+              <span class="theme-name">GitHub</span>
+            </div>
+            <div class="theme-card" data-theme="dark">
+              <div class="theme-preview dark-theme"></div>
+              <span class="theme-name">深色模式</span>
+            </div>
+            <div class="theme-card" data-theme="elegant">
+              <div class="theme-preview elegant-theme"></div>
+              <span class="theme-name">优雅排版</span>
+            </div>
+            <div class="theme-card" data-theme="print">
+              <div class="theme-preview print-theme"></div>
+              <span class="theme-name">打印优化</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="theme-section">
+          <h3>自定义 CSS</h3>
+          <div class="custom-css-section">
+            <div class="css-upload-area" id="cssUploadArea">
+              <input type="file" id="cssFileInput" accept=".css" style="display: none;">
+              <div class="upload-placeholder">
+                <span class="upload-icon">📁</span>
+                <p>点击或拖拽 .css 文件到此处上传</p>
+                <small>支持自定义样式，将应用到预览区和导出的 PDF</small>
+              </div>
+            </div>
+            <div class="css-editor-area" id="cssEditorArea" style="display: none;">
+              <div class="css-editor-header">
+                <span id="currentCssName">custom.css</span>
+                <button id="clearCssBtn" class="btn btn-small btn-danger">清除</button>
+              </div>
+              <textarea id="cssEditor" class="css-editor" placeholder="/* 输入自定义 CSS 样式 */"></textarea>
+              <div class="css-actions">
+                <button id="applyCssBtn" class="btn btn-primary">应用样式</button>
+                <button id="downloadCssBtn" class="btn btn-secondary">下载 CSS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theme-section">
+          <h3>样式预览</h3>
+          <div class="style-preview" id="stylePreview">
+            <h1>标题样式</h1>
+            <p>这是一段普通文本，包含 <strong>粗体</strong> 和 <em>斜体</em> 效果。</p>
+            <blockquote>这是引用样式的示例展示</blockquote>
+            <pre><code>const code = "代码块样式";</code></pre>
+            <ul>
+              <li>列表项一</li>
+              <li>列表项二</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>正在使用 WASM 生成 PDF...</p>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
