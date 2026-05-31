@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D WiFi 信号仿真工具</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>WiFi 信号仿真</h1>
+            
+            <div class="panel">
+                <h2>路由器设置</h2>
+                <div class="form-group">
+                    <label for="power">发射功率 (dBm):</label>
+                    <input type="range" id="power" min="10" max="30" value="20">
+                    <span id="powerValue">20</span>
+                </div>
+                <div class="form-group">
+                    <label for="channel">信道:</label>
+                    <select id="channel">
+                        <option value="1">2.4GHz - 信道 1</option>
+                        <option value="6">2.4GHz - 信道 6</option>
+                        <option value="11">2.4GHz - 信道 11</option>
+                        <option value="36">5GHz - 信道 36</option>
+                        <option value="149">5GHz - 信道 149</option>
+                    </select>
+                </div>
+                <button id="addRouter" class="btn btn-primary">放置路由器</button>
+                <button id="clearRouters" class="btn btn-secondary">清除所有</button>
+            </div>
+            
+            <div class="panel">
+                <h2>已放置的路由器</h2>
+                <div id="routerList" class="router-list"></div>
+            </div>
+            
+            <div class="panel">
+                <h2>热力图设置</h2>
+                <div class="form-group">
+                    <label for="gridResolution">网格分辨率:</label>
+                    <select id="gridResolution">
+                        <option value="20">低 (20x16)</option>
+                        <option value="40" selected>中 (40x32)</option>
+                        <option value="80">高 (80x64)</option>
+                    </select>
+                </div>
+                <button id="calculateHeatmap" class="btn btn-primary">生成热力图</button>
+                <button id="clearHeatmap" class="btn btn-secondary">清除热力图</button>
+            </div>
+            
+            <div class="panel">
+                <h2>墙体绘制</h2>
+                <div class="form-group">
+                    <label for="wallMaterial">墙体材质:</label>
+                    <select id="wallMaterial">
+                        <option value="concrete">混凝土 (12dB/18dB)</option>
+                        <option value="brick">砖墙 (8dB/12dB)</option>
+                        <option value="wood" selected>木板 (4dB/6dB)</option>
+                        <option value="glass">玻璃 (2dB/3dB)</option>
+                        <option value="metal">金属 (25dB/35dB)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="wallHeight">墙体高度 (m):</label>
+                    <input type="range" id="wallHeight" min="1" max="3" step="0.1" value="2.8">
+                    <span id="wallHeightValue">2.8</span>
+                </div>
+                <button id="startDrawWall" class="btn btn-primary">开始绘制墙体</button>
+                <button id="cancelDrawWall" class="btn btn-secondary" style="display:none;">取消绘制</button>
+                <button id="clearUserWalls" class="btn btn-secondary">清除用户墙体</button>
+                <div id="drawHint" class="draw-hint" style="display:none; margin-top:10px; padding:8px; background:#1a1a2e; border-radius:4px; font-size:0.8rem; color:#aaa;">
+                    点击地板设置起点，再次点击设置终点
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>已绘制的墙体</h2>
+                <div id="wallList" class="router-list"></div>
+            </div>
+            
+            <div class="panel">
+                <h2>视图控制</h2>
+                <button id="topView" class="btn btn-small">顶视图</button>
+                <button id="perspectiveView" class="btn btn-small">透视图</button>
+                <button id="resetCamera" class="btn btn-small">重置视角</button>
+            </div>
+            
+            <div class="info-panel">
+                <h3>操作说明</h3>
+                <ul>
+                    <li>左键拖动: 旋转视角</li>
+                    <li>右键拖动: 平移</li>
+                    <li>滚轮: 缩放</li>
+                    <li>放置模式: 点击地板放置路由器</li>
+                    <li>绘制模式: 点击两点创建墙体</li>
+                    <li>按 ESC: 取消当前操作</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div id="scene-container"></div>
+            <div id="status-bar" class="status-bar">就绪</div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "/node_modules/three/build/three.module.js",
+            "three/addons/": "/node_modules/three/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
