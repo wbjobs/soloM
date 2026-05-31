@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nats:
+    image: nats:2.10-alpine
+    container_name: log-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: "-m 8222"
+    restart: unless-stopped
+    networks:
+      - log-network
+
+  log-shipper:
+    build:
+      context: ./log-shipper
+      dockerfile: Dockerfile
+    container_name: log-shipper
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - nats
+    restart: unless-stopped
+    networks:
+      - log-network
+    environment:
+      - NATS_URL=nats://nats:4222
+
+  alert-service:
+    build:
+      context: ./alert-service
+      dockerfile: Dockerfile
+    container_name: alert-service
+    volumes:
+      - ./config:/app/config
+    depends_on:
+      - nats
+    restart: unless-stopped
+    networks:
+      - log-network
+    environment:
+      - NATS_URL=nats://nats:4222
+
+networks:
+  log-network:
+    driver: bridge

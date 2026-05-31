@@ -1,0 +1,32 @@
+nats:
+  url: "nats://localhost:4222"
+  subject: "logs"
+
+log_shipper:
+  watch_dir: "./logs"
+  file_pattern: "*.log"
+  scan_interval: 1
+  health_check_interval: 5
+  reopen_max_retry: 5
+
+alert_service:
+  patterns:
+    - "ERROR"
+    - "Exception"
+    - "exception"
+    - "Error"
+  error_code_regex: '(?:ERROR|Error|error)[_:]\s*([A-Z0-9_]+)'
+  aggregation:
+    enabled: true
+    window_sec: 60
+    threshold: 100
+    silence_sec: 300
+  webhook:
+    dingtalk:
+      enabled: false
+      url: ""
+      secret: ""
+    feishu:
+      enabled: false
+      url: ""
+      secret: ""
