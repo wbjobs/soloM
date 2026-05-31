@@ -1,0 +1,30 @@
+{
+  "name": "smart-city-client",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^8.9.32",
+    "@deck.gl/extensions": "^8.9.32",
+    "@deck.gl/geo-layers": "^8.9.32",
+    "@deck.gl/layers": "^8.9.32",
+    "@deck.gl/mesh-layers": "^8.9.32",
+    "cesium": "^1.111.0",
+    "deck.gl": "^8.9.32",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "resium": "^1.16.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "vite-plugin-cesium": "^1.2.22"
+  }
+}

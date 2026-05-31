@@ -1,0 +1,3789 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.44227793738416,
+            39.95765242149427
+          ],
+          [
+            116.45035593535516,
+            39.96157400101073
+          ],
+          [
+            116.44758418118181,
+            39.96377178030286
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1,
+        "pipeId": "PIPE-000001",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 463,
+        "length": 1152.8,
+        "depth": 5.241220435037657,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2022,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-06-17",
+          "warrantyYears": 18
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40064966334445,
+            39.930646526330925
+          ],
+          [
+            116.40307940779405,
+            39.92074811447279
+          ],
+          [
+            116.407948420925,
+            39.917985190968885
+          ],
+          [
+            116.41082976255808,
+            39.915716096035275
+          ]
+        ]
+      },
+      "properties": {
+        "id": 2,
+        "pipeId": "PIPE-000002",
+        "type": "gas",
+        "material": "steel",
+        "diameter": 897,
+        "length": 1985.2,
+        "depth": 1.8843998178069523,
+        "pressure": 0.2804041788040093,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2005,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-07-15",
+          "warrantyYears": 20
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37218168132176,
+            39.91291200253407
+          ],
+          [
+            116.3643926651109,
+            39.91435124730639
+          ],
+          [
+            116.36814180235103,
+            39.908195053214
+          ],
+          [
+            116.36112059626392,
+            39.909447877348235
+          ],
+          [
+            116.35490557828913,
+            39.9009521595846
+          ]
+        ]
+      },
+      "properties": {
+        "id": 3,
+        "pipeId": "PIPE-000003",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 209,
+        "length": 3131.5,
+        "depth": 1.598176761610354,
+        "pressure": null,
+        "flowRate": 383,
+        "status": "normal",
+        "yearInstalled": 2002,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-08-18",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40954525507202,
+            39.95296520506859
+          ],
+          [
+            116.40571774545286,
+            39.9494291402821
+          ],
+          [
+            116.40336453377779,
+            39.94247275630184
+          ],
+          [
+            116.40149897559166,
+            39.93851274056198
+          ],
+          [
+            116.39520551913158,
+            39.934148257597684
+          ]
+        ]
+      },
+      "properties": {
+        "id": 4,
+        "pipeId": "PIPE-000004",
+        "type": "water",
+        "material": "pvc",
+        "diameter": 432,
+        "length": 2497.3,
+        "depth": 4.763480088765361,
+        "pressure": 1.3893283721219167,
+        "flowRate": 382,
+        "status": "normal",
+        "yearInstalled": 2022,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-11-07",
+          "warrantyYears": 12
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41194539609225,
+            39.879263196913335
+          ],
+          [
+            116.41489881866356,
+            39.879417720933695
+          ],
+          [
+            116.41176988821937,
+            39.87362165534032
+          ],
+          [
+            116.41049431318471,
+            39.878648633838935
+          ],
+          [
+            116.41950564226816,
+            39.88763138939917
+          ],
+          [
+            116.42774479448389,
+            39.877701246298095
+          ]
+        ]
+      },
+      "properties": {
+        "id": 5,
+        "pipeId": "PIPE-000005",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 956,
+        "length": 4082,
+        "depth": 5.172812789945719,
+        "pressure": 0.6555550374883203,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1996,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-02-27",
+          "warrantyYears": 27
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.34811260120182,
+            39.86737619183765
+          ],
+          [
+            116.35127099100396,
+            39.859518827822036
+          ],
+          [
+            116.35681784802937,
+            39.86059517639812
+          ],
+          [
+            116.36312229474471,
+            39.868752345519596
+          ],
+          [
+            116.36594536291808,
+            39.863047624257774
+          ],
+          [
+            116.37349549864312,
+            39.86201090551756
+          ],
+          [
+            116.36406852478329,
+            39.860111546462434
+          ]
+        ]
+      },
+      "properties": {
+        "id": 6,
+        "pipeId": "PIPE-000006",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 102,
+        "length": 4614.3,
+        "depth": 1.924499203212149,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2019,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-12-18",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41826554555863,
+            39.90280084271464
+          ],
+          [
+            116.42081840389292,
+            39.89637308735548
+          ],
+          [
+            116.42913656443635,
+            39.89212565215812
+          ],
+          [
+            116.42476079408502,
+            39.88646545019348
+          ],
+          [
+            116.41860168224012,
+            39.88264740859987
+          ],
+          [
+            116.41953943006536,
+            39.87586162701169
+          ],
+          [
+            116.42102630419662,
+            39.8710727632841
+          ]
+        ]
+      },
+      "properties": {
+        "id": 7,
+        "pipeId": "PIPE-000007",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 297,
+        "length": 4305.6,
+        "depth": 1.5745323930006563,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-01-15",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39834090847431,
+            39.95437805697524
+          ],
+          [
+            116.40082632182092,
+            39.94868883027227
+          ],
+          [
+            116.39171799929346,
+            39.9505915765708
+          ]
+        ]
+      },
+      "properties": {
+        "id": 8,
+        "pipeId": "PIPE-000008",
+        "type": "sewage",
+        "material": "concrete",
+        "diameter": 605,
+        "length": 1469.3,
+        "depth": 2.8892964516667545,
+        "pressure": null,
+        "flowRate": 48,
+        "status": "maintenance",
+        "yearInstalled": 2023,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-12-24",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.35080807733947,
+            39.95630639299634
+          ],
+          [
+            116.35316452652101,
+            39.95870830516437
+          ],
+          [
+            116.34378006137298,
+            39.95977594614093
+          ]
+        ]
+      },
+      "properties": {
+        "id": 9,
+        "pipeId": "PIPE-000009",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 103,
+        "length": 1140.8,
+        "depth": 2.18585389555516,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1999,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-02-20",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38756890018172,
+            39.900041872603445
+          ],
+          [
+            116.38499776877562,
+            39.89193736271484
+          ],
+          [
+            116.39073479822218,
+            39.88323531526338
+          ],
+          [
+            116.39363088893914,
+            39.87772018224098
+          ],
+          [
+            116.38610601357249,
+            39.87148580840847
+          ],
+          [
+            116.39148558052578,
+            39.87905481408447
+          ],
+          [
+            116.38580243041568,
+            39.87150131721101
+          ]
+        ]
+      },
+      "properties": {
+        "id": 10,
+        "pipeId": "PIPE-000010",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 182,
+        "length": 5536.9,
+        "depth": 1.2688527224358062,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1994,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-08-28",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.42404639555139,
+            39.943013177271055
+          ],
+          [
+            116.41759918808843,
+            39.95265404512774
+          ],
+          [
+            116.42605408364957,
+            39.95595392453513
+          ]
+        ]
+      },
+      "properties": {
+        "id": 11,
+        "pipeId": "PIPE-000011",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 995,
+        "length": 2009.8,
+        "depth": 4.661275468617249,
+        "pressure": 0.5153121657741224,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2007,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-06-25",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.42260463272903,
+            39.92756451263004
+          ],
+          [
+            116.41589677690956,
+            39.93332174033331
+          ],
+          [
+            116.40808325402337,
+            39.933475578316894
+          ],
+          [
+            116.41769388400851,
+            39.936245052942105
+          ]
+        ]
+      },
+      "properties": {
+        "id": 12,
+        "pipeId": "PIPE-000012",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 584,
+        "length": 2396,
+        "depth": 5.094510663820565,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2001,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-01-16",
+          "warrantyYears": 19
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40617518916119,
+            39.93666464175386
+          ],
+          [
+            116.39792158923692,
+            39.9415305679735
+          ],
+          [
+            116.39188019024533,
+            39.94159218975276
+          ]
+        ]
+      },
+      "properties": {
+        "id": 13,
+        "pipeId": "PIPE-000013",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 568,
+        "length": 1400.3,
+        "depth": 1.8963269927568596,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 1998,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-07-27",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40823813914243,
+            39.88097219572306
+          ],
+          [
+            116.4153372251591,
+            39.87661447548363
+          ],
+          [
+            116.41208672821757,
+            39.88557536130766
+          ],
+          [
+            116.41334076275217,
+            39.89111792723003
+          ],
+          [
+            116.41068667052399,
+            39.88952090410308
+          ],
+          [
+            116.40386363412468,
+            39.889114734751075
+          ],
+          [
+            116.4102961457613,
+            39.893421401654635
+          ]
+        ]
+      },
+      "properties": {
+        "id": 14,
+        "pipeId": "PIPE-000014",
+        "type": "gas",
+        "material": "steel",
+        "diameter": 548,
+        "length": 4028.5,
+        "depth": 5.303737331318739,
+        "pressure": 0.4448947202803149,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 1990,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-05-21",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38140767482315,
+            39.92597565221125
+          ],
+          [
+            116.38349334010725,
+            39.925078116531424
+          ],
+          [
+            116.38569776888835,
+            39.923319389712795
+          ]
+        ]
+      },
+      "properties": {
+        "id": 15,
+        "pipeId": "PIPE-000015",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 100,
+        "length": 474.4,
+        "depth": 1.8800079030173713,
+        "pressure": null,
+        "flowRate": 476,
+        "status": "maintenance",
+        "yearInstalled": 1998,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-07-20",
+          "warrantyYears": 13
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3680555375222,
+            39.92491920620544
+          ],
+          [
+            116.36077153220491,
+            39.93464210769414
+          ],
+          [
+            116.36035158324852,
+            39.94463632478655
+          ],
+          [
+            116.36098777474082,
+            39.94242499265603
+          ],
+          [
+            116.36195679941343,
+            39.938420322604365
+          ]
+        ]
+      },
+      "properties": {
+        "id": 16,
+        "pipeId": "PIPE-000016",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 587,
+        "length": 3058,
+        "depth": 5.304145635840113,
+        "pressure": null,
+        "flowRate": 263,
+        "status": "normal",
+        "yearInstalled": 2015,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-09-03",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.36813513677525,
+            39.87467042024389
+          ],
+          [
+            116.36123044467637,
+            39.872974237526115
+          ],
+          [
+            116.36533396453065,
+            39.86969788591848
+          ]
+        ]
+      },
+      "properties": {
+        "id": 17,
+        "pipeId": "PIPE-000017",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 272,
+        "length": 1122.1,
+        "depth": 1.7520349363895074,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2023,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-09-16",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39497914132224,
+            39.88713430184682
+          ],
+          [
+            116.3957194136621,
+            39.89566972317613
+          ],
+          [
+            116.40228327667354,
+            39.90539880521848
+          ],
+          [
+            116.39289861639439,
+            39.898627404817404
+          ]
+        ]
+      },
+      "properties": {
+        "id": 18,
+        "pipeId": "PIPE-000018",
+        "type": "water",
+        "material": "steel",
+        "diameter": 353,
+        "length": 3262.6,
+        "depth": 1.9342427890881044,
+        "pressure": 1.0098554485169526,
+        "flowRate": 329,
+        "status": "maintenance",
+        "yearInstalled": 2023,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-02-28",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41948107988956,
+            39.90182837020044
+          ],
+          [
+            116.42735979630437,
+            39.902877660141506
+          ],
+          [
+            116.43585695464418,
+            39.89575831989167
+          ],
+          [
+            116.42608795075846,
+            39.88756475116659
+          ],
+          [
+            116.42311875085592,
+            39.88836652606919
+          ],
+          [
+            116.4304377006864,
+            39.88480267142649
+          ],
+          [
+            116.4365342646382,
+            39.87769957333096
+          ]
+        ]
+      },
+      "properties": {
+        "id": 19,
+        "pipeId": "PIPE-000019",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 387,
+        "length": 4935.6,
+        "depth": 1.1596048393652694,
+        "pressure": 1.287297774887821,
+        "flowRate": 91,
+        "status": "maintenance",
+        "yearInstalled": 1990,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-03-25",
+          "warrantyYears": 12
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39143600638937,
+            39.87583439721607
+          ],
+          [
+            116.39152125739885,
+            39.88133208984325
+          ],
+          [
+            116.38534951939909,
+            39.880373536336236
+          ],
+          [
+            116.39295499015223,
+            39.88999510504743
+          ],
+          [
+            116.3967638406003,
+            39.88379808518813
+          ],
+          [
+            116.39649656619238,
+            39.876517478998075
+          ],
+          [
+            116.39032528589172,
+            39.87395940809776
+          ]
+        ]
+      },
+      "properties": {
+        "id": 20,
+        "pipeId": "PIPE-000020",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 440,
+        "length": 4562.2,
+        "depth": 4.981663714080138,
+        "pressure": null,
+        "flowRate": 119,
+        "status": "normal",
+        "yearInstalled": 2005,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-07-09",
+          "warrantyYears": 25
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41090274445946,
+            39.908837388658746
+          ],
+          [
+            116.40189336692325,
+            39.91098810325226
+          ],
+          [
+            116.39556588736862,
+            39.901777876107566
+          ],
+          [
+            116.4004769491526,
+            39.90394778363839
+          ]
+        ]
+      },
+      "properties": {
+        "id": 21,
+        "pipeId": "PIPE-000021",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 850,
+        "length": 2441.6,
+        "depth": 2.1906400006900286,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1994,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-05-09",
+          "warrantyYears": 10
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40400156123364,
+            39.91047271737528
+          ],
+          [
+            116.4023195574762,
+            39.918125941972534
+          ],
+          [
+            116.41206767174249,
+            39.91937225261977
+          ],
+          [
+            116.41853606943802,
+            39.92080654257613
+          ],
+          [
+            116.40874911612815,
+            39.91110594761454
+          ]
+        ]
+      },
+      "properties": {
+        "id": 22,
+        "pipeId": "PIPE-000022",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 481,
+        "length": 3637.6,
+        "depth": 2.3155985907044254,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2002,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-02-03",
+          "warrantyYears": 12
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39639318019799,
+            39.94622907938657
+          ],
+          [
+            116.3899543948744,
+            39.94281463349471
+          ],
+          [
+            116.38800355421169,
+            39.93289352667105
+          ]
+        ]
+      },
+      "properties": {
+        "id": 23,
+        "pipeId": "PIPE-000023",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 881,
+        "length": 1779.9,
+        "depth": 5.707916486686331,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-09-22",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.389086903957,
+            39.88089239442789
+          ],
+          [
+            116.38320307769321,
+            39.87769661831902
+          ],
+          [
+            116.3912327138885,
+            39.872137330139836
+          ],
+          [
+            116.3977742427176,
+            39.87966855115558
+          ],
+          [
+            116.39854060521026,
+            39.875998514890746
+          ],
+          [
+            116.38998985111644,
+            39.87412432115097
+          ]
+        ]
+      },
+      "properties": {
+        "id": 24,
+        "pipeId": "PIPE-000024",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 934,
+        "length": 3710.1,
+        "depth": 1.431121335081841,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 2021,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-06-08",
+          "warrantyYears": 18
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.36018917038656,
+            39.91440760588344
+          ],
+          [
+            116.35481929148077,
+            39.91073640078518
+          ],
+          [
+            116.35935926715712,
+            39.91545732073186
+          ],
+          [
+            116.36051354813925,
+            39.922168257525016
+          ]
+        ]
+      },
+      "properties": {
+        "id": 25,
+        "pipeId": "PIPE-000025",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 936,
+        "length": 2015,
+        "depth": 3.4655594077105314,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2020,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-10-28",
+          "warrantyYears": 10
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.42288050238916,
+            39.89629709636493
+          ],
+          [
+            116.4303924716018,
+            39.89370255830308
+          ],
+          [
+            116.42735091549665,
+            39.887157003120585
+          ],
+          [
+            116.43220084958283,
+            39.88819947196135
+          ],
+          [
+            116.4259479316068,
+            39.89733381305126
+          ],
+          [
+            116.43567707178028,
+            39.901470036216324
+          ],
+          [
+            116.4338456979189,
+            39.906654033651336
+          ]
+        ]
+      },
+      "properties": {
+        "id": 26,
+        "pipeId": "PIPE-000026",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 309,
+        "length": 4590.5,
+        "depth": 3.8071793687456292,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2008,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-09-13",
+          "warrantyYears": 24
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41654118012077,
+            39.88543552200437
+          ],
+          [
+            116.40935217055637,
+            39.88600432647056
+          ],
+          [
+            116.41674906996292,
+            39.88031273480911
+          ]
+        ]
+      },
+      "properties": {
+        "id": 27,
+        "pipeId": "PIPE-000027",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 901,
+        "length": 1507.8,
+        "depth": 4.116230547139052,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2008,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-03-24",
+          "warrantyYears": 24
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41045706762792,
+            39.93629575336327
+          ],
+          [
+            116.41311695537473,
+            39.941766173898735
+          ],
+          [
+            116.40944452773667,
+            39.94878316005243
+          ],
+          [
+            116.40758626920153,
+            39.95496216256598
+          ],
+          [
+            116.41190737721895,
+            39.963954916891836
+          ],
+          [
+            116.40550184346503,
+            39.95993865714668
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28,
+        "pipeId": "PIPE-000028",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 447,
+        "length": 3959,
+        "depth": 2.298011793308289,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2008,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-12-18",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 29,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39825514958191,
+            39.90545378594903
+          ],
+          [
+            116.40290225969775,
+            39.90727237452326
+          ],
+          [
+            116.41120811395888,
+            39.91658833383305
+          ],
+          [
+            116.40638474724959,
+            39.908581166674324
+          ],
+          [
+            116.41148108648822,
+            39.909384611832316
+          ],
+          [
+            116.40772393874214,
+            39.89940102163907
+          ],
+          [
+            116.4033088749645,
+            39.909255230404796
+          ]
+        ]
+      },
+      "properties": {
+        "id": 29,
+        "pipeId": "PIPE-000029",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 938,
+        "length": 5429.1,
+        "depth": 5.209794271355927,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 2012,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-06-09",
+          "warrantyYears": 14
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.386085849874,
+            39.90013513829459
+          ],
+          [
+            116.3793807731392,
+            39.89679065007189
+          ],
+          [
+            116.38402686404525,
+            39.89197919070314
+          ],
+          [
+            116.37733141904567,
+            39.901632364571356
+          ],
+          [
+            116.37495641401236,
+            39.90261624673134
+          ],
+          [
+            116.38084184136773,
+            39.89889070631291
+          ]
+        ]
+      },
+      "properties": {
+        "id": 30,
+        "pipeId": "PIPE-000030",
+        "type": "sewage",
+        "material": "concrete",
+        "diameter": 763,
+        "length": 3439.1,
+        "depth": 2.1032818744373305,
+        "pressure": null,
+        "flowRate": 489,
+        "status": "maintenance",
+        "yearInstalled": 2020,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-02-13",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.44176551230805,
+            39.91573746362905
+          ],
+          [
+            116.43659664844257,
+            39.90972176618059
+          ],
+          [
+            116.42991351137374,
+            39.90457950217441
+          ]
+        ]
+      },
+      "properties": {
+        "id": 31,
+        "pipeId": "PIPE-000031",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 360,
+        "length": 1605.7,
+        "depth": 2.6283006392104458,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1995,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-01-25",
+          "warrantyYears": 14
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.42159381854347,
+            39.869694316638224
+          ],
+          [
+            116.42748214329842,
+            39.862782976740796
+          ],
+          [
+            116.42713022696717,
+            39.85454722246684
+          ],
+          [
+            116.43415852702262,
+            39.860325215730406
+          ],
+          [
+            116.42513871851914,
+            39.85539497109836
+          ],
+          [
+            116.41941802082805,
+            39.86158555414418
+          ]
+        ]
+      },
+      "properties": {
+        "id": 32,
+        "pipeId": "PIPE-000032",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 618,
+        "length": 4494.8,
+        "depth": 5.366448230956578,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2012,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-07-05",
+          "warrantyYears": 11
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41522976474154,
+            39.88793707809536
+          ],
+          [
+            116.41316792690048,
+            39.895226444709984
+          ],
+          [
+            116.41449212790457,
+            39.89036268735987
+          ],
+          [
+            116.42070712575207,
+            39.894755068577616
+          ],
+          [
+            116.43059698002989,
+            39.886588255489485
+          ],
+          [
+            116.42142827859034,
+            39.889069655283464
+          ]
+        ]
+      },
+      "properties": {
+        "id": 33,
+        "pipeId": "PIPE-000033",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 812,
+        "length": 4164.6,
+        "depth": 4.086312290471608,
+        "pressure": 0.45047281259087507,
+        "flowRate": 105,
+        "status": "normal",
+        "yearInstalled": 2023,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-05-01",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 34,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.42114933251366,
+            39.91499779006445
+          ],
+          [
+            116.41294986540602,
+            39.91807412437612
+          ],
+          [
+            116.40954057006518,
+            39.91219352721245
+          ]
+        ]
+      },
+      "properties": {
+        "id": 34,
+        "pipeId": "PIPE-000034",
+        "type": "water",
+        "material": "pvc",
+        "diameter": 299,
+        "length": 1491.5,
+        "depth": 1.2296596943622486,
+        "pressure": 0.5037612443758333,
+        "flowRate": 369,
+        "status": "normal",
+        "yearInstalled": 2015,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-02-21",
+          "warrantyYears": 21
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 35,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.36137609906118,
+            39.858312820247015
+          ],
+          [
+            116.3669577447608,
+            39.852443178825524
+          ],
+          [
+            116.36589408201017,
+            39.85835103278962
+          ],
+          [
+            116.37391549479361,
+            39.85364521612343
+          ],
+          [
+            116.36817019968535,
+            39.849023460506515
+          ]
+        ]
+      },
+      "properties": {
+        "id": 35,
+        "pipeId": "PIPE-000035",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 382,
+        "length": 3038.1,
+        "depth": 4.26303345147505,
+        "pressure": 0.30528330238712137,
+        "flowRate": 288,
+        "status": "maintenance",
+        "yearInstalled": 1998,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-05-07",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 36,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3721989548929,
+            39.89005195252903
+          ],
+          [
+            116.36704340149008,
+            39.88701193971026
+          ],
+          [
+            116.3677144113539,
+            39.89098833867404
+          ],
+          [
+            116.36130752590525,
+            39.890314267141164
+          ],
+          [
+            116.35805570164511,
+            39.89696786438509
+          ],
+          [
+            116.36721164614217,
+            39.8919620568061
+          ]
+        ]
+      },
+      "properties": {
+        "id": 36,
+        "pipeId": "PIPE-000036",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 233,
+        "length": 3295.9,
+        "depth": 3.503135563210529,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 2022,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-02-08",
+          "warrantyYears": 12
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 37,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.43531285387242,
+            39.872684742566676
+          ],
+          [
+            116.42658447091034,
+            39.87152827481683
+          ],
+          [
+            116.42981056702122,
+            39.87143705980492
+          ],
+          [
+            116.42961732319446,
+            39.86776040052298
+          ],
+          [
+            116.42968671653855,
+            39.86209662389782
+          ],
+          [
+            116.4360581273902,
+            39.86044990861517
+          ]
+        ]
+      },
+      "properties": {
+        "id": 37,
+        "pipeId": "PIPE-000037",
+        "type": "water",
+        "material": "steel",
+        "diameter": 660,
+        "length": 2639.6,
+        "depth": 5.595112276182417,
+        "pressure": 0.893097295052983,
+        "flowRate": 170,
+        "status": "maintenance",
+        "yearInstalled": 2001,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-01-18",
+          "warrantyYears": 25
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 38,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39571218089115,
+            39.884067636780074
+          ],
+          [
+            116.40138923234822,
+            39.89103471004216
+          ],
+          [
+            116.4109445242895,
+            39.884259693351964
+          ],
+          [
+            116.40255779738564,
+            39.879248213518174
+          ],
+          [
+            116.3946914247724,
+            39.872253505960664
+          ],
+          [
+            116.3962983914175,
+            39.866278391866445
+          ],
+          [
+            116.38810601835235,
+            39.87185271812081
+          ]
+        ]
+      },
+      "properties": {
+        "id": 38,
+        "pipeId": "PIPE-000038",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 526,
+        "length": 5561.1,
+        "depth": 1.0932554775982475,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2012,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-03-02",
+          "warrantyYears": 16
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 39,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.44155022738217,
+            39.948228169675744
+          ],
+          [
+            116.44843629429603,
+            39.94629255974184
+          ],
+          [
+            116.44200689521789,
+            39.94856897757541
+          ],
+          [
+            116.4462204835066,
+            39.952008853461216
+          ]
+        ]
+      },
+      "properties": {
+        "id": 39,
+        "pipeId": "PIPE-000039",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 898,
+        "length": 1750.6,
+        "depth": 1.7945903566727552,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1994,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-03-06",
+          "warrantyYears": 27
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 40,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37484237324432,
+            39.90535571437573
+          ],
+          [
+            116.38354076233836,
+            39.895961632709366
+          ],
+          [
+            116.38274169201475,
+            39.89835605124546
+          ]
+        ]
+      },
+      "properties": {
+        "id": 40,
+        "pipeId": "PIPE-000040",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 144,
+        "length": 1553.4,
+        "depth": 1.1378766192100123,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2005,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-07-10",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 41,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.34912915227073,
+            39.878845190370896
+          ],
+          [
+            116.34349213843271,
+            39.88811639950078
+          ],
+          [
+            116.3382913756478,
+            39.89562624182856
+          ],
+          [
+            116.34387225653309,
+            39.90188735920699
+          ],
+          [
+            116.33393646287622,
+            39.89539642289146
+          ]
+        ]
+      },
+      "properties": {
+        "id": 41,
+        "pipeId": "PIPE-000041",
+        "type": "sewage",
+        "material": "concrete",
+        "diameter": 233,
+        "length": 4032.8,
+        "depth": 1.9848989372903416,
+        "pressure": null,
+        "flowRate": 332,
+        "status": "normal",
+        "yearInstalled": 2008,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-03-12",
+          "warrantyYears": 20
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 42,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41024217264442,
+            39.87437310421719
+          ],
+          [
+            116.41395081454094,
+            39.86959994225138
+          ],
+          [
+            116.40628992000207,
+            39.87780640680756
+          ]
+        ]
+      },
+      "properties": {
+        "id": 42,
+        "pipeId": "PIPE-000042",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 829,
+        "length": 1737.4,
+        "depth": 5.49466332864985,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2003,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-05-09",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 43,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.43603430207128,
+            39.86694082154385
+          ],
+          [
+            116.4431301615678,
+            39.86665865241347
+          ],
+          [
+            116.44969832507665,
+            39.861315946157156
+          ],
+          [
+            116.45608677294148,
+            39.859632468995414
+          ],
+          [
+            116.45632058342292,
+            39.85594817410437
+          ]
+        ]
+      },
+      "properties": {
+        "id": 43,
+        "pipeId": "PIPE-000043",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 112,
+        "length": 2405.7,
+        "depth": 5.732061403813722,
+        "pressure": 1.1350612339064483,
+        "flowRate": 244,
+        "status": "normal",
+        "yearInstalled": 1993,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-04-09",
+          "warrantyYears": 13
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 44,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.35458186484674,
+            39.911318451602746
+          ],
+          [
+            116.35661311724105,
+            39.902598983505584
+          ],
+          [
+            116.35467833122442,
+            39.89846908313654
+          ],
+          [
+            116.3480445608241,
+            39.89228176175088
+          ],
+          [
+            116.35604953850557,
+            39.89121365758934
+          ]
+        ]
+      },
+      "properties": {
+        "id": 44,
+        "pipeId": "PIPE-000044",
+        "type": "water",
+        "material": "pvc",
+        "diameter": 393,
+        "length": 3051.6,
+        "depth": 5.968714638225432,
+        "pressure": 0.4774306254385006,
+        "flowRate": 50,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-03-27",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 45,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38371576434659,
+            39.93516789742167
+          ],
+          [
+            116.38240882037137,
+            39.92832034061609
+          ],
+          [
+            116.3814661138027,
+            39.925816528342764
+          ],
+          [
+            116.38943696376847,
+            39.923078572044304
+          ],
+          [
+            116.39290292400554,
+            39.928430504578856
+          ],
+          [
+            116.38699878678057,
+            39.926202417574494
+          ],
+          [
+            116.39172480368632,
+            39.92235224227265
+          ]
+        ]
+      },
+      "properties": {
+        "id": 45,
+        "pipeId": "PIPE-000045",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 584,
+        "length": 3611.3,
+        "depth": 2.221548900663204,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2001,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-02-16",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 46,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39980881432052,
+            39.9017986224071
+          ],
+          [
+            116.39026616302263,
+            39.90587825458868
+          ],
+          [
+            116.39053711190374,
+            39.89940895265799
+          ],
+          [
+            116.38374492547297,
+            39.90350728384393
+          ]
+        ]
+      },
+      "properties": {
+        "id": 46,
+        "pipeId": "PIPE-000046",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 707,
+        "length": 2384.5,
+        "depth": 2.834156078221545,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 1999,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-04-07",
+          "warrantyYears": 17
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 47,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39271235372863,
+            39.87175136226355
+          ],
+          [
+            116.40113116824936,
+            39.871700037222034
+          ],
+          [
+            116.40483162304123,
+            39.86195996312532
+          ],
+          [
+            116.4014049066407,
+            39.869374486577755
+          ],
+          [
+            116.40027830728525,
+            39.87745018467199
+          ]
+        ]
+      },
+      "properties": {
+        "id": 47,
+        "pipeId": "PIPE-000047",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 245,
+        "length": 3618.2,
+        "depth": 3.8918453169625113,
+        "pressure": null,
+        "flowRate": 36,
+        "status": "maintenance",
+        "yearInstalled": 2017,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-01-16",
+          "warrantyYears": 27
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 48,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.43476352563164,
+            39.88247146078456
+          ],
+          [
+            116.4349553390083,
+            39.890514285892394
+          ],
+          [
+            116.44360683050716,
+            39.88973098427923
+          ],
+          [
+            116.44870409897753,
+            39.884794537024774
+          ]
+        ]
+      },
+      "properties": {
+        "id": 48,
+        "pipeId": "PIPE-000048",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 421,
+        "length": 2333.9,
+        "depth": 1.488866573893445,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2013,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-02-20",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 49,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.4249671753195,
+            39.86397832068757
+          ],
+          [
+            116.42635919494354,
+            39.868997354524105
+          ],
+          [
+            116.43005676907036,
+            39.86505983863716
+          ]
+        ]
+      },
+      "properties": {
+        "id": 49,
+        "pipeId": "PIPE-000049",
+        "type": "gas",
+        "material": "steel",
+        "diameter": 286,
+        "length": 1108.4,
+        "depth": 4.493676060677165,
+        "pressure": 0.5587788457216714,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2020,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-09-20",
+          "warrantyYears": 10
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 50,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37925150860576,
+            39.885067497505474
+          ],
+          [
+            116.37510528163729,
+            39.88066183754897
+          ],
+          [
+            116.36883518565918,
+            39.873675751913474
+          ],
+          [
+            116.36879867295877,
+            39.87831163163033
+          ]
+        ]
+      },
+      "properties": {
+        "id": 50,
+        "pipeId": "PIPE-000050",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 226,
+        "length": 2059.4,
+        "depth": 4.163030293502297,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2018,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-08-26",
+          "warrantyYears": 18
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 51,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.4460808204898,
+            39.889610002130134
+          ],
+          [
+            116.4525062810616,
+            39.89878997207545
+          ],
+          [
+            116.4517448062622,
+            39.902107962767026
+          ],
+          [
+            116.45026111717411,
+            39.90602150708501
+          ],
+          [
+            116.45183083480306,
+            39.91097084694932
+          ]
+        ]
+      },
+      "properties": {
+        "id": 51,
+        "pipeId": "PIPE-000051",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 266,
+        "length": 2548.4,
+        "depth": 1.952532069954528,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2017,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-10-01",
+          "warrantyYears": 19
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 52,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.43041392312537,
+            39.909677482038774
+          ],
+          [
+            116.42113003084515,
+            39.9118721967476
+          ],
+          [
+            116.414030436401,
+            39.90339359544518
+          ],
+          [
+            116.41775232113201,
+            39.89614796571368
+          ]
+        ]
+      },
+      "properties": {
+        "id": 52,
+        "pipeId": "PIPE-000052",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 261,
+        "length": 2810.2,
+        "depth": 5.2976044554456125,
+        "pressure": 0.8672793329482882,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2004,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-01-05",
+          "warrantyYears": 10
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 53,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3687972427389,
+            39.93089172724651
+          ],
+          [
+            116.35892898939025,
+            39.922237003278646
+          ],
+          [
+            116.35789533370884,
+            39.92114333450848
+          ],
+          [
+            116.35699835641321,
+            39.92752348444649
+          ],
+          [
+            116.35326934430215,
+            39.92586359264721
+          ],
+          [
+            116.35186111147439,
+            39.93094986863957
+          ],
+          [
+            116.35061195514909,
+            39.93587161504167
+          ]
+        ]
+      },
+      "properties": {
+        "id": 53,
+        "pipeId": "PIPE-000053",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 217,
+        "length": 3639.1,
+        "depth": 2.662400240107611,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2010,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-03-10",
+          "warrantyYears": 13
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 54,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.43220333594091,
+            39.94472606203802
+          ],
+          [
+            116.43899831986145,
+            39.94438954243997
+          ],
+          [
+            116.435700840639,
+            39.937784718420914
+          ],
+          [
+            116.44480786182719,
+            39.9353627164547
+          ]
+        ]
+      },
+      "properties": {
+        "id": 54,
+        "pipeId": "PIPE-000054",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 335,
+        "length": 2184.9,
+        "depth": 2.713448440832974,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2005,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-12-13",
+          "warrantyYears": 20
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 55,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38421457311539,
+            39.9091523791512
+          ],
+          [
+            116.3892890172051,
+            39.90489218734062
+          ],
+          [
+            116.39048155123814,
+            39.9093263020257
+          ],
+          [
+            116.39140587082895,
+            39.91400715670495
+          ]
+        ]
+      },
+      "properties": {
+        "id": 55,
+        "pipeId": "PIPE-000055",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 695,
+        "length": 1668.6,
+        "depth": 5.256489154361917,
+        "pressure": 1.1880556782006368,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 1999,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-08-14",
+          "warrantyYears": 16
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 56,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39940963534107,
+            39.88764167823584
+          ],
+          [
+            116.40890653686321,
+            39.891140902707164
+          ],
+          [
+            116.41219532803697,
+            39.882928160052536
+          ],
+          [
+            116.41294204360369,
+            39.87947120700273
+          ],
+          [
+            116.41058376850701,
+            39.87978087147847
+          ],
+          [
+            116.40756311414393,
+            39.8896569990641
+          ],
+          [
+            116.4012055862623,
+            39.880618843656706
+          ]
+        ]
+      },
+      "properties": {
+        "id": 56,
+        "pipeId": "PIPE-000056",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 287,
+        "length": 4709.8,
+        "depth": 1.6277520050811758,
+        "pressure": 1.3080660804800424,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2018,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-07-20",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 57,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3488656157041,
+            39.94680050540391
+          ],
+          [
+            116.3515944958031,
+            39.95174941467615
+          ],
+          [
+            116.35194459822964,
+            39.96058008071689
+          ],
+          [
+            116.34604017464561,
+            39.95495009049073
+          ],
+          [
+            116.33793632978481,
+            39.95207095835179
+          ],
+          [
+            116.33396535881045,
+            39.95938829823827
+          ]
+        ]
+      },
+      "properties": {
+        "id": 57,
+        "pipeId": "PIPE-000057",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 118,
+        "length": 4018.6,
+        "depth": 3.7508451515309806,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1991,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-11-13",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 58,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.40627616991485,
+            39.88793190500335
+          ],
+          [
+            116.39790196959882,
+            39.888950261883565
+          ],
+          [
+            116.40626897267899,
+            39.883399499081264
+          ],
+          [
+            116.40462755495376,
+            39.889660012168754
+          ],
+          [
+            116.39689573497988,
+            39.89384728965621
+          ],
+          [
+            116.403072334017,
+            39.88649670743182
+          ],
+          [
+            116.40377028151576,
+            39.879126878096315
+          ]
+        ]
+      },
+      "properties": {
+        "id": 58,
+        "pipeId": "PIPE-000058",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 412,
+        "length": 4970,
+        "depth": 1.5145462674339463,
+        "pressure": 1.685205605462962,
+        "flowRate": 57,
+        "status": "maintenance",
+        "yearInstalled": 1992,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-06-22",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 59,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3998959082004,
+            39.87698166811656
+          ],
+          [
+            116.3963214174088,
+            39.868127761537366
+          ],
+          [
+            116.39913617516362,
+            39.87493910017732
+          ]
+        ]
+      },
+      "properties": {
+        "id": 59,
+        "pipeId": "PIPE-000059",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 172,
+        "length": 1822.1,
+        "depth": 3.2246728518554626,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1992,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-08-04",
+          "warrantyYears": 26
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 60,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.35786534775085,
+            39.91136884685018
+          ],
+          [
+            116.35812452081738,
+            39.91491784961902
+          ],
+          [
+            116.35029968315808,
+            39.90717835020594
+          ],
+          [
+            116.3415491682557,
+            39.90646393703422
+          ],
+          [
+            116.34187944710233,
+            39.897642120570815
+          ],
+          [
+            116.33787374980335,
+            39.894278811881875
+          ]
+        ]
+      },
+      "properties": {
+        "id": 60,
+        "pipeId": "PIPE-000060",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 853,
+        "length": 3716.4,
+        "depth": 1.2176586016864157,
+        "pressure": 0.9589348607360175,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2009,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-12-09",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 61,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39053890940711,
+            39.86909010367645
+          ],
+          [
+            116.39775200288962,
+            39.87218818003083
+          ],
+          [
+            116.38901588163567,
+            39.873719005989805
+          ]
+        ]
+      },
+      "properties": {
+        "id": 61,
+        "pipeId": "PIPE-000061",
+        "type": "gas",
+        "material": "steel",
+        "diameter": 856,
+        "length": 1467.5,
+        "depth": 2.133462485197674,
+        "pressure": 1.3289335808614056,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-10-26",
+          "warrantyYears": 14
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 62,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.36539715290937,
+            39.93954131623487
+          ],
+          [
+            116.36377456089058,
+            39.94455704347651
+          ],
+          [
+            116.35821518459747,
+            39.952891198729525
+          ],
+          [
+            116.36599120225166,
+            39.95151148091249
+          ],
+          [
+            116.36985377214891,
+            39.95444653874179
+          ],
+          [
+            116.37250943017348,
+            39.94561946050577
+          ]
+        ]
+      },
+      "properties": {
+        "id": 62,
+        "pipeId": "PIPE-000062",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 480,
+        "length": 3760.1,
+        "depth": 2.4087129640570693,
+        "pressure": 1.2860186722266393,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2010,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-01-03",
+          "warrantyYears": 10
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 63,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38029856945825,
+            39.91416281928656
+          ],
+          [
+            116.38478040336742,
+            39.91719525938533
+          ],
+          [
+            116.39403225042861,
+            39.914498564185905
+          ]
+        ]
+      },
+      "properties": {
+        "id": 63,
+        "pipeId": "PIPE-000063",
+        "type": "water",
+        "material": "steel",
+        "diameter": 323,
+        "length": 1351.4,
+        "depth": 4.5595719988045555,
+        "pressure": 0.9743521424414243,
+        "flowRate": 414,
+        "status": "normal",
+        "yearInstalled": 2015,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-06-06",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 64,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.3516123238873,
+            39.94074360728109
+          ],
+          [
+            116.36000879729687,
+            39.946765009067576
+          ],
+          [
+            116.36611733856532,
+            39.938210648365306
+          ]
+        ]
+      },
+      "properties": {
+        "id": 64,
+        "pipeId": "PIPE-000064",
+        "type": "water",
+        "material": "cast_iron",
+        "diameter": 673,
+        "length": 2060.9,
+        "depth": 1.5685267894007306,
+        "pressure": 1.3093410873530378,
+        "flowRate": 413,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-12-21",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 65,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37809223612521,
+            39.948615852951406
+          ],
+          [
+            116.37143992506401,
+            39.957121312099744
+          ],
+          [
+            116.37352022101284,
+            39.9610247029351
+          ]
+        ]
+      },
+      "properties": {
+        "id": 65,
+        "pipeId": "PIPE-000065",
+        "type": "sewage",
+        "material": "pvc",
+        "diameter": 194,
+        "length": 1568.8,
+        "depth": 3.7331192064642176,
+        "pressure": null,
+        "flowRate": 437,
+        "status": "normal",
+        "yearInstalled": 2007,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-05-19",
+          "warrantyYears": 23
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 66,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.39955766717583,
+            39.90075695722257
+          ],
+          [
+            116.40286901574828,
+            39.90255751653569
+          ],
+          [
+            116.40552762042428,
+            39.89555708470222
+          ],
+          [
+            116.40749677457862,
+            39.89241693775214
+          ]
+        ]
+      },
+      "properties": {
+        "id": 66,
+        "pipeId": "PIPE-000066",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 639,
+        "length": 1541.8,
+        "depth": 3.1844557706300547,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2023,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-05-01",
+          "warrantyYears": 27
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 67,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41725091095813,
+            39.87416916900413
+          ],
+          [
+            116.41624736165038,
+            39.87579630143635
+          ],
+          [
+            116.42400095800086,
+            39.876109037358326
+          ],
+          [
+            116.41484564028777,
+            39.87988617712812
+          ],
+          [
+            116.42046099265636,
+            39.87353657144306
+          ],
+          [
+            116.42707243818366,
+            39.87358919633467
+          ]
+        ]
+      },
+      "properties": {
+        "id": 67,
+        "pipeId": "PIPE-000067",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 839,
+        "length": 3161.7,
+        "depth": 2.6323137315162715,
+        "pressure": 0.9943168923143408,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2013,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-02-18",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 68,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38532978016347,
+            39.94422937556779
+          ],
+          [
+            116.37613343365805,
+            39.95340656000338
+          ],
+          [
+            116.38211402829775,
+            39.96312703990144
+          ],
+          [
+            116.37767305183986,
+            39.957841635046755
+          ],
+          [
+            116.3812979460593,
+            39.95872056537605
+          ],
+          [
+            116.39108781070755,
+            39.95295785301851
+          ],
+          [
+            116.39457142421251,
+            39.957478753598245
+          ]
+        ]
+      },
+      "properties": {
+        "id": 68,
+        "pipeId": "PIPE-000068",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 621,
+        "length": 5131.8,
+        "depth": 1.0201065385714816,
+        "pressure": 1.3893521619490594,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 2020,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-08-25",
+          "warrantyYears": 28
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 69,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38526494490984,
+            39.939733086450666
+          ],
+          [
+            116.3914898382357,
+            39.93527612373468
+          ],
+          [
+            116.39791719389683,
+            39.935628156070315
+          ],
+          [
+            116.4027710001773,
+            39.93982635333749
+          ],
+          [
+            116.40656653748363,
+            39.94791470097627
+          ]
+        ]
+      },
+      "properties": {
+        "id": 69,
+        "pipeId": "PIPE-000069",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 407,
+        "length": 2850.2,
+        "depth": 5.945325436846955,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2020,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-07-01",
+          "warrantyYears": 18
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 70,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37111771322817,
+            39.89657897883031
+          ],
+          [
+            116.36940081862272,
+            39.89086212388256
+          ],
+          [
+            116.37497756892081,
+            39.89717006228936
+          ]
+        ]
+      },
+      "properties": {
+        "id": 70,
+        "pipeId": "PIPE-000070",
+        "type": "gas",
+        "material": "steel",
+        "diameter": 436,
+        "length": 1497.2,
+        "depth": 1.5395612601865596,
+        "pressure": 0.22989469541959112,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2008,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-02-19",
+          "warrantyYears": 20
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 71,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37301008231567,
+            39.88054224955578
+          ],
+          [
+            116.37055226358835,
+            39.87767206897214
+          ],
+          [
+            116.36674418113945,
+            39.87602313626655
+          ],
+          [
+            116.36003824628288,
+            39.87325705662776
+          ],
+          [
+            116.35417292335741,
+            39.87880622923268
+          ],
+          [
+            116.35056734453809,
+            39.87913517313827
+          ],
+          [
+            116.36052262476109,
+            39.88594988106927
+          ]
+        ]
+      },
+      "properties": {
+        "id": 71,
+        "pipeId": "PIPE-000071",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 584,
+        "length": 3640.9,
+        "depth": 2.0803910566883523,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2012,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-01-25",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 72,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.36133879307526,
+            39.863594738171095
+          ],
+          [
+            116.35634776337854,
+            39.85375497285579
+          ],
+          [
+            116.36577230372964,
+            39.85178935379529
+          ],
+          [
+            116.37153420449462,
+            39.85782420101533
+          ],
+          [
+            116.3745361438749,
+            39.858363842225465
+          ]
+        ]
+      },
+      "properties": {
+        "id": 72,
+        "pipeId": "PIPE-000072",
+        "type": "gas",
+        "material": "cast_iron",
+        "diameter": 139,
+        "length": 3097.5,
+        "depth": 5.846592819151557,
+        "pressure": 0.8105654728758622,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "燃气集团",
+        "color": "#FF6347",
+        "properties": {
+          "maintenanceDate": "2024-01-14",
+          "warrantyYears": 12
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 73,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.34895167996687,
+            39.924168372697835
+          ],
+          [
+            116.35354735088379,
+            39.9190100918028
+          ],
+          [
+            116.35539323536096,
+            39.914597349972844
+          ],
+          [
+            116.3555401138882,
+            39.92438339130669
+          ],
+          [
+            116.35670217306944,
+            39.91963255348031
+          ],
+          [
+            116.3626184348014,
+            39.929262455014126
+          ]
+        ]
+      },
+      "properties": {
+        "id": 73,
+        "pipeId": "PIPE-000073",
+        "type": "electric",
+        "material": "pvc",
+        "diameter": 711,
+        "length": 4012.3,
+        "depth": 3.035207894139605,
+        "pressure": null,
+        "flowRate": null,
+        "status": "maintenance",
+        "yearInstalled": 2015,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-09-27",
+          "warrantyYears": 24
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 74,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.44299207583609,
+            39.95183880296193
+          ],
+          [
+            116.43813719470931,
+            39.94635208223738
+          ],
+          [
+            116.4315675906176,
+            39.95217804012378
+          ],
+          [
+            116.43978233383284,
+            39.949511901698514
+          ]
+        ]
+      },
+      "properties": {
+        "id": 74,
+        "pipeId": "PIPE-000074",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 200,
+        "length": 2349.8,
+        "depth": 5.014368981368932,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1991,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-09-11",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 75,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38866189085753,
+            39.90957581425822
+          ],
+          [
+            116.37962970789208,
+            39.91142723972574
+          ],
+          [
+            116.37811823654107,
+            39.910873873817145
+          ]
+        ]
+      },
+      "properties": {
+        "id": 75,
+        "pipeId": "PIPE-000075",
+        "type": "electric",
+        "material": "concrete",
+        "diameter": 771,
+        "length": 938.6,
+        "depth": 3.253978078667418,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2009,
+        "owner": "电力集团",
+        "color": "#FFD700",
+        "properties": {
+          "maintenanceDate": "2024-04-13",
+          "warrantyYears": 29
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 76,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41937555265525,
+            39.95152962942574
+          ],
+          [
+            116.41924597253414,
+            39.94987104670103
+          ],
+          [
+            116.41488977747069,
+            39.94077813918096
+          ],
+          [
+            116.41908160276765,
+            39.935613209588396
+          ],
+          [
+            116.41760115904121,
+            39.93360784758745
+          ],
+          [
+            116.42585801854962,
+            39.92603465681786
+          ]
+        ]
+      },
+      "properties": {
+        "id": 76,
+        "pipeId": "PIPE-000076",
+        "type": "heating",
+        "material": "steel",
+        "diameter": 710,
+        "length": 3286.5,
+        "depth": 1.5617068299599637,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1998,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-09-26",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 77,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38758836464446,
+            39.91363797606827
+          ],
+          [
+            116.37969376270598,
+            39.9050539929481
+          ],
+          [
+            116.38033671205716,
+            39.9011414656908
+          ],
+          [
+            116.38305057220471,
+            39.90265226577681
+          ]
+        ]
+      },
+      "properties": {
+        "id": 77,
+        "pipeId": "PIPE-000077",
+        "type": "heating",
+        "material": "cast_iron",
+        "diameter": 439,
+        "length": 1889.3,
+        "depth": 3.76327758707976,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 2002,
+        "owner": "热力集团",
+        "color": "#FF4500",
+        "properties": {
+          "maintenanceDate": "2024-12-20",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 78,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.37625498559792,
+            39.94887876979748
+          ],
+          [
+            116.3794727162265,
+            39.95582330838906
+          ],
+          [
+            116.38336870409547,
+            39.956228493426075
+          ],
+          [
+            116.38414686833522,
+            39.96021356401083
+          ]
+        ]
+      },
+      "properties": {
+        "id": 78,
+        "pipeId": "PIPE-000078",
+        "type": "water",
+        "material": "steel",
+        "diameter": 790,
+        "length": 1599.8,
+        "depth": 2.1421318657265402,
+        "pressure": 1.2415331086990025,
+        "flowRate": 72,
+        "status": "normal",
+        "yearInstalled": 2009,
+        "owner": "水务集团",
+        "color": "#1E90FF",
+        "properties": {
+          "maintenanceDate": "2024-03-18",
+          "warrantyYears": 15
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 79,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.41367756132507,
+            39.91485656228218
+          ],
+          [
+            116.40457247306395,
+            39.90590259183129
+          ],
+          [
+            116.39692142319693,
+            39.91337197364155
+          ]
+        ]
+      },
+      "properties": {
+        "id": 79,
+        "pipeId": "PIPE-000079",
+        "type": "telecom",
+        "material": "pvc",
+        "diameter": 188,
+        "length": 2314.9,
+        "depth": 4.258496747248417,
+        "pressure": null,
+        "flowRate": null,
+        "status": "normal",
+        "yearInstalled": 1991,
+        "owner": "电信集团",
+        "color": "#9370DB",
+        "properties": {
+          "maintenanceDate": "2024-08-02",
+          "warrantyYears": 22
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 80,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            116.38449476190755,
+            39.922683020574176
+          ],
+          [
+            116.3911951445841,
+            39.92168130256223
+          ],
+          [
+            116.38697606302458,
+            39.927456901923094
+          ],
+          [
+            116.38845596546791,
+            39.92716329457575
+          ],
+          [
+            116.39335741589744,
+            39.93301036010219
+          ],
+          [
+            116.39151216841313,
+            39.92852106912948
+          ],
+          [
+            116.38335462242831,
+            39.92611113219692
+          ]
+        ]
+      },
+      "properties": {
+        "id": 80,
+        "pipeId": "PIPE-000080",
+        "type": "sewage",
+        "material": "concrete",
+        "diameter": 652,
+        "length": 3484.2,
+        "depth": 1.3733352722954497,
+        "pressure": null,
+        "flowRate": 82,
+        "status": "normal",
+        "yearInstalled": 2016,
+        "owner": "市政集团",
+        "color": "#556B2F",
+        "properties": {
+          "maintenanceDate": "2024-01-18",
+          "warrantyYears": 12
+        }
+      }
+    }
+  ]
+}
