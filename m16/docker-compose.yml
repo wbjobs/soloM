@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ocr_user
+      POSTGRES_PASSWORD: ocr_pass
+      POSTGRES_DB: ocr_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ocr_user -d ocr_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  ocr-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://ocr_user:ocr_pass@db:5432/ocr_db
+      DBNET_ONNX_PATH: models/dbnet.onnx
+      CRNN_ONNX_PATH: models/crnn.onnx
+    volumes:
+      - ./uploads:/app/uploads
+      - ./models:/app/models
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
