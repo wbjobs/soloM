@@ -1,0 +1,19 @@
+{
+  "name": "video-keyframe-extractor",
+  "version": "1.0.0",
+  "description": "Browser-side video keyframe extractor using React + FFmpeg.wasm",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  },
+  "keywords": ["video", "keyframe", "ffmpeg", "wasm", "react"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
