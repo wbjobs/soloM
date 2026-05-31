@@ -1,0 +1,296 @@
+{
+  "name": "企业网络拓扑示例",
+  "description": "一个典型的企业级网络拓扑结构，包含路由器、防火墙、核心交换机、接入交换机、服务器和客户端",
+  "devices": [
+    {
+      "id": "internet",
+      "type": "router",
+      "name": "Internet",
+      "ip": "0.0.0.0",
+      "description": "互联网出口"
+    },
+    {
+      "id": "er1",
+      "type": "router",
+      "name": "边缘路由器 1",
+      "ip": "10.0.0.1",
+      "model": "Cisco ASR 1001-X",
+      "location": "机房 A"
+    },
+    {
+      "id": "er2",
+      "type": "router",
+      "name": "边缘路由器 2",
+      "ip": "10.0.0.2",
+      "model": "Cisco ASR 1001-X",
+      "location": "机房 B"
+    },
+    {
+      "id": "fw1",
+      "type": "firewall",
+      "name": "主防火墙",
+      "ip": "10.0.1.1",
+      "model": "Palo Alto PA-8500",
+      "description": "主用防火墙设备"
+    },
+    {
+      "id": "fw2",
+      "type": "firewall",
+      "name": "备防火墙",
+      "ip": "10.0.1.2",
+      "model": "Palo Alto PA-8500",
+      "description": "备用防火墙设备"
+    },
+    {
+      "id": "cs1",
+      "type": "core_switch",
+      "name": "核心交换机 A",
+      "ip": "10.0.2.1",
+      "model": "Cisco Nexus 93180YC-EX"
+    },
+    {
+      "id": "cs2",
+      "type": "core_switch",
+      "name": "核心交换机 B",
+      "ip": "10.0.2.2",
+      "model": "Cisco Nexus 93180YC-EX"
+    },
+    {
+      "id": "ds1",
+      "type": "switch",
+      "name": "汇聚交换机 1",
+      "ip": "10.1.1.1",
+      "model": "Cisco Catalyst 9407R"
+    },
+    {
+      "id": "ds2",
+      "type": "switch",
+      "name": "汇聚交换机 2",
+      "ip": "10.1.2.1",
+      "model": "Cisco Catalyst 9407R"
+    },
+    {
+      "id": "as1",
+      "type": "switch",
+      "name": "接入交换机 1",
+      "ip": "10.2.1.1",
+      "model": "Cisco Catalyst 2960X-48TS-L",
+      "location": "1楼"
+    },
+    {
+      "id": "as2",
+      "type": "switch",
+      "name": "接入交换机 2",
+      "ip": "10.2.2.1",
+      "model": "Cisco Catalyst 2960X-48TS-L",
+      "location": "2楼"
+    },
+    {
+      "id": "as3",
+      "type": "switch",
+      "name": "接入交换机 3",
+      "ip": "10.2.3.1",
+      "model": "Cisco Catalyst 2960X-48TS-L",
+      "location": "3楼"
+    },
+    {
+      "id": "srv1",
+      "type": "server",
+      "name": "Web 服务器",
+      "ip": "10.100.1.10",
+      "os": "Ubuntu 22.04 LTS",
+      "model": "Dell PowerEdge R750",
+      "description": "对外提供 Web 服务"
+    },
+    {
+      "id": "srv2",
+      "type": "server",
+      "name": "数据库服务器",
+      "ip": "10.100.1.11",
+      "os": "CentOS Stream 8",
+      "model": "Dell PowerEdge R750",
+      "description": "MySQL 主数据库"
+    },
+    {
+      "id": "srv3",
+      "type": "server",
+      "name": "文件服务器",
+      "ip": "10.100.1.12",
+      "os": "Windows Server 2022",
+      "model": "HPE ProLiant DL380"
+    },
+    {
+      "id": "pc1",
+      "type": "host",
+      "name": "研发-张三",
+      "ip": "10.200.1.10",
+      "os": "Windows 11 专业版",
+      "mac": "AA:BB:CC:DD:EE:01",
+      "department": "研发部"
+    },
+    {
+      "id": "pc2",
+      "type": "host",
+      "name": "研发-李四",
+      "ip": "10.200.1.11",
+      "os": "Ubuntu 22.04",
+      "mac": "AA:BB:CC:DD:EE:02",
+      "department": "研发部"
+    },
+    {
+      "id": "pc3",
+      "type": "host",
+      "name": "财务-王五",
+      "ip": "10.200.2.10",
+      "os": "Windows 10 企业版",
+      "mac": "AA:BB:CC:DD:EE:03",
+      "department": "财务部"
+    },
+    {
+      "id": "pc4",
+      "type": "host",
+      "name": "市场-赵六",
+      "ip": "10.200.3.10",
+      "os": "macOS Ventura",
+      "mac": "AA:BB:CC:DD:EE:04",
+      "department": "市场部"
+    }
+  ],
+  "connections": [
+    {
+      "from": "internet",
+      "to": "er1",
+      "bandwidth": 100,
+      "type": "fiber",
+      "description": "ISP 主链路"
+    },
+    {
+      "from": "internet",
+      "to": "er2",
+      "bandwidth": 100,
+      "type": "fiber",
+      "description": "ISP 备链路"
+    },
+    {
+      "from": "er1",
+      "to": "fw1",
+      "bandwidth": 40,
+      "type": "fiber"
+    },
+    {
+      "from": "er2",
+      "to": "fw2",
+      "bandwidth": 40,
+      "type": "fiber"
+    },
+    {
+      "from": "fw1",
+      "to": "cs1",
+      "bandwidth": 40,
+      "type": "fiber"
+    },
+    {
+      "from": "fw2",
+      "to": "cs2",
+      "bandwidth": 40,
+      "type": "fiber"
+    },
+    {
+      "from": "cs1",
+      "to": "cs2",
+      "bandwidth": 100,
+      "type": "fiber",
+      "description": "核心交换机堆叠"
+    },
+    {
+      "from": "cs1",
+      "to": "ds1",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "cs2",
+      "to": "ds1",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "cs1",
+      "to": "ds2",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "cs2",
+      "to": "ds2",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "ds1",
+      "to": "as1",
+      "bandwidth": 1,
+      "type": "ethernet"
+    },
+    {
+      "from": "ds1",
+      "to": "as2",
+      "bandwidth": 1,
+      "type": "ethernet"
+    },
+    {
+      "from": "ds2",
+      "to": "as3",
+      "bandwidth": 1,
+      "type": "ethernet"
+    },
+    {
+      "from": "ds1",
+      "to": "srv1",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "ds1",
+      "to": "srv2",
+      "bandwidth": 10,
+      "type": "fiber"
+    },
+    {
+      "from": "ds2",
+      "to": "srv3",
+      "bandwidth": 1,
+      "type": "ethernet"
+    },
+    {
+      "from": "as1",
+      "to": "pc1",
+      "bandwidth": 0.1,
+      "type": "ethernet"
+    },
+    {
+      "from": "as1",
+      "to": "pc2",
+      "bandwidth": 0.1,
+      "type": "ethernet"
+    },
+    {
+      "from": "as2",
+      "to": "pc3",
+      "bandwidth": 0.1,
+      "type": "ethernet"
+    },
+    {
+      "from": "as3",
+      "to": "pc4",
+      "bandwidth": 0.1,
+      "type": "ethernet"
+    }
+  ],
+  "algorithm": "force3d",
+  "options": {
+    "iterations": 500,
+    "repulsion_strength": 500,
+    "attraction_strength": 0.01
+  }
+}

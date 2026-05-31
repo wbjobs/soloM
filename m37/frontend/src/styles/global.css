@@ -1,0 +1,184 @@
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1f2937;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-primary: #3b82f6;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+  --border-color: #374151;
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: #374151;
+}
+
+.input, .textarea, .select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus, .textarea:focus, .select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 13px;
+}
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow-lg);
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 12px 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+.topo-node-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transform-origin: center bottom;
+}
+
+.topo-node-label.topo-label-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.topo-node-label.topo-label-hidden {
+  opacity: 0 !important;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+
+.topo-node-label.topo-label-behind,
+.topo-node-label.topo-label-offscreen {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.topo-node-label.topo-label-highlighted {
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  background: rgba(0, 0, 0, 0.88);
+  transform: scale(1.12);
+  z-index: 100;
+}
+
+.topo-label-name {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f3f4f6;
+  line-height: 1.3;
+  letter-spacing: 0.3px;
+}
+
+.topo-label-type {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  color: #9ca3af;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.topo-node-label[data-device-type="router"] .topo-label-name { color: #4CAF50; }
+.topo-node-label[data-device-type="firewall"] .topo-label-name { color: #F44336; }
+.topo-node-label[data-device-type="core_switch"] .topo-label-name { color: #CE93D8; }
+.topo-node-label[data-device-type="switch"] .topo-label-name { color: #64B5F6; }
+.topo-node-label[data-device-type="server"] .topo-label-name { color: #FFB74D; }
+.topo-node-label[data-device-type="host"] .topo-label-name { color: #90A4AE; }
+.topo-node-label[data-device-type="client"] .topo-label-name { color: #A1887F; }
