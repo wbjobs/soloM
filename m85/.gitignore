@@ -1,0 +1,11 @@
+/target
+**/*.rs.bk
+Cargo.lock
+mingw.7z
+/mingw64
+*.log
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
