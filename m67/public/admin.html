@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM 提示词注入检测网关 - 管理后台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f5f7fa; color: #1f2937; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+    .login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 400px; }
+    .login-card h1 { text-align: center; margin-bottom: 30px; color: #111827; }
+    .login-card input { width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+    .login-card button { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: background 0.2s; }
+    .login-card button:hover { background: #1d4ed8; }
+    .error { color: #dc2626; text-align: center; margin-top: 12px; }
+
+    .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 16px 24px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .header h1 { font-size: 20px; color: #111827; }
+    .header .user { display: flex; align-items: center; gap: 16px; }
+    .logout-btn { padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .logout-btn:hover { background: #dc2626; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .stat-label { font-size: 13px; color: #6b7280; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #111827; }
+    .stat-value.benign { color: #059669; }
+    .stat-value.attack { color: #dc2626; }
+
+    .tabs { display: flex; gap: 4px; margin-bottom: 20px; background: white; padding: 4px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: fit-content; }
+    .tab { padding: 10px 20px; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #6b7280; transition: all 0.2s; }
+    .tab.active { background: #2563eb; color: white; }
+    .tab:hover:not(.active) { background: #f3f4f6; }
+
+    .panel { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+    .panel.hidden { display: none; }
+
+    .filters { display: flex; gap: 12px; padding: 16px; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; }
+    .filters input, .filters select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+    .filters input[type="text"] { flex: 1; min-width: 200px; }
+
+    .log-list { overflow-x: auto; }
+    .log-table { width: 100%; border-collapse: collapse; }
+    .log-table th, .log-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f3f4f6; }
+    .log-table th { background: #f9fafb; font-weight: 600; font-size: 13px; color: #374151; }
+    .log-table tbody tr { cursor: pointer; transition: background 0.15s; }
+    .log-table tbody tr:hover { background: #f9fafb; }
+
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+    .badge.pending { background: #fef3c7; color: #92400e; }
+    .badge.false_positive { background: #d1fae5; color: #065f46; }
+    .badge.true_positive { background: #fee2e2; color: #991b1b; }
+    .badge.unsure { background: #e0e7ff; color: #3730a3; }
+    .badge.learned { background: #cffafe; color: #155e75; margin-left: 6px; }
+
+    .score-bar { height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; width: 80px; }
+    .score-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.3s; }
+
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-top: 1px solid #e5e7eb; }
+    .pagination button { padding: 8px 16px; border: 1px solid #d1d5db; background: white; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination button:hover:not(:disabled) { background: #f9fafb; }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal { background: white; border-radius: 12px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 18px; }
+    .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; }
+    .modal-body { padding: 20px; }
+
+    .detail-section { margin-bottom: 20px; }
+    .detail-section h3 { font-size: 14px; color: #6b7280; margin-bottom: 8px; }
+    .detail-section pre { background: #f9fafb; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 13px; border: 1px solid #e5e7eb; }
+
+    .feedback-buttons { display: flex; gap: 12px; padding: 20px; border-top: 1px solid #e5e7eb; }
+    .feedback-btn { flex: 1; padding: 12px; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .feedback-btn.false_positive { background: #d1fae5; color: #065f46; }
+    .feedback-btn.false_positive:hover { background: #a7f3d0; }
+    .feedback-btn.true_positive { background: #fee2e2; color: #991b1b; }
+    .feedback-btn.true_positive:hover { background: #fecaca; }
+    .feedback-btn.unsure { background: #e0e7ff; color: #3730a3; }
+    .feedback-btn.unsure:hover { background: #c7d2fe; }
+
+    .learned-list { max-height: 600px; overflow-y: auto; }
+    .learned-item { padding: 16px; border-bottom: 1px solid #f3f4f6; }
+    .learned-item:last-child { border-bottom: none; }
+    .learned-type { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-right: 10px; }
+    .learned-type.benign { background: #d1fae5; color: #065f46; }
+    .learned-type.attack { background: #fee2e2; color: #991b1b; }
+    .learned-content { color: #374151; font-size: 14px; }
+    .learned-date { color: #9ca3af; font-size: 12px; margin-top: 4px; }
+
+    .info-note { background: #eff6ff; padding: 12px 16px; border-radius: 8px; margin: 16px 0; color: #1e40af; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const apiBase = '/api/admin';
+    let currentPage = 1;
+    let currentFilters = {};
+    let logs = [];
+    let total = 0;
+    let pageSize = 20;
+    let activeTab = 'logs';
+    let stats = null;
+    let learned = { benign: [], attack: [] };
+    let selectedLog = null;
+    let isLoggedIn = false;
+
+    async function apiCall(path, options = {}) {
+      const response = await fetch(apiBase + path, {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        ...options,
+        body: options.body ? JSON.stringify(options.body) : undefined,
+      });
+      if (response.status === 401) {
+        isLoggedIn = false;
+        render();
+        throw new Error('Unauthorized');
+      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    async function login(password) {
+      try {
+        await apiCall('/login', { method: 'POST', body: { password } });
+        isLoggedIn = true;
+        await loadAllData();
+        render();
+      } catch (err) {
+        return err.message;
+      }
+    }
+
+    async function logout() {
+      await apiCall('/logout', { method: 'POST' });
+      isLoggedIn = false;
+      render();
+    }
+
+    async function loadLogs() {
+      const params = new URLSearchParams({ page: currentPage, pageSize, ...currentFilters });
+      const data = await apiCall('/logs?' + params.toString());
+      logs = data.items;
+      total = data.total;
+    }
+
+    async function loadStats() {
+      stats = await apiCall('/stats');
+    }
+
+    async function loadLearned() {
+      learned = await apiCall('/learned');
+    }
+
+    async function loadAllData() {
+      await Promise.all([loadLogs(), loadStats(), loadLearned()]);
+    }
+
+    async function submitFeedback(id, feedback) {
+      await apiCall(`/logs/${id}/feedback`, {
+        method: 'POST',
+        body: { feedback },
+      });
+      selectedLog = null;
+      await loadAllData();
+      render();
+    }
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleString('zh-CN');
+    }
+
+    function renderLogin() {
+      return `
+        <div class="login-page">
+          <div class="login-card">
+            <h1>🔐 管理后台登录</h1>
+            <input type="password" id="password" placeholder="请输入管理员密码" onkeypress="if(event.key==='Enter') doLogin()">
+            <button onclick="doLogin()">登录</button>
+            <div id="loginError" class="error"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHeader() {
+      return `
+        <div class="header">
+          <h1>🛡️ LLM 提示词注入检测网关</h1>
+          <div class="user">
+            <span>管理员</span>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStats() {
+      if (!stats) return '';
+      return `
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">总拦截请求</div>
+            <div class="stat-value">${stats.storage.totalBlocked}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">最近24小时</div>
+            <div class="stat-value">${stats.storage.last24h}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">误报已学习</div>
+            <div class="stat-value benign">${stats.learned.benignCount}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">攻击已学习</div>
+            <div class="stat-value attack">${stats.learned.attackCount}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">参考向量总数</div>
+            <div class="stat-value">${stats.semantic ? (stats.semantic.totalInjectionReferences + stats.semantic.totalBenignReferences) : 'N/A'}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTabs() {
+      return `
+        <div class="tabs">
+          <button class="tab ${activeTab === 'logs' ? 'active' : ''}" onclick="switchTab('logs')">拦截日志</button>
+          <button class="tab ${activeTab === 'learned' ? 'active' : ''}" onclick="switchTab('learned')">已学习样本</button>
+        </div>
+      `;
+    }
+
+    function renderLogRow(log) {
+      const feedback = log.feedback || 'pending';
+      const feedbackLabel = {
+        pending: '待处理',
+        false_positive: '误报',
+        true_positive: '确实攻击',
+        unsure: '不确定'
+      }[feedback];
+      const preview = log.content.length > 80 ? log.content.substring(0, 80) + '...' : log.content;
+      const scorePercent = Math.min(100, (log.score / log.threshold) * 100);
+
+      return `
+        <tr onclick="openLog('${log.id}')">
+          <td style="white-space: nowrap; font-size: 12px; color: #6b7280;">${formatDate(log.timestamp)}</td>
+          <td>
+            <span class="badge ${feedback}">${feedbackLabel}</span>
+            ${log.learned ? '<span class="badge learned">已学习</span>' : ''}
+          </td>
+          <td>${preview}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 600; color: ${log.score >= log.threshold ? '#dc2626' : '#059669'};">${log.score}</span>
+              <div class="score-bar"><div class="score-bar-fill" style="width: ${scorePercent}%;"></div></div>
+            </div>
+          </td>
+          <td style="color: #6b7280;">${log.ip}</td>
+        </tr>
+      `;
+    }
+
+    function renderLogsPanel() {
+      const totalPages = Math.ceil(total / pageSize);
+      return `
+        <div class="panel ${activeTab !== 'logs' ? 'hidden' : ''}">
+          <div class="filters">
+            <input type="text" placeholder="搜索内容..." onchange="setFilter('search', this.value)" value="${currentFilters.search || ''}">
+            <select onchange="setFilter('feedback', this.value)">
+              <option value="">全部状态</option>
+              <option value="pending" ${currentFilters.feedback === 'pending' ? 'selected' : ''}>待处理</option>
+              <option value="false_positive" ${currentFilters.feedback === 'false_positive' ? 'selected' : ''}>误报</option>
+              <option value="true_positive" ${currentFilters.feedback === 'true_positive' ? 'selected' : ''}>确实攻击</option>
+              <option value="unsure" ${currentFilters.feedback === 'unsure' ? 'selected' : ''}>不确定</option>
+            </select>
+            <input type="date" onchange="setFilter('fromDate', this.value)" value="${currentFilters.fromDate || ''}">
+            <input type="date" onchange="setFilter('toDate', this.value)" value="${currentFilters.toDate || ''}">
+            <input type="number" placeholder="最低分数" onchange="setFilter('minScore', this.value)" value="${currentFilters.minScore || ''}">
+          </div>
+          <div class="log-list">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th style="width: 180px;">时间</th>
+                  <th style="width: 120px;">状态</th>
+                  <th>内容</th>
+                  <th style="width: 160px;">分数</th>
+                  <th style="width: 140px;">IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${logs.map(log => renderLogRow(log)).join('')}
+                ${logs.length === 0 ? '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #9ca3af;">暂无数据</td></tr>' : ''}
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div>共 ${total} 条，第 ${currentPage}/${totalPages || 1} 页</div>
+            <div>
+              <button onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>
+              <button onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderLearnedPanel() {
+      const allLearned = [
+        ...learned.benign.map(p => ({ ...p, type: 'benign' })),
+        ...learned.attack.map(p => ({ ...p, type: 'attack' })),
+      ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      return `
+        <div class="panel ${activeTab !== 'learned' ? 'hidden' : ''}">
+          <div class="info-note">
+            ℹ️ 当管理员在日志中标记"误报"或"确实攻击"后，系统会自动将样本加入向量库并重新初始化检测模型。
+            下次遇到相似内容时，模型将能正确识别。
+          </div>
+          <div class="learned-list">
+            ${allLearned.length === 0 ? '<div style="text-align: center; padding: 40px; color: #9ca3af;">暂无已学习样本</div>' : ''}
+            ${allLearned.map(item => `
+              <div class="learned-item">
+                <span class="learned-type ${item.type}">${item.type === 'benign' ? '良性样本' : '攻击样本'}</span>
+                <span class="learned-content">${item.content}</span>
+                <div class="learned-date">${formatDate(item.createdAt)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderModal() {
+      if (!selectedLog) return '';
+      const log = selectedLog;
+      const feedback = log.feedback || 'pending';
+
+      return `
+        <div class="modal-backdrop" onclick="if(event.target === this) closeModal()">
+          <div class="modal">
+            <div class="modal-header">
+              <h2>拦截详情 - ${formatDate(log.timestamp)}</h2>
+              <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+              <div class="detail-section">
+                <h3>请求内容</h3>
+                <pre>${escapeHtml(log.content)}</pre>
+              </div>
+              <div class="detail-section">
+                <h3>检测信息</h3>
+                <pre>分数: ${log.score} / 阈值: ${log.threshold}
+IP: ${log.ip}
+匹配项: ${JSON.stringify(log.matchedItems, null, 2)}
+${log.semantic ? `语义相似度: 攻击=${log.semantic.maxInjectionSimilarity}, 良性=${log.semantic.maxBenignSimilarity}
+最佳匹配: ${log.semantic.bestMatch || 'N/A'}` : ''}</pre>
+              </div>
+              ${log.feedbackNote ? `
+              <div class="detail-section">
+                <h3>备注</h3>
+                <pre>${escapeHtml(log.feedbackNote)}</pre>
+              </div>` : ''}
+            </div>
+            <div class="feedback-buttons">
+              <button class="feedback-btn false_positive" onclick="submitFeedback('${log.id}', 'false_positive')" ${feedback === 'false_positive' ? 'style="opacity: 0.5;"' : ''}>
+                ✅ 这是误报
+                <div style="font-size: 11px; margin-top: 4px; font-weight: normal;">自动加入良性样本库</div>
+              </button>
+              <button class="feedback-btn true_positive" onclick="submitFeedback('${log.id}', 'true_positive')" ${feedback === 'true_positive' ? 'style="opacity: 0.5;"' : ''}>
+                ⚠️ 确实攻击
+                <div style="font-size: 11px; margin-top: 4px; font-weight: normal;">自动加入攻击样本库</div>
+              </button>
+              <button class="feedback-btn unsure" onclick="submitFeedback('${log.id}', 'unsure')" ${feedback === 'unsure' ? 'style="opacity: 0.5;"' : ''}>
+                🤔 不确定
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      if (!isLoggedIn) {
+        app.innerHTML = renderLogin();
+        return;
+      }
+      app.innerHTML = `
+        <div class="container">
+          ${renderHeader()}
+          ${renderStats()}
+          ${renderTabs()}
+          ${renderLogsPanel()}
+          ${renderLearnedPanel()}
+        </div>
+        ${renderModal()}
+      `;
+    }
+
+    window.doLogin = async function() {
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('loginError');
+      const err = await login(password);
+      if (err) {
+        errorEl.textContent = err;
+      }
+    };
+
+    window.logout = logout;
+
+    window.switchTab = async function(tab) {
+      activeTab = tab;
+      render();
+    };
+
+    window.setFilter = async function(key, value) {
+      if (value) {
+        currentFilters[key] = value;
+      } else {
+        delete currentFilters[key];
+      }
+      currentPage = 1;
+      await loadLogs();
+      render();
+    };
+
+    window.goToPage = async function(page) {
+      currentPage = page;
+      await loadLogs();
+      render();
+    };
+
+    window.openLog = async function(id) {
+      selectedLog = await apiCall('/logs/' + id);
+      render();
+    };
+
+    window.closeModal = function() {
+      selectedLog = null;
+      render();
+    };
+
+    window.submitFeedback = async function(id, feedback) {
+      await submitFeedback(id, feedback);
+    };
+
+    async function init() {
+      try {
+        await loadAllData();
+        isLoggedIn = true;
+      } catch (e) {
+        isLoggedIn = false;
+      }
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>

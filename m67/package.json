@@ -1,0 +1,31 @@
+{
+  "name": "llm-prompt-injection-gateway",
+  "version": "1.0.0",
+  "description": "私有化部署的 LLM 提示词注入检测网关",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node tests/test-detection.js"
+  },
+  "keywords": [
+    "llm",
+    "prompt-injection",
+    "gateway",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@elastic/elasticsearch": "^9.4.2",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
