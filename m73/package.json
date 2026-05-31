@@ -1,0 +1,28 @@
+{
+  "name": "crdt-collab-editor",
+  "version": "1.0.0",
+  "description": "Offline-first collaborative code snippet editor using CRDT",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "build": "vite build",
+    "client": "vite"
+  },
+  "dependencies": {
+    "level": "^8.0.1",
+    "lib0": "^0.2.94",
+    "ws": "^8.18.0",
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.18"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10",
+    "y-websocket": "^2.0.4",
+    "monaco-editor": "^0.52.0",
+    "y-indexeddb": "^9.0.12",
+    "y-monaco": "^0.1.6",
+    "lib0": "^0.2.94",
+    "y-protocols": "^1.0.6"
+  }
+}
