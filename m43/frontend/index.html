@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC P2P 文件传输与剪贴板同步</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>WebRTC P2P 工具</h1>
+            <p class="subtitle">局域网文件传输与剪贴板同步</p>
+        </header>
+
+        <section class="connection-panel">
+            <h2>连接设置</h2>
+            <div class="form-group">
+                <label for="roomId">房间号:</label>
+                <input type="text" id="roomId" placeholder="输入房间号或随机生成">
+                <button id="generateRoomBtn">随机生成</button>
+            </div>
+            <div class="form-group">
+                <label for="clientName">设备名称:</label>
+                <input type="text" id="clientName" placeholder="输入您的设备名称">
+            </div>
+            <div class="form-group">
+                <label for="roomPassword">房间密码:</label>
+                <input type="password" id="roomPassword" placeholder="输入房间密码用于加密信令">
+                <small style="color: #888; font-size: 0.85rem;">密码用于加密 SDP 和 ICE 候选，确保信令交换安全</small>
+            </div>
+            <button id="connectBtn" class="primary-btn">连接</button>
+            <button id="disconnectBtn" class="danger-btn" disabled>断开连接</button>
+            
+            <div class="status-panel">
+                <span class="status-label">状态:</span>
+                <span id="connectionStatus" class="status disconnected">未连接</span>
+            </div>
+            
+            <div class="peers-panel">
+                <h3>已连接设备:</h3>
+                <ul id="peersList"></ul>
+            </div>
+        </section>
+
+        <section class="file-transfer-panel">
+            <h2>文件传输</h2>
+            <div id="dropZone" class="drop-zone">
+                <div class="drop-zone-content">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>拖拽文件到此处或点击选择文件</p>
+                    <p class="drop-hint">支持大文件断点续传</p>
+                </div>
+                <input type="file" id="fileInput" multiple hidden>
+            </div>
+
+            <div class="transfer-list">
+                <h3>传输列表</h3>
+                <div id="transferList" class="transfer-items"></div>
+            </div>
+        </section>
+
+        <section class="clipboard-panel">
+            <h2>剪贴板同步</h2>
+            <div class="clipboard-controls">
+                <label class="switch">
+                    <input type="checkbox" id="clipboardSyncToggle" disabled>
+                    <span class="slider"></span>
+                </label>
+                <span>启用剪贴板同步</span>
+            </div>
+            <div class="clipboard-content">
+                <h3>当前剪贴板内容:</h3>
+                <textarea id="clipboardContent" readonly placeholder="剪贴板内容将显示在这里..."></textarea>
+                <button id="copyClipboardBtn" class="secondary-btn">复制到本地剪贴板</button>
+                <button id="sendClipboardBtn" class="primary-btn" disabled>发送本地剪贴板</button>
+            </div>
+        </section>
+
+        <section class="log-panel">
+            <h2>日志</h2>
+            <div id="logContainer" class="log-container"></div>
+            <button id="clearLogBtn" class="secondary-btn">清空日志</button>
+        </section>
+    </div>
+
+    <script src="static/js/crypto.js"></script>
+    <script src="static/js/signaling.js"></script>
+    <script src="static/js/fileTransfer.js"></script>
+    <script src="static/js/clipboardSync.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>
