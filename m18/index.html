@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebGPU 2D 流体烟雾模拟</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    #canvas.mode-obstacle {
+      cursor: cell;
+    }
+
+    #canvas.mode-eraser {
+      cursor: not-allowed;
+    }
+
+    .control-panel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(20, 20, 35, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(100, 200, 255, 0.2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      min-width: 220px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .control-panel h1 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #00d4ff, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-value {
+      color: #00d4ff;
+      font-weight: 500;
+      font-family: 'Monaco', 'Consolas', monospace;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(100, 200, 255, 0.15);
+    }
+
+    .controls {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-group label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      outline: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, #00d4ff, #a855f7);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
+    }
+
+    .mode-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      flex: 1;
+      min-width: 60px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.6);
+      padding: 8px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      text-align: center;
+    }
+
+    .mode-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(168, 85, 247, 0.25));
+      border-color: rgba(100, 200, 255, 0.5);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(0, 212, 255, 0.15);
+    }
+
+    .mode-btn.active.obstacle-mode {
+      background: linear-gradient(135deg, rgba(255, 170, 50, 0.25), rgba(255, 100, 50, 0.25));
+      border-color: rgba(255, 170, 50, 0.5);
+      box-shadow: 0 2px 12px rgba(255, 170, 50, 0.15);
+    }
+
+    .mode-btn.active.eraser-mode {
+      background: linear-gradient(135deg, rgba(255, 80, 80, 0.25), rgba(200, 50, 50, 0.25));
+      border-color: rgba(255, 80, 80, 0.5);
+      box-shadow: 0 2px 12px rgba(255, 80, 80, 0.15);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(168, 85, 247, 0.3));
+      border-color: rgba(100, 200, 255, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.warn {
+      background: linear-gradient(135deg, rgba(255, 80, 80, 0.2), rgba(200, 50, 50, 0.2));
+      border-color: rgba(255, 80, 80, 0.3);
+    }
+
+    .btn.warn:hover {
+      background: linear-gradient(135deg, rgba(255, 80, 80, 0.3), rgba(200, 50, 50, 0.3));
+      border-color: rgba(255, 80, 80, 0.5);
+      box-shadow: 0 4px 16px rgba(255, 80, 80, 0.2);
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(20, 20, 35, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(100, 200, 255, 0.15);
+      border-radius: 20px;
+      padding: 10px 24px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      z-index: 100;
+      animation: fadeInHint 1s ease-out;
+      white-space: nowrap;
+    }
+
+    .hint strong {
+      color: #00d4ff;
+      font-weight: 500;
+    }
+
+    .hint .obstacle-hint strong {
+      color: #ffaa32;
+    }
+
+    .hint .eraser-hint strong {
+      color: #ff5050;
+    }
+
+    @keyframes fadeInHint {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .error-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(220, 38, 38, 0.9);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      z-index: 1000;
+    }
+
+    .error-message h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .error-message p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .control-panel {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        min-width: auto;
+      }
+
+      .hint {
+        bottom: 20px;
+        font-size: 11px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="control-panel">
+    <h1>🌊 WebGPU 流体模拟</h1>
+    <div class="stat-row">
+      <span>FPS</span>
+      <span class="stat-value" id="fps">--</span>
+    </div>
+    <div class="stat-row">
+      <span>分辨率</span>
+      <span class="stat-value" id="resolution">512</span>
+    </div>
+    <div class="stat-row">
+      <span>帧时间</span>
+      <span class="stat-value" id="frameTime">-- ms</span>
+    </div>
+
+    <div class="section-label">交互模式</div>
+    <div class="mode-buttons">
+      <button class="mode-btn active" id="modeFluid" data-mode="fluid">💨 流体</button>
+      <button class="mode-btn obstacle-mode" id="modeObstacle" data-mode="obstacle">🧱 墙体</button>
+      <button class="mode-btn eraser-mode" id="modeEraser" data-mode="eraser">🧹 橡皮</button>
+    </div>
+
+    <div class="section-label">模拟参数</div>
+    <div class="controls">
+      <div class="control-group">
+        <label>模拟速度: <span id="speed-value">1.0x</span></label>
+        <input type="range" id="speed" min="0.1" max="3" step="0.1" value="1">
+      </div>
+      <div class="control-group">
+        <label>烟雾浓度: <span id="density-value">1.0x</span></label>
+        <input type="range" id="density" min="0.1" max="3" step="0.1" value="1">
+      </div>
+      <div class="control-group">
+        <label>压力迭代: <span id="iter-value">12</span></label>
+        <input type="range" id="iterations" min="4" max="30" step="1" value="12">
+      </div>
+      <div class="control-group">
+        <label>基础分辨率: <span id="base-res-value">512</span></label>
+        <input type="range" id="baseResolution" min="256" max="1024" step="256" value="512">
+      </div>
+      <div class="control-group">
+        <label style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="autoScale" checked style="width: auto; height: auto;">
+          自动调整分辨率
+        </label>
+      </div>
+    </div>
+
+    <div class="section-label">障碍物</div>
+    <div class="controls">
+      <div class="control-group">
+        <label>画笔大小: <span id="obstacle-radius-value">3</span></label>
+        <input type="range" id="obstacleRadius" min="1" max="8" step="1" value="3">
+      </div>
+      <button class="btn" id="addCircleBtn">⭕ 添加圆形障碍</button>
+      <button class="btn warn" id="clearObstaclesBtn">🗑️ 清除所有障碍</button>
+      <button class="btn warn" id="resetBtn">🔄 重置模拟</button>
+    </div>
+  </div>
+
+  <div class="hint" id="hintText">
+    <strong>鼠标拖拽</strong> 产生流体效果
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
