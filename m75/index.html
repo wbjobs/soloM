@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分子结构3D可视化与性质计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 320px 1fr 300px;
+            grid-template-rows: 60px 1fr;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-left {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-right {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel {
+            margin-bottom: 24px;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(0, 212, 255, 0.5);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .file-upload.dragover {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .selected-atoms {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .atom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .atom-remove {
+            background: #ff4757;
+            border: none;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 247, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .result-title {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .result-unit {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls-group {
+            margin-bottom: 16px;
+        }
+
+        .control-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #00d4ff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .instructions {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        .instructions p {
+            margin-bottom: 6px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-hint {
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 12px;
+            z-index: 100;
+        }
+
+        .loading.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-bar {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .fps-display {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .atom-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(10, 10, 30, 0.92);
+            border: 1px solid rgba(0, 212, 255, 0.6);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            color: #e0e0e0;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
+            line-height: 1.6;
+            min-width: 160px;
+        }
+
+        .atom-tooltip .tooltip-element {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 4px;
+        }
+
+        .atom-tooltip .tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .atom-tooltip .tooltip-label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .atom-tooltip .tooltip-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .element-legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            font-size: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔬 分子结构3D可视化与性质计算器</h1>
+        </header>
+
+        <aside class="sidebar-left">
+            <div class="panel">
+                <div class="panel-title">文件上传</div>
+                <div class="file-upload" id="drop-zone">
+                    <div class="file-upload-icon">📂</div>
+                    <div class="file-upload-text">拖拽 .pdb 文件到此处<br>或点击选择文件</div>
+                    <input type="file" id="file-input" accept=".pdb">
+                </div>
+                <button class="btn btn-secondary" id="load-sample" style="margin-top: 12px;">
+                    🧪 加载示例分子
+                </button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">显示控制</div>
+                <div class="controls-group">
+                    <label class="control-label">原子大小: <span id="atom-size-value">1.0</span></label>
+                    <input type="range" class="slider" id="atom-size" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="controls-group">
+                    <label class="control-label">棍粗细: <span id="bond-size-value">0.3</span></label>
+                    <input type="range" class="slider" id="bond-size" min="0.1" max="1" step="0.1" value="0.3">
+                </div>
+                <button class="btn btn-secondary" id="reset-view">
+                    🔄 重置视角
+                </button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">操作说明</div>
+                <div class="instructions">
+                    <p>🖱️ <strong>左键拖动</strong>: 旋转分子</p>
+                    <p>🖱️ <strong>右键拖动</strong>: 平移视角</p>
+                    <p>🖱️ <strong>滚轮</strong>: 缩放</p>
+                    <p>👆 <strong>点击原子</strong>: 选中/取消选中</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">元素图例</div>
+                <div class="element-legend" id="element-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FFFFFF;"></div>
+                        <span>H 氢</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #333333;"></div>
+                        <span>C 碳</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #0000FF;"></div>
+                        <span>N 氮</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FF0000;"></div>
+                        <span>O 氧</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FF8000;"></div>
+                        <span>P 磷</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FFFF00;"></div>
+                        <span>S 硫</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div id="canvas-container">
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-state-icon">🧬</div>
+                    <div class="empty-state-text">暂无分子数据</div>
+                    <div class="empty-state-hint">请上传 PDB 文件或加载示例分子</div>
+                </div>
+            </div>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <span>加载中...</span>
+            </div>
+            <div class="fps-display" id="fps-display">0 FPS</div>
+            <div class="atom-tooltip" id="atom-tooltip"></div>
+            <div class="status-bar" id="status-bar">
+                就绪
+            </div>
+        </main>
+
+        <aside class="sidebar-right">
+            <div class="panel">
+                <div class="panel-title">分子信息</div>
+                <div class="info-item">
+                    <span class="info-label">原子数量</span>
+                    <span class="info-value" id="atom-count">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">化学键数量</span>
+                    <span class="info-value" id="bond-count">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">文件名</span>
+                    <span class="info-value" id="file-name">-</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">选中原子 (<span id="selected-count">0</span>)</div>
+                <div class="selected-atoms" id="selected-atoms-list">
+                    <div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">
+                        点击分子中的原子进行选择
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="clear-selection" style="margin-top: 10px;">
+                    🗑️ 清空选择
+                </button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">性质计算</div>
+                <button class="btn btn-primary" id="calculate-btn" disabled>
+                    ⚖️ 计算平均相对原子质量
+                </button>
+            </div>
+
+            <div class="panel" id="result-panel" style="display: none;">
+                <div class="panel-title">计算结果</div>
+                <div class="result-card">
+                    <div class="result-title">平均相对原子质量</div>
+                    <div class="result-value" id="average-mass">-</div>
+                    <div class="result-unit">g/mol</div>
+                </div>
+                <div class="info-item" style="margin-top: 12px;">
+                    <span class="info-label">选中原子数</span>
+                    <span class="info-value" id="result-count">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">总质量</span>
+                    <span class="info-value" id="total-mass">-</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+
+        let scene, camera, renderer, raycaster;
+        let atomsData = [];
+        let bondsData = [];
+        let selectedAtomIds = new Set();
+        let atomLocalPositions = [];
+        let atomInstancedMeshes = {};
+        let atomIdToInstance = {};
+        let bondInstancedMesh = null;
+        let selectionOverlay = null;
+        let bondHighlightOverlay = null;
+        let lastPdbData = null;
+        let currentFile = null;
+        let hoveredAtomId = null;
+        let atomToBonds = {};
+        let bondMatrices = [];
+        let lastMouseClientX = 0;
+        let lastMouseClientY = 0;
+
+        let frameCount = 0;
+        let lastFpsTime = performance.now();
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+
+            camera = new THREE.PerspectiveCamera(
+                60,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 0, 30);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            raycaster = new THREE.Raycaster();
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 10);
+            scene.add(directionalLight);
+
+            const pointLight1 = new THREE.PointLight(0x00d4ff, 0.5, 100);
+            pointLight1.position.set(-10, 5, 5);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x7b2ff7, 0.5, 100);
+            pointLight2.position.set(10, -5, -5);
+            scene.add(pointLight2);
+
+            const gridHelper = new THREE.GridHelper(50, 50, 0x333333, 0x222222);
+            gridHelper.position.y = -10;
+            scene.add(gridHelper);
+
+            setupControls();
+
+            window.addEventListener('resize', onWindowResize);
+            renderer.domElement.addEventListener('click', onCanvasClick);
+
+            animate();
+        }
+
+        function setupControls() {
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            let isRightDragging = false;
+            let rotationGroup = new THREE.Group();
+            scene.add(rotationGroup);
+            window.rotationGroup = rotationGroup;
+
+            renderer.domElement.addEventListener('mousedown', (e) => {
+                if (e.button === 0) {
+                    isDragging = true;
+                } else if (e.button === 2) {
+                    isRightDragging = true;
+                }
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            renderer.domElement.addEventListener('mousemove', (e) => {
+                lastMouseClientX = e.clientX;
+                lastMouseClientY = e.clientY;
+
+                if (isDragging) {
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+                    rotationGroup.rotation.y += deltaX * 0.01;
+                    rotationGroup.rotation.x += deltaY * 0.01;
+                }
+
+                if (isRightDragging) {
+                    const deltaX = e.clientX - previousMousePosition.x;
+                    const deltaY = e.clientY - previousMousePosition.y;
+                    camera.position.x -= deltaX * 0.05;
+                    camera.position.y += deltaY * 0.05;
+                }
+
+                if (!isDragging && !isRightDragging && atomLocalPositions.length > 0) {
+                    const rect = renderer.domElement.getBoundingClientRect();
+                    const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                    const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                    const hitId = raycastAtoms(mouseX, mouseY);
+
+                    if (hitId !== null && hitId !== hoveredAtomId) {
+                        onHoverAtom(hitId, e.clientX, e.clientY);
+                    } else if (hitId !== null && hitId === hoveredAtomId) {
+                        updateTooltipPosition(e.clientX, e.clientY);
+                    } else if (hitId === null && hoveredAtomId !== null) {
+                        onLeaveAtom();
+                    }
+                } else if (isDragging || isRightDragging) {
+                    onLeaveAtom();
+                }
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            renderer.domElement.addEventListener('mouseup', () => {
+                isDragging = false;
+                isRightDragging = false;
+            });
+
+            renderer.domElement.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                camera.position.z += e.deltaY * 0.05;
+                camera.position.z = Math.max(5, Math.min(100, camera.position.z));
+            });
+
+            renderer.domElement.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
+
+            renderer.domElement.addEventListener('mouseleave', () => {
+                isDragging = false;
+                isRightDragging = false;
+                onLeaveAtom();
+            });
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function onCanvasClick(event) {
+            if (atomLocalPositions.length === 0) return;
+
+            const rect = renderer.domElement.getBoundingClientRect();
+            const mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            const mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            const closestId = raycastAtoms(mouseX, mouseY);
+            if (closestId !== null) {
+                toggleAtomSelection(closestId);
+            }
+        }
+
+        function raycastAtoms(mouseX, mouseY) {
+            raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
+
+            const inverseMatrix = new THREE.Matrix4().getInverse(window.rotationGroup.matrixWorld);
+            const localOrigin = raycaster.ray.origin.clone().applyMatrix4(inverseMatrix);
+            const localDir = raycaster.ray.direction.clone().transformDirection(inverseMatrix);
+
+            let closestId = null;
+            let closestT = Infinity;
+
+            const atomSizeScale = parseFloat(document.getElementById('atom-size').value);
+            const radius = 0.5 * atomSizeScale;
+            const radiusSq = radius * radius;
+
+            const ox = localOrigin.x, oy = localOrigin.y, oz = localOrigin.z;
+            const dx = localDir.x, dy = localDir.y, dz = localDir.z;
+
+            for (let i = 0; i < atomLocalPositions.length; i++) {
+                const pos = atomLocalPositions[i];
+                const cx = ox - pos.x, cy = oy - pos.y, cz = oz - pos.z;
+
+                const b = 2 * (cx * dx + cy * dy + cz * dz);
+                const c = cx * cx + cy * cy + cz * cz - radiusSq;
+                const discriminant = b * b - 4 * c;
+
+                if (discriminant > 0) {
+                    const t = (-b - Math.sqrt(discriminant)) / 2;
+                    if (t > 0 && t < closestT) {
+                        closestT = t;
+                        closestId = i;
+                    }
+                }
+            }
+
+            return closestId;
+        }
+
+        function toggleAtomSelection(atomId) {
+            if (selectedAtomIds.has(atomId)) {
+                selectedAtomIds.delete(atomId);
+            } else {
+                selectedAtomIds.add(atomId);
+            }
+            updateSelectionOverlay();
+            updateSelectedAtomsList();
+            updateCalculateButton();
+        }
+
+        function onHoverAtom(atomId, clientX, clientY) {
+            hoveredAtomId = atomId;
+            const atom = atomsData[atomId];
+            if (!atom) return;
+
+            showTooltip(atom, clientX, clientY);
+            updateBondHighlight(atomId);
+            renderer.domElement.style.cursor = 'pointer';
+        }
+
+        function onLeaveAtom() {
+            hoveredAtomId = null;
+            hideTooltip();
+            clearBondHighlight();
+            renderer.domElement.style.cursor = 'default';
+        }
+
+        function showTooltip(atom, clientX, clientY) {
+            const tooltip = document.getElementById('atom-tooltip');
+            tooltip.innerHTML = `
+                <div class="tooltip-element">${atom.element}</div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">名称</span>
+                    <span class="tooltip-value">${atom.name}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">残基</span>
+                    <span class="tooltip-value">${atom.res_name} ${atom.res_seq}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">X</span>
+                    <span class="tooltip-value">${atom.x.toFixed(3)}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Y</span>
+                    <span class="tooltip-value">${atom.y.toFixed(3)}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Z</span>
+                    <span class="tooltip-value">${atom.z.toFixed(3)}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">化学键</span>
+                    <span class="tooltip-value">${(atomToBonds[atom.id] || []).length}</span>
+                </div>
+            `;
+            updateTooltipPosition(clientX, clientY);
+            tooltip.style.display = 'block';
+        }
+
+        function updateTooltipPosition(clientX, clientY) {
+            const tooltip = document.getElementById('atom-tooltip');
+            if (tooltip.style.display === 'none') return;
+            const offset = 16;
+            let left = clientX + offset;
+            let top = clientY + offset;
+            const rect = tooltip.getBoundingClientRect();
+            if (left + rect.width > window.innerWidth - 10) {
+                left = clientX - rect.width - offset;
+            }
+            if (top + rect.height > window.innerHeight - 10) {
+                top = clientY - rect.height - offset;
+            }
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('atom-tooltip');
+            tooltip.style.display = 'none';
+        }
+
+        function updateBondHighlight(atomId) {
+            clearBondHighlight();
+
+            const bondIndices = atomToBonds[atomId];
+            if (!bondIndices || bondIndices.length === 0) return;
+
+            const bondSizeScale = parseFloat(document.getElementById('bond-size').value);
+            const isLarge = atomsData.length > 5000;
+            const cylinderSegments = isLarge ? 4 : 8;
+
+            const cylinderGeo = new THREE.CylinderGeometry(
+                0.25 * bondSizeScale,
+                0.25 * bondSizeScale,
+                1,
+                cylinderSegments
+            );
+            const bondMat = new THREE.MeshPhongMaterial({
+                color: 0xffaa00,
+                emissive: 0xffaa00,
+                emissiveIntensity: 0.4,
+                shininess: 100
+            });
+
+            bondHighlightOverlay = new THREE.InstancedMesh(cylinderGeo, bondMat, bondIndices.length);
+
+            for (let i = 0; i < bondIndices.length; i++) {
+                const bi = bondIndices[i];
+                if (bondMatrices[bi]) {
+                    bondHighlightOverlay.setMatrixAt(i, bondMatrices[bi]);
+                }
+            }
+
+            bondHighlightOverlay.instanceMatrix.needsUpdate = true;
+            window.rotationGroup.add(bondHighlightOverlay);
+        }
+
+        function clearBondHighlight() {
+            if (bondHighlightOverlay) {
+                window.rotationGroup.remove(bondHighlightOverlay);
+                bondHighlightOverlay.geometry.dispose();
+                bondHighlightOverlay.material.dispose();
+                bondHighlightOverlay = null;
+            }
+        }
+
+        function updateSelectionOverlay() {
+            if (selectionOverlay) {
+                window.rotationGroup.remove(selectionOverlay);
+                selectionOverlay.geometry.dispose();
+                selectionOverlay.material.dispose();
+                selectionOverlay = null;
+            }
+
+            if (selectedAtomIds.size === 0) return;
+
+            const atomSizeScale = parseFloat(document.getElementById('atom-size').value);
+            const isLarge = atomsData.length > 5000;
+            const segments = isLarge ? 8 : 16;
+
+            const geo = new THREE.SphereGeometry(0.55 * atomSizeScale, segments, segments);
+            const mat = new THREE.MeshPhongMaterial({
+                color: 0x00ff88,
+                emissive: 0x00ff88,
+                emissiveIntensity: 0.5,
+                transparent: true,
+                opacity: 0.6,
+                shininess: 100
+            });
+
+            selectionOverlay = new THREE.InstancedMesh(geo, mat, selectedAtomIds.size);
+
+            const dummy = new THREE.Object3D();
+            let idx = 0;
+            selectedAtomIds.forEach(atomId => {
+                if (atomLocalPositions[atomId]) {
+                    dummy.position.copy(atomLocalPositions[atomId]);
+                    dummy.scale.set(1.2, 1.2, 1.2);
+                    dummy.updateMatrix();
+                    selectionOverlay.setMatrixAt(idx, dummy.matrix);
+                    idx++;
+                }
+            });
+
+            selectionOverlay.instanceMatrix.needsUpdate = true;
+            window.rotationGroup.add(selectionOverlay);
+        }
+
+        function updateSelectedAtomsList() {
+            const list = document.getElementById('selected-atoms-list');
+            const count = document.getElementById('selected-count');
+
+            count.textContent = selectedAtomIds.size;
+
+            if (selectedAtomIds.size === 0) {
+                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">点击分子中的原子进行选择</div>';
+                return;
+            }
+
+            let html = '';
+            selectedAtomIds.forEach(id => {
+                const atom = atomsData[id];
+                if (atom) {
+                    html += `
+                        <div class="atom-item">
+                            <span>${atom.element} - ${atom.name} (#${atom.id})</span>
+                            <button class="atom-remove" onclick="removeAtomSelection(${id})">×</button>
+                        </div>
+                    `;
+                }
+            });
+            list.innerHTML = html;
+        }
+
+        window.removeAtomSelection = function(atomId) {
+            if (selectedAtomIds.has(atomId)) {
+                selectedAtomIds.delete(atomId);
+                updateSelectionOverlay();
+                updateSelectedAtomsList();
+                updateCalculateButton();
+            }
+        };
+
+        function updateCalculateButton() {
+            const btn = document.getElementById('calculate-btn');
+            btn.disabled = selectedAtomIds.size === 0;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+
+            frameCount++;
+            const now = performance.now();
+            if (now - lastFpsTime >= 1000) {
+                const fps = frameCount;
+                frameCount = 0;
+                lastFpsTime = now;
+                document.getElementById('fps-display').textContent = fps + ' FPS';
+            }
+        }
+
+        function clearScene() {
+            if (window.rotationGroup) {
+                while (window.rotationGroup.children.length > 0) {
+                    const child = window.rotationGroup.children[0];
+                    window.rotationGroup.remove(child);
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                }
+            }
+            atomInstancedMeshes = {};
+            atomIdToInstance = {};
+            bondInstancedMesh = null;
+            selectionOverlay = null;
+            bondHighlightOverlay = null;
+            atomLocalPositions = [];
+            atomToBonds = {};
+            bondMatrices = [];
+            hoveredAtomId = null;
+            hideTooltip();
+            selectedAtomIds.clear();
+            updateSelectedAtomsList();
+            updateCalculateButton();
+        }
+
+        function loadMolecule(pdbData) {
+            clearScene();
+            showLoading(true);
+
+            lastPdbData = pdbData;
+            atomsData = pdbData.atoms;
+            bondsData = pdbData.bonds;
+
+            requestAnimationFrame(() => {
+                let centerX = 0, centerY = 0, centerZ = 0;
+                for (let i = 0; i < pdbData.atoms.length; i++) {
+                    centerX += pdbData.atoms[i].x;
+                    centerY += pdbData.atoms[i].y;
+                    centerZ += pdbData.atoms[i].z;
+                }
+                centerX /= pdbData.atoms.length;
+                centerY /= pdbData.atoms.length;
+                centerZ /= pdbData.atoms.length;
+
+                const atomSizeScale = parseFloat(document.getElementById('atom-size').value);
+                const bondSizeScale = parseFloat(document.getElementById('bond-size').value);
+                const isLarge = pdbData.atoms.length > 5000;
+                const sphereSegments = isLarge ? 8 : 16;
+                const cylinderSegments = isLarge ? 4 : 8;
+
+                atomLocalPositions = new Array(pdbData.atoms.length);
+                for (let i = 0; i < pdbData.atoms.length; i++) {
+                    atomLocalPositions[i] = new THREE.Vector3(
+                        pdbData.atoms[i].x - centerX,
+                        pdbData.atoms[i].y - centerY,
+                        pdbData.atoms[i].z - centerZ
+                    );
+                }
+
+                const atomsByColor = {};
+                for (let i = 0; i < pdbData.atoms.length; i++) {
+                    const atom = pdbData.atoms[i];
+                    const colorKey = atom.color;
+                    if (!atomsByColor[colorKey]) atomsByColor[colorKey] = [];
+                    atomsByColor[colorKey].push({ atom: atom, localIndex: i });
+                }
+
+                const sphereGeo = new THREE.SphereGeometry(0.5 * atomSizeScale, sphereSegments, sphereSegments);
+                atomInstancedMeshes = {};
+                atomIdToInstance = {};
+
+                const dummy = new THREE.Object3D();
+
+                for (const colorKey in atomsByColor) {
+                    const items = atomsByColor[colorKey];
+                    const mat = new THREE.MeshPhongMaterial({
+                        color: parseInt(colorKey),
+                        shininess: 100,
+                        specular: 0x444444
+                    });
+                    const im = new THREE.InstancedMesh(sphereGeo, mat, items.length);
+
+                    for (let i = 0; i < items.length; i++) {
+                        const item = items[i];
+                        dummy.position.copy(atomLocalPositions[item.localIndex]);
+                        dummy.scale.set(1, 1, 1);
+                        dummy.rotation.set(0, 0, 0);
+                        dummy.updateMatrix();
+                        im.setMatrixAt(i, dummy.matrix);
+
+                        atomIdToInstance[item.atom.id] = { mesh: im, index: i };
+                    }
+
+                    im.instanceMatrix.needsUpdate = true;
+                    im.userData.colorKey = colorKey;
+                    window.rotationGroup.add(im);
+                    atomInstancedMeshes[colorKey] = im;
+                }
+
+                if (bondsData.length > 0) {
+                    const atomsById = {};
+                    for (let i = 0; i < pdbData.atoms.length; i++) {
+                        atomsById[pdbData.atoms[i].id] = pdbData.atoms[i];
+                    }
+
+                    atomToBonds = {};
+                    bondMatrices = new Array(bondsData.length);
+
+                    const cylinderGeo = new THREE.CylinderGeometry(
+                        0.15 * bondSizeScale,
+                        0.15 * bondSizeScale,
+                        1,
+                        cylinderSegments
+                    );
+                    const bondMat = new THREE.MeshPhongMaterial({ color: 0x888888, shininess: 100 });
+                    bondInstancedMesh = new THREE.InstancedMesh(cylinderGeo, bondMat, bondsData.length);
+
+                    for (let i = 0; i < bondsData.length; i++) {
+                        const bond = bondsData[i];
+                        const a1 = atomsById[bond.atom1];
+                        const a2 = atomsById[bond.atom2];
+                        if (!a1 || !a2) continue;
+
+                        const start = new THREE.Vector3(a1.x - centerX, a1.y - centerY, a1.z - centerZ);
+                        const end = new THREE.Vector3(a2.x - centerX, a2.y - centerY, a2.z - centerZ);
+                        const direction = new THREE.Vector3().subVectors(end, start);
+                        const length = direction.length();
+
+                        dummy.position.copy(start.clone().add(end).multiplyScalar(0.5));
+                        dummy.scale.set(1, length, 1);
+                        dummy.rotation.set(0, 0, 0);
+                        dummy.quaternion.setFromUnitVectors(
+                            new THREE.Vector3(0, 1, 0),
+                            direction.clone().normalize()
+                        );
+                        dummy.updateMatrix();
+                        bondInstancedMesh.setMatrixAt(i, dummy.matrix);
+                        bondMatrices[i] = dummy.matrix.clone();
+
+                        if (!atomToBonds[bond.atom1]) atomToBonds[bond.atom1] = [];
+                        if (!atomToBonds[bond.atom2]) atomToBonds[bond.atom2] = [];
+                        atomToBonds[bond.atom1].push(i);
+                        atomToBonds[bond.atom2].push(i);
+                    }
+
+                    bondInstancedMesh.instanceMatrix.needsUpdate = true;
+                    window.rotationGroup.add(bondInstancedMesh);
+                }
+
+                updateSelectionOverlay();
+
+                document.getElementById('atom-count').textContent = pdbData.atom_count;
+                document.getElementById('bond-count').textContent = pdbData.bond_count;
+                document.getElementById('empty-state').style.display = 'none';
+
+                showLoading(false);
+                updateStatus(`已加载 ${pdbData.atom_count} 个原子，${pdbData.bond_count} 个化学键`);
+            });
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+
+        function updateStatus(text) {
+            document.getElementById('status-bar').textContent = text;
+        }
+
+        function parsePDB(content) {
+            const atoms = [];
+            const bonds = [];
+            const lines = content.split('\n');
+
+            const atomSerialToIndex = {};
+
+            const atomColors = {
+                'H': 0xFFFFFF, 'C': 0x333333, 'N': 0x0000FF, 'O': 0xFF0000,
+                'F': 0x00FF00, 'CL': 0x00FF00, 'BR': 0x8B0000, 'I': 0x940094,
+                'P': 0xFF8000, 'S': 0xFFFF00, 'B': 0xFFA500, 'LI': 0xFF6666,
+                'NA': 0xFF6666, 'K': 0xFF6666, 'MG': 0x00FF00, 'CA': 0x808080,
+                'FE': 0xFFA500, 'ZN': 0x808080, 'CU': 0x8B4513, 'NI': 0x808080,
+                'default': 0xFFC0CB
+            };
+
+            for (let idx = 0; idx < lines.length; idx++) {
+                const line = lines[idx];
+                const recordType = line.substring(0, 6).trim();
+
+                if (recordType === 'ATOM' || recordType === 'HETATM') {
+                    try {
+                        const serial = parseInt(line.substring(6, 11).trim());
+                        const name = line.substring(12, 16).trim();
+                        const resName = line.substring(17, 20).trim();
+                        const chainId = line.substring(21, 22).trim();
+                        const resSeq = parseInt(line.substring(22, 26).trim());
+                        const x = parseFloat(line.substring(30, 38).trim());
+                        const y = parseFloat(line.substring(38, 46).trim());
+                        const z = parseFloat(line.substring(46, 54).trim());
+
+                        let element = '';
+                        if (line.length >= 78) {
+                            element = line.substring(76, 78).trim();
+                        }
+                        if (!element) {
+                            element = name.replace(/[^a-zA-Z]/g, '').substring(0, 1) || 'C';
+                        }
+
+                        const elementUpper = element.toUpperCase();
+                        const color = atomColors[elementUpper] || atomColors['default'];
+
+                        const atomIndex = atoms.length;
+                        atomSerialToIndex[serial] = atomIndex;
+
+                        atoms.push({
+                            id: atomIndex,
+                            serial: serial,
+                            name: name,
+                            element: element,
+                            res_name: resName,
+                            chain_id: chainId,
+                            res_seq: resSeq,
+                            x: x,
+                            y: y,
+                            z: z,
+                            color: color
+                        });
+                    } catch (e) {
+                        console.error('Error parsing atom:', e);
+                    }
+                } else if (recordType === 'CONECT') {
+                    try {
+                        const parts = line.trim().split(/\s+/);
+                        if (parts.length >= 2) {
+                            const atomSerial = parseInt(parts[1]);
+                            for (let i = 2; i < parts.length; i++) {
+                                const bondedSerial = parseInt(parts[i]);
+                                bonds.push({
+                                    atom1: atomSerial,
+                                    atom2: bondedSerial
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error parsing bond:', e);
+                    }
+                }
+            }
+
+            if (bonds.length === 0 && atoms.length > 1) {
+                const bondThreshold = 1.8;
+                const cellSize = bondThreshold;
+                const grid = {};
+
+                for (let i = 0; i < atoms.length; i++) {
+                    const gx = Math.floor(atoms[i].x / cellSize);
+                    const gy = Math.floor(atoms[i].y / cellSize);
+                    const gz = Math.floor(atoms[i].z / cellSize);
+                    const key = gx + ',' + gy + ',' + gz;
+                    if (!grid[key]) grid[key] = [];
+                    grid[key].push(i);
+                }
+
+                for (let i = 0; i < atoms.length; i++) {
+                    const gx = Math.floor(atoms[i].x / cellSize);
+                    const gy = Math.floor(atoms[i].y / cellSize);
+                    const gz = Math.floor(atoms[i].z / cellSize);
+
+                    for (let dx = -1; dx <= 1; dx++) {
+                        for (let dy = -1; dy <= 1; dy++) {
+                            for (let dz = -1; dz <= 1; dz++) {
+                                const key = (gx + dx) + ',' + (gy + dy) + ',' + (gz + dz);
+                                const cell = grid[key];
+                                if (!cell) continue;
+
+                                for (let ci = 0; ci < cell.length; ci++) {
+                                    const j = cell[ci];
+                                    if (j <= i) continue;
+
+                                    const ddx = atoms[i].x - atoms[j].x;
+                                    const ddy = atoms[i].y - atoms[j].y;
+                                    const ddz = atoms[i].z - atoms[j].z;
+                                    const distSq = ddx * ddx + ddy * ddy + ddz * ddz;
+                                    if (distSq < bondThreshold * bondThreshold) {
+                                        bonds.push({
+                                            atom1: atoms[i].serial,
+                                            atom2: atoms[j].serial
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            const bondsIndexed = bonds.map(bond => ({
+                atom1: atomSerialToIndex[bond.atom1],
+                atom2: atomSerialToIndex[bond.atom2]
+            })).filter(bond => bond.atom1 !== undefined && bond.atom2 !== undefined);
+
+            return {
+                atoms: atoms,
+                bonds: bondsIndexed,
+                atom_count: atoms.length,
+                bond_count: bondsIndexed.length
+            };
+        }
+
+        function setupFileUpload() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.name.endsWith('.pdb')) {
+                    handleFile(file);
+                } else {
+                    alert('请上传 .pdb 格式的文件');
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFile(file);
+                }
+            });
+        }
+
+        function handleFile(file) {
+            currentFile = file;
+            document.getElementById('file-name').textContent = file.name;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const pdbData = parsePDB(content);
+                loadMolecule(pdbData);
+            };
+            reader.readAsText(file);
+        }
+
+        function loadSampleMolecule() {
+            const samplePDB = `HEADER    PROTEIN                                 01-JAN-24
+TITLE     Sample Molecule - Caffeine
+ATOM      1  N1  CAF A   1       0.000   0.000   0.000  1.00  0.00           N
+ATOM      2  C2  CAF A   1       1.450   0.000   0.000  1.00  0.00           C
+ATOM      3  N3  CAF A   1       2.175   1.150   0.000  1.00  0.00           N
+ATOM      4  C4  CAF A   1       1.450   2.300   0.000  1.00  0.00           C
+ATOM      5  C5  CAF A   1       0.000   2.300   0.000  1.00  0.00           C
+ATOM      6  C6  CAF A   1      -0.725   1.150   0.000  1.00  0.00           C
+ATOM      7  N7  CAF A   1      -0.725  -1.150   0.000  1.00  0.00           N
+ATOM      8  C8  CAF A   1       0.000  -2.300   0.000  1.00  0.00           C
+ATOM      9  N9  CAF A   1       1.450  -2.300   0.000  1.00  0.00           N
+ATOM     10  C10 CAF A   1       2.175  -1.150   0.000  1.00  0.00           C
+ATOM     11  O11 CAF A   1      -2.000   1.150   0.000  1.00  0.00           O
+ATOM     12  O12 CAF A   1       2.800   1.150   0.000  1.00  0.00           O
+ATOM     13  C13 CAF A   1      -1.500  -1.150   1.200  1.00  0.00           C
+ATOM     14  H1  CAF A   1       2.000   3.200   0.000  1.00  0.00           H
+ATOM     15  H2  CAF A   1      -0.500   3.200   0.000  1.00  0.00           H
+ATOM     16  H3  CAF A   1      -0.500  -3.200   0.000  1.00  0.00           H
+ATOM     17  H4  CAF A   1       2.000  -3.200   0.000  1.00  0.00           H
+ATOM     18  H5  CAF A   1      -2.500  -1.150   1.200  1.00  0.00           H
+ATOM     19  H6  CAF A   1      -1.200  -0.150   1.200  1.00  0.00           H
+ATOM     20  H7  CAF A   1      -1.200  -2.000   1.800  1.00  0.00           H
+CONECT    1    2    6    7
+CONECT    2    1    3   10
+CONECT    3    2    4   12
+CONECT    4    3    5
+CONECT    5    4    6
+CONECT    6    5    1   11
+CONECT    7    1    8   13
+CONECT    8    7    9
+CONECT    9    8   10
+CONECT   10    9    2
+CONECT   11    6
+CONECT   12    3
+CONECT   13    7
+END
+`;
+            const pdbData = parsePDB(samplePDB);
+            document.getElementById('file-name').textContent = 'sample_caffeine.pdb';
+            loadMolecule(pdbData);
+        }
+
+        async function calculateAverageMass() {
+            if (selectedAtomIds.size === 0) return;
+
+            showLoading(true);
+            document.getElementById('calculate-btn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/calculate-mass`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        atom_ids: Array.from(selectedAtomIds),
+                        atoms_data: atomsData
+                    })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.detail || '计算失败');
+                }
+
+                const result = await response.json();
+
+                document.getElementById('result-panel').style.display = 'block';
+                document.getElementById('average-mass').textContent = result.average_mass;
+                document.getElementById('result-count').textContent = result.selected_count;
+                document.getElementById('total-mass').textContent = result.total_mass + ' g/mol';
+
+                updateStatus(`计算完成：平均质量 ${result.average_mass} g/mol`);
+            } catch (error) {
+                console.error('Calculation error:', error);
+                alert('计算失败：' + error.message);
+            } finally {
+                showLoading(false);
+                document.getElementById('calculate-btn').disabled = false;
+            }
+        }
+
+        function clearSelection() {
+            selectedAtomIds.clear();
+            updateSelectionOverlay();
+            updateSelectedAtomsList();
+            updateCalculateButton();
+            document.getElementById('result-panel').style.display = 'none';
+        }
+
+        function resetView() {
+            camera.position.set(0, 0, 30);
+            if (window.rotationGroup) {
+                window.rotationGroup.rotation.set(0, 0, 0);
+            }
+        }
+
+        function updateAtomSize() {
+            const value = parseFloat(document.getElementById('atom-size').value);
+            document.getElementById('atom-size-value').textContent = value;
+            if (lastPdbData) {
+                loadMolecule(lastPdbData);
+            }
+        }
+
+        function updateBondSize() {
+            const value = parseFloat(document.getElementById('bond-size').value);
+            document.getElementById('bond-size-value').textContent = value;
+            if (lastPdbData) {
+                loadMolecule(lastPdbData);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            setupFileUpload();
+
+            document.getElementById('load-sample').addEventListener('click', loadSampleMolecule);
+            document.getElementById('calculate-btn').addEventListener('click', calculateAverageMass);
+            document.getElementById('clear-selection').addEventListener('click', clearSelection);
+            document.getElementById('reset-view').addEventListener('click', resetView);
+            document.getElementById('atom-size').addEventListener('input', updateAtomSize);
+            document.getElementById('bond-size').addEventListener('input', updateBondSize);
+        });
+    </script>
+</body>
+</html>
