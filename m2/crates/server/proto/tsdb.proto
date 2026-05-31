@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package tsdb;
+
+message Tag {
+    string key = 1;
+    string value = 2;
+}
+
+message Field {
+    string key = 1;
+    oneof value {
+        double float_value = 2;
+        int64 int_value = 3;
+        bool bool_value = 4;
+        string string_value = 5;
+    }
+}
+
+message DataPoint {
+    string measurement = 1;
+    repeated Tag tags = 2;
+    int64 timestamp = 3;
+    repeated Field fields = 4;
+}
+
+message WriteRequest {
+    repeated DataPoint points = 1;
+}
+
+message WriteResponse {
+    bool success = 1;
+    string message = 2;
+    uint32 written = 3;
+}
+
+service WriteService {
+    rpc Write(WriteRequest) returns (WriteResponse);
+    rpc WriteStream(stream WriteRequest) returns (WriteResponse);
+}

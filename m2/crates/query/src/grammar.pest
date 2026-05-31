@@ -1,0 +1,45 @@
+query = { select_clause ~ where_clause? ~ group_by_clause? ~ EOI }
+
+select_clause = { "SELECT" ~ ws ~ select_list ~ ws ~ "FROM" ~ ws ~ identifier }
+
+select_list = { select_item ~ (ws ~ "," ~ ws ~ select_item)* }
+
+select_item = { aggregate_function | field_ref }
+
+aggregate_function = { function_name ~ "(" ~ ws ~ field_ref ~ ws ~ ")" }
+
+function_name = { "mean" | "sum" | "count" | "min" | "max" | "first" | "last" }
+
+field_ref = { identifier | "*" }
+
+where_clause = { "WHERE" ~ ws ~ condition_list }
+
+condition_list = { condition ~ (ws ~ "AND" ~ ws ~ condition)* }
+
+condition = { identifier ~ ws ~ operator ~ ws ~ value }
+
+operator = { "=" | "!=" | ">" | "<" | ">=" | "<=" }
+
+value = { string | number | time_expr | now }
+
+string = { "'" ~ identifier ~ "'" }
+
+number = { "-"? ~ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+
+time_expr = { now ~ ws ~ time_op ~ ws ~ duration }
+
+now = { "now()" }
+
+time_op = { "+" | "-" }
+
+duration = { number ~ time_unit }
+
+time_unit = { "ms" | "s" | "m" | "h" | "d" | "w" }
+
+group_by_clause = { "GROUP" ~ ws ~ "BY" ~ ws ~ group_by_list }
+
+group_by_list = { identifier ~ (ws ~ "," ~ ws ~ identifier)* }
+
+identifier = @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHA | ASCII_DIGIT | "_")* }
+
+ws = _{ " "+ }
