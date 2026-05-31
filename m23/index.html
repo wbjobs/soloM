@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 双向链接管理器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <button id="selectFolderBtn" class="btn">选择文件夹</button>
+        <span id="currentFolder" class="current-folder"></span>
+      </div>
+      <div id="fileTree" class="file-tree"></div>
+    </div>
+    
+    <div class="main-content">
+      <div class="editor-pane">
+        <div class="pane-header">
+          <span>Markdown 编辑器</span>
+          <button id="saveBtn" class="btn small" disabled>保存</button>
+        </div>
+        <textarea id="editor" placeholder="选择或创建一个 Markdown 文件开始编辑..."></textarea>
+      </div>
+      
+      <div class="preview-pane">
+        <div class="pane-header">预览</div>
+        <div id="preview" class="preview-content"></div>
+      </div>
+    </div>
+    
+    <div class="graph-panel">
+      <div class="pane-header">
+        <span>双向链接图谱</span>
+        <button id="refreshGraphBtn" class="btn small" disabled>刷新</button>
+      </div>
+      <div id="graphStats" class="graph-stats"></div>
+      <div class="graph-tabs">
+        <button class="tab-btn active" data-tab="json">JSON</button>
+        <button class="tab-btn" data-tab="visual">可视化</button>
+      </div>
+      <div id="jsonTab" class="tab-content active">
+        <pre id="graphJson"></pre>
+      </div>
+      <div id="visualTab" class="tab-content">
+        <canvas id="graphCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="node_modules/marked/marked.min.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
