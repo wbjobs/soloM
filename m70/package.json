@@ -1,0 +1,19 @@
+{
+  "name": "decentralized-dns",
+  "version": "1.0.0",
+  "description": "Decentralized Domain Name Service with Merkle Tree and Blockchain",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "crypto-js": "^4.2.0",
+    "ethers": "^6.16.0",
+    "express": "^5.2.1"
+  }
+}

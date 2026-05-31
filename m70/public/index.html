@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>去中心化域名解析服务</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 去中心化域名解析服务</h1>
+            <p class="subtitle">基于 Merkle Tree 和区块链的不可篡改域名系统</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="resolve">域名解析</button>
+            <button class="tab-btn" data-tab="register">域名注册</button>
+            <button class="tab-btn" data-tab="mempool">内存池</button>
+            <button class="tab-btn" data-tab="transfer">域名转移</button>
+            <button class="tab-btn" data-tab="explorer">区块链浏览器</button>
+        </div>
+
+        <div id="resolve" class="tab-content active">
+            <div class="card">
+                <h2>🔍 域名解析</h2>
+                <div class="input-group">
+                    <input type="text" id="resolveName" placeholder="输入域名 (例如: mydomain.dn)">
+                    <button onclick="resolveDomain()">解析</button>
+                </div>
+                <div id="resolveResult" class="result"></div>
+            </div>
+        </div>
+
+        <div id="register" class="tab-content">
+            <div class="card">
+                <h2>📝 域名注册</h2>
+                <p class="hint">注册请求将先进入内存池，每 10 秒按 Gas 费高低排序打包出块</p>
+                <div class="input-group">
+                    <input type="text" id="registerName" placeholder="域名 (例如: mydomain)">
+                    <input type="text" id="ownerAddress" placeholder="所有者地址 (例如: 0x1234...abcd)">
+                    <input type="number" id="gasPrice" placeholder="Gas 费 (≥1, 越高越优先)" min="1" value="1">
+                    <button onclick="registerDomain()">提交注册</button>
+                </div>
+                <div id="registerResult" class="result"></div>
+            </div>
+        </div>
+
+        <div id="mempool" class="tab-content">
+            <div class="card">
+                <h2>🏊 交易内存池 (Mempool)</h2>
+                <p class="hint">等待被打包的交易，按 Gas 费从高到低排序。每 10 秒自动出块。</p>
+                <div class="mempool-header">
+                    <div id="mempoolCount" class="mempool-count">待处理交易: 0</div>
+                    <button onclick="refreshMempool()">刷新</button>
+                </div>
+                <div id="mempoolList" class="mempool-list"></div>
+            </div>
+        </div>
+
+        <div id="transfer" class="tab-content">
+            <div class="card">
+                <h2>🔄 域名所有权转移</h2>
+                <p class="hint">使用原所有者的私钥签名转移消息，验证通过后进入内存池等待打包</p>
+                
+                <div class="wallet-section">
+                    <h3>🔑 钱包管理</h3>
+                    <div class="input-group">
+                        <input type="text" id="privateKey" placeholder="输入私钥 (0x...) 或点击生成">
+                        <button onclick="generateWallet()">生成新钱包</button>
+                        <button onclick="importWallet()">导入钱包</button>
+                    </div>
+                    <div id="walletInfo" class="wallet-info"></div>
+                </div>
+
+                <div class="transfer-section">
+                    <h3>📝 转移操作</h3>
+                    <div class="input-group">
+                        <input type="text" id="transferName" placeholder="域名 (例如: mydomain)">
+                        <input type="text" id="newOwner" placeholder="新所有者地址 (0x...)">
+                        <input type="number" id="transferGasPrice" placeholder="Gas 费 (≥1)" min="1" value="1">
+                    </div>
+                    <div class="signature-preview">
+                        <p><strong>待签名消息:</strong></p>
+                        <code id="messageToSign" class="message-box">-</code>
+                    </div>
+                    <div class="input-group">
+                        <button onclick="previewMessage()">预览消息</button>
+                        <button onclick="signAndTransfer()">签名并提交转移</button>
+                    </div>
+                </div>
+                <div id="transferResult" class="result"></div>
+            </div>
+        </div>
+
+        <div id="explorer" class="tab-content">
+            <div class="card">
+                <h2>⛓️ 区块链信息</h2>
+                <div id="chainInfo" class="chain-info"></div>
+                <button onclick="refreshChainInfo()">刷新信息</button>
+            </div>
+
+            <div class="card">
+                <h2>📚 已注册域名列表</h2>
+                <div id="domainsList" class="domains-list"></div>
+            </div>
+
+            <div class="card">
+                <h2>🔗 区块链</h2>
+                <div id="blocksList" class="blocks-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
