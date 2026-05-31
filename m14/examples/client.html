@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Push Gateway Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #messages {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .push {
+            background-color: #e3f2fd;
+        }
+        .broadcast {
+            background-color: #fff3e0;
+        }
+        .system {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .connected {
+            background-color: #c8e6c9;
+            color: #2e7d32;
+        }
+        .disconnected {
+            background-color: #ffcdd2;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <h1>消息推送网关测试客户端</h1>
+
+    <div class="section">
+        <h2>连接设置</h2>
+        <input type="text" id="gatewayUrl" placeholder="WebSocket URL" value="ws://localhost:8080/ws">
+        <input type="text" id="userId" placeholder="User ID" value="user001">
+        <button onclick="connect()">连接</button>
+        <button onclick="disconnect()">断开</button>
+        <div id="status" class="status disconnected">未连接</div>
+    </div>
+
+    <div class="section">
+        <h2>消息记录</h2>
+        <button onclick="clearMessages()">清空消息</button>
+        <div id="messages"></div>
+    </div>
+
+    <div class="section">
+        <h2>查询离线消息</h2>
+        <input type="text" id="historyUserId" placeholder="User ID" value="user001">
+        <input type="number" id="historyLimit" placeholder="Limit" value="50" min="1" max="200">
+        <button onclick="queryHistory()">查询历史</button>
+        <div id="historyResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>测试推送 (使用 curl)</h2>
+        <pre id="curlExample">
+# 推送给指定用户
+curl -X POST http://localhost:9090/api/push \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_ids": ["user001", "user002"],
+    "payload": {
+      "title": "测试消息",
+      "content": "这是一条推送消息",
+      "time": "'$(date +%Y-%m-%d\ %H:%M:%S)'"
+    }
+  }'
+
+# 广播给所有用户
+curl -X POST http://localhost:9090/api/broadcast \
+  -H "Content-Type: application/json" \
+  -d '{
+    "payload": {
+      "type": "broadcast",
+      "content": "这是一条广播消息"
+    }
+  }'
+        </pre>
+    </div>
+
+    <script>
+        let ws = null;
+
+        function connect() {
+            const url = document.getElementById('gatewayUrl').value;
+            const userId = document.getElementById('userId').value;
+
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                addMessage('system', '已经连接');
+                return;
+            }
+
+            ws = new WebSocket(url);
+
+            ws.onopen = function() {
+                document.getElementById('status').className = 'status connected';
+                document.getElementById('status').textContent = '已连接 - 正在认证...';
+
+                const authMsg = {
+                    type: 'auth',
+                    payload: {
+                        user_id: userId
+                    }
+                };
+                ws.send(JSON.stringify(authMsg));
+                addMessage('system', '发送认证请求: ' + userId);
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const msg = JSON.parse(event.data);
+                    console.log('Received:', msg);
+
+                    if (msg.type === 'auth_ack') {
+                        document.getElementById('status').textContent = '已连接 - 用户: ' + userId;
+                        addMessage('system', '认证成功: ' + msg.payload.user_id);
+                    } else if (msg.type === 'push') {
+                        addMessage('push', `MSG_ID: ${msg.msg_id}<br>` + JSON.stringify(msg.payload, null, 2));
+                        if (msg.msg_id) {
+                            sendACK(msg.msg_id);
+                            addMessage('system', '已发送 ACK: ' + msg.msg_id);
+                        }
+                    } else if (msg.type === 'broadcast') {
+                        addMessage('broadcast', JSON.stringify(msg.payload, null, 2));
+                    }
+                } catch (e) {
+                    addMessage('system', '解析消息失败: ' + event.data);
+                }
+            };
+
+            function sendACK(msgId) {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    const ackMsg = {
+                        type: 'ack',
+                        msg_id: msgId
+                    };
+                    ws.send(JSON.stringify(ackMsg));
+                }
+            }
+
+            ws.onclose = function() {
+                document.getElementById('status').className = 'status disconnected';
+                document.getElementById('status').textContent = '连接已断开';
+                addMessage('system', '连接已关闭');
+            };
+
+            ws.onerror = function(error) {
+                addMessage('system', '连接错误');
+            };
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        function addMessage(type, content) {
+            const messagesDiv = document.getElementById('messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + type;
+            const time = new Date().toLocaleTimeString();
+            msgDiv.innerHTML = `<strong>[${time}]</strong> ${content.replace(/\n/g, '<br>')}`;
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = '';
+        }
+
+        async function queryHistory() {
+            const userId = document.getElementById('historyUserId').value;
+            const limit = document.getElementById('historyLimit').value;
+            const resultDiv = document.getElementById('historyResult');
+
+            try {
+                const response = await fetch(`http://localhost:9090/api/history?user_id=${userId}&limit=${limit}`);
+                const data = await response.json();
+
+                if (data.success && data.data && data.data.length > 0) {
+                    let html = `<h4>历史消息 (共 ${data.total} 条)</h4>`;
+                    html += '<table style="width:100%;border-collapse:collapse;">';
+                    html += '<tr><th style="border:1px solid #ccc;padding:8px;">时间</th><th style="border:1px solid #ccc;padding:8px;">状态</th><th style="border:1px solid #ccc;padding:8px;">内容</th></tr>';
+                    for (const msg of data.data) {
+                        const time = new Date(msg.timestamp * 1000).toLocaleString();
+                        const statusColor = msg.status === 'delivered' ? 'green' : 'red';
+                        html += `<tr>
+                            <td style="border:1px solid #ccc;padding:8px;">${time}</td>
+                            <td style="border:1px solid #ccc;padding:8px;color:${statusColor};">${msg.status}</td>
+                            <td style="border:1px solid #ccc;padding:8px;"><pre>${JSON.stringify(msg.payload, null, 2)}</pre></td>
+                        </tr>`;
+                    }
+                    html += '</table>';
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = '<p>暂无历史消息</p>';
+                }
+            } catch (e) {
+                resultDiv.innerHTML = `<p style="color:red;">查询失败: ${e.message}</p>`;
+            }
+        }
+
+        window.onbeforeunload = function() {
+            if (ws) {
+                ws.close();
+            }
+        };
+    </script>
+</body>
+</html>
