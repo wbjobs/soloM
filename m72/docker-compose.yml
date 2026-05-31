@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: industrial
+      POSTGRES_PASSWORD: industrial123
+      POSTGRES_DB: sensor_db
+    volumes:
+      - tsdb_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U industrial -d sensor_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "1883:1883"
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_ADDR: redis:6379
+      MQTT_PORT: 1883
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+    environment:
+      REDIS_ADDR: redis:6379
+      DB_HOST: timescaledb
+      DB_PORT: 5432
+      DB_USER: industrial
+      DB_PASSWORD: industrial123
+      DB_NAME: sensor_db
+      API_PORT: 8080
+
+  simulator:
+    build:
+      context: ./simulator
+      dockerfile: Dockerfile
+    depends_on:
+      - gateway
+    environment:
+      MQTT_BROKER: tcp://gateway:1883
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    environment:
+      REACT_APP_API_URL: http://localhost:8080
+
+volumes:
+  redis_data:
+  tsdb_data:
