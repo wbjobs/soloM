@@ -1,0 +1,20 @@
+server:
+  host: "127.0.0.1"
+  port: 8080
+
+exchange:
+  name: "binance"
+  ws_url: "wss://stream.binance.com:9443/ws"
+  symbols:
+    - "btcusdt"
+  use_mock: true
+
+orderbook:
+  max_levels: 20
+  depth_calculation_levels: 10
+
+metrics:
+  update_interval_ms: 100
+
+logging:
+  level: "info"
