@@ -1,0 +1,34 @@
+{
+  "name": "log-analyzer-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for analyzing large error.log files using Node.js + LangChain.js with Ollama or OpenAI",
+  "main": "src/index.js",
+  "bin": {
+    "log-analyzer": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/index.js --file ./example/error.log --provider ollama"
+  },
+  "keywords": [
+    "log",
+    "analyzer",
+    "cli",
+    "langchain",
+    "ollama",
+    "openai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/community": "^0.3.0",
+    "@langchain/core": "^0.3.0",
+    "@langchain/openai": "^0.3.0",
+    "chalk": "^4.1.2",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.3.0",
+    "ora": "^5.4.1"
+  },
+  "type": "module"
+}

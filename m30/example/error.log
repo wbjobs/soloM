@@ -1,0 +1,139 @@
+2026-05-20 08:15:23 INFO Server starting up on port 3000
+2026-05-20 08:15:24 INFO Database connection established
+2026-05-20 08:15:25 INFO Cache initialized with 1000 entries
+2026-05-20 08:15:30 DEBUG Processing request from 192.168.1.100
+2026-05-20 08:15:31 INFO User login successful: user123
+2026-05-20 08:16:45 WARN High memory usage detected: 85%
+2026-05-20 08:17:00 ERROR Failed to connect to Redis server at localhost:6379
+    at RedisClient.connect (/app/src/cache/redis.js:45:23)
+    at CacheManager.initialize (/app/src/cache/manager.js:22:15)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+Caused by: Error: Connection refused
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1195:16)
+2026-05-20 08:17:01 INFO Retrying Redis connection (attempt 1/5)
+2026-05-20 08:17:05 ERROR Failed to connect to Redis server at localhost:6379
+    at RedisClient.connect (/app/src/cache/redis.js:45:23)
+Caused by: Error: Connection refused
+2026-05-20 08:17:10 ERROR Failed to connect to Redis server at localhost:6379
+2026-05-20 08:17:15 ERROR Failed to connect to Redis server at localhost:6379
+2026-05-20 08:17:20 ERROR Failed to connect to Redis server at localhost:6379
+2026-05-20 08:17:25 FATAL Redis connection failed after 5 attempts. Exiting.
+    at process.exit (/app/src/server.js:120:17)
+2026-05-28 10:30:00 INFO Server restarted
+2026-05-28 10:30:05 INFO Database connection pool initialized: 10 connections
+2026-05-28 10:30:10 DEBUG Loading configuration from /app/config/prod.json
+2026-05-28 10:31:22 ERROR Database query timeout after 30000ms
+Query: SELECT * FROM orders WHERE status = 'PENDING' AND created_at < '2026-05-20'
+    at Query.execute (/app/src/db/query.js:89:19)
+    at OrderRepository.findStaleOrders (/app/src/repositories/order.js:156:32)
+Caused by: Error: Query timeout exceeded
+2026-05-28 10:32:00 WARN Slow query detected: 25000ms
+2026-05-28 10:32:15 ERROR Database query timeout after 30000ms
+Query: UPDATE inventory SET quantity = quantity - 1 WHERE product_id = 9876
+    at Query.execute (/app/src/db/query.js:89:19)
+2026-05-28 10:33:00 ERROR Unable to process payment for order #45678
+    at PaymentService.charge (/app/src/services/payment.js:78:13)
+    at OrderService.completeOrder (/app/src/services/order.js:234:28)
+Caused by: Error: Stripe API error: Rate limit exceeded
+    at StripeClient.request (/app/src/clients/stripe.js:56:21)
+2026-05-28 10:33:05 ERROR Unable to process payment for order #45679
+Caused by: Error: Stripe API error: Rate limit exceeded
+2026-05-28 10:33:10 ERROR Unable to process payment for order #45680
+Caused by: Error: Stripe API error: Rate limit exceeded
+2026-05-28 10:34:00 INFO API rate limits reset
+2026-05-28 10:35:22 ERROR NullPointerException in UserProfileService
+    at UserProfileService.updateLastLogin (/app/src/services/userProfile.js:112:45)
+    at AuthController.login (/app/src/controllers/auth.js:89:34)
+Caused by: java.lang.NullPointerException: Cannot read property 'id' of null
+    at UserProfileService.updateLastLogin (userProfile.js:112)
+2026-05-28 10:36:00 ERROR NullPointerException in UserProfileService
+Caused by: java.lang.NullPointerException: Cannot read property 'id' of null
+2026-05-28 10:37:00 ERROR Disk space critically low on /var/log: 95% used
+    at DiskMonitor.checkSpace (/app/src/monitor/disk.js:67:21)
+2026-05-28 10:38:00 ERROR Failed to write log to /var/log/app.log: No space left on device
+    at FileAppender.write (/app/src/logging/appenders.js:34:17)
+2026-05-28 10:39:00 ERROR Failed to write log to /var/log/app.log: No space left on device
+2026-05-29 14:20:00 INFO Scheduled backup job started
+2026-05-29 14:20:30 ERROR Backup failed: S3 bucket access denied
+    at S3Client.upload (/app/src/clients/s3.js:89:17)
+    at BackupService.uploadToS3 (/app/src/services/backup.js:145:32)
+Caused by: AccessDenied: Access Denied
+    at Request.extractError (/app/node_modules/aws-sdk/lib/services/s3.js:719:35)
+2026-05-29 14:21:00 ERROR Backup failed: S3 bucket access denied
+2026-05-29 14:22:00 WARN Backup job failed, will retry in 60 minutes
+2026-05-29 15:30:00 ERROR OutOfMemoryError: Java heap space
+    at com.example.cache.LRUCache.put(LRUCache.java:87)
+    at com.example.service.DataService.loadData(DataService.java:156)
+Caused by: java.lang.OutOfMemoryError: Java heap space
+    at java.base/java.util.HashMap.resize(HashMap.java:816)
+2026-05-29 15:31:00 ERROR OutOfMemoryError: Java heap space
+2026-05-29 15:32:00 CRITICAL Application crash due to out of memory
+2026-05-29 16:00:00 INFO JVM restarted with increased heap size: 4GB
+2026-05-29 16:05:00 ERROR Connection pool exhausted - no available connections
+    at ConnectionPool.getConnection (/app/src/db/pool.js:78:19)
+    at UserRepository.findById (/app/src/repositories/user.js:45:22)
+2026-05-29 16:05:05 ERROR Connection pool exhausted - no available connections
+2026-05-29 16:05:10 ERROR Connection pool exhausted - no available connections
+2026-05-29 16:06:00 WARN Connection pool usage: 100%
+2026-05-29 16:07:00 ERROR Failed to send email notification via SMTP
+    at EmailService.send (/app/src/services/email.js:123:15)
+Caused by: Error: Connection timeout to smtp.example.com:587
+2026-05-29 16:08:00 ERROR Failed to send email notification via SMTP
+2026-05-29 16:10:00 INFO SMTP connection restored
+2026-05-29 17:00:00 ERROR Invalid JWT token signature
+    at AuthMiddleware.verifyToken (/app/src/middleware/auth.js:67:21)
+Caused by: JsonWebTokenError: invalid signature
+    at /app/node_modules/jsonwebtoken/verify.js:133:19
+2026-05-29 17:00:05 ERROR Invalid JWT token signature
+2026-05-29 17:00:10 ERROR Invalid JWT token signature
+2026-05-29 17:01:00 WARN Possible JWT secret rotation needed
+2026-05-29 18:30:00 ERROR WebSocket connection closed unexpectedly: code 1006
+    at WebSocketManager.handleClose (/app/src/websocket/manager.js:156:18)
+2026-05-29 18:30:05 ERROR WebSocket connection closed unexpectedly: code 1006
+2026-05-29 18:31:00 INFO WebSocket reconnection successful
+2026-05-29 19:45:00 ERROR Elasticsearch index failed: circuit_breaking_exception
+    at ElasticsearchClient.index (/app/src/clients/elasticsearch.js:98:23)
+Caused by: [circuit_breaking_exception] [parent] Data too large, data for [<http_request>] would be [1234567890/1.1gb], which is larger than the limit of [1073741824/1gb]
+2026-05-29 19:45:30 ERROR Elasticsearch index failed: circuit_breaking_exception
+2026-05-29 20:00:00 ERROR Kafka producer timeout: Failed to deliver message to topic 'order-events'
+    at KafkaProducer.send (/app/src/clients/kafka.js:76:19)
+Caused by: TimeoutException: Topic order-events not present in metadata after 60000 ms
+2026-05-29 20:00:30 ERROR Kafka producer timeout: Failed to deliver message to topic 'order-events'
+2026-05-29 21:00:00 INFO Application running normally
+2026-05-29 21:30:00 ERROR GraphQL query depth limit exceeded: depth 15, max 10
+    at GraphQLValidator.validateDepth (/app/src/graphql/validator.js:45:19)
+2026-05-29 21:30:05 ERROR GraphQL query depth limit exceeded: depth 15, max 10
+2026-05-29 22:00:00 INFO Daily maintenance completed
+2026-05-30 08:00:00 INFO Server health check: OK
+2026-05-30 08:05:00 ERROR SSL handshake failed with upstream service api.payment-provider.com
+    at TLSSocket.<anonymous> (/app/src/clients/http.js:167:28)
+Caused by: Error: certificate has expired
+    at TLSSocket.onConnectSecure (node:_tls_wrap:1539:34)
+2026-05-30 08:05:10 ERROR SSL handshake failed with upstream service api.payment-provider.com
+2026-05-30 08:05:20 ERROR SSL handshake failed with upstream service api.payment-provider.com
+2026-05-30 08:06:00 WARN Payment service API appears to have expired SSL certificate
+2026-05-30 08:10:00 ERROR Cannot read property 'length' of undefined
+    at OrderProcessor.calculateTotal (/app/src/processors/order.js:234:51)
+    at OrderProcessor.process (/app/src/processors/order.js:89:23)
+Caused by: TypeError: Cannot read property 'length' of undefined
+    at OrderProcessor.calculateTotal (order.js:234)
+2026-05-30 08:10:30 ERROR Cannot read property 'length' of undefined
+2026-05-30 08:11:00 INFO Investigating order processing issue
+2026-05-30 08:15:00 ERROR Lock wait timeout exceeded; try restarting transaction
+Query: UPDATE products SET stock = stock - 1 WHERE id = 12345
+    at Query.execute (/app/src/db/query.js:89:19)
+    at InventoryService.decrementStock (/app/src/services/inventory.js:178:36)
+Caused by: Error: ER_LOCK_WAIT_TIMEOUT: Lock wait timeout exceeded; try restarting transaction
+2026-05-30 08:15:30 ERROR Lock wait timeout exceeded; try restarting transaction
+2026-05-30 08:16:00 ERROR Lock wait timeout exceeded; try restarting transaction
+2026-05-30 08:17:00 INFO Database deadlock detected, analyzing...
+2026-05-30 08:20:00 ERROR Rate limit exceeded for API endpoint /api/v1/orders
+    at RateLimiter.check (/app/src/middleware/rateLimit.js:78:19)
+2026-05-30 08:20:10 ERROR Rate limit exceeded for API endpoint /api/v1/orders
+2026-05-30 08:20:20 ERROR Rate limit exceeded for API endpoint /api/v1/orders
+2026-05-30 08:21:00 INFO Rate limit metrics: 1500 requests/minute from 192.168.1.200
+2026-05-30 08:25:00 ERROR Failed to decode protobuf message: invalid wire type
+    at ProtobufDecoder.decode (/app/src/serialization/protobuf.js:67:15)
+    at MessageQueueConsumer.processMessage (/app/src/queue/consumer.js:89:28)
+2026-05-30 08:25:30 ERROR Failed to decode protobuf message: invalid wire type
+2026-05-30 08:26:00 WARN Possible message schema mismatch between producer and consumer
