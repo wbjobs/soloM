@@ -1,0 +1,52 @@
+[general]
+theme = "dark"
+auto_start = false
+log_retention_days = 30
+log_level = "info"
+
+[[tasks]]
+name = "打开终端"
+description = "使用 Ctrl+Alt+T 打开终端"
+hotkey = "Ctrl+Alt+T"
+script_type = "shell"
+script_path = ""
+working_dir = "."
+enabled = true
+script_content = '''
+#!/bin/bash
+echo "正在打开终端..."
+'''
+
+[[tasks]]
+name = "系统信息"
+description = "使用 Ctrl+Shift+I 显示系统信息"
+hotkey = "Ctrl+Shift+I"
+script_type = "python"
+script_path = ""
+working_dir = "."
+enabled = true
+script_content = '''
+import platform
+import sys
+
+print("系统信息:")
+print(f"  操作系统: {platform.system()} {platform.release()}")
+print(f"  处理器: {platform.machine()}")
+print(f"  Python 版本: {sys.version.split()[0]}")
+'''
+
+[[tasks]]
+name = "清理临时文件"
+description = "使用 Ctrl+Alt+C 清理临时文件"
+hotkey = "Ctrl+Alt+C"
+script_type = "shell"
+script_path = ""
+working_dir = "."
+enabled = false
+script_content = '''
+#!/bin/bash
+echo "正在清理临时文件..."
+'''
+
+[tasks.env]
+PATH = "/usr/local/bin:/usr/bin:/bin"

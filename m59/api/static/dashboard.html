@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crawler Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1e293b,#334155);padding:20px 32px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:22px;font-weight:600;background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .status{display:flex;align-items:center;gap:8px;font-size:13px;color:#94a3b8}
+.header .dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:pulse 2s infinite}
+.header .dot.connected{background:#22c55e}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;padding:24px 32px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:24px;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.card .label{font-size:13px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.card .value{font-size:36px;font-weight:700;line-height:1.2}
+.card .sub{font-size:12px;color:#64748b;margin-top:6px}
+.card.crawl .value{color:#38bdf8}
+.card.success .value{color:#22c55e}
+.card.time .value{color:#a78bfa}
+.card.queue .value{color:#fb923c}
+.card.proxy .value{color:#f472b6}
+.card.clean .value{color:#34d399}
+.progress-bar{width:100%;height:6px;background:#334155;border-radius:3px;margin-top:12px;overflow:hidden}
+.progress-bar .fill{height:100%;border-radius:3px;transition:width .6s ease}
+.chart-section{padding:0 32px 32px}
+.chart-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:24px}
+.chart-card h3{font-size:15px;color:#94a3b8;margin-bottom:16px}
+#timeline{width:100%;height:200px}
+.footer{text-align:center;padding:20px;color:#475569;font-size:12px}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Distributed Crawler Dashboard</h1>
+  <div class="status">
+    <span class="dot" id="wsDot"></span>
+    <span id="wsStatus">Connecting...</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card crawl">
+    <div class="label">Today's Crawl Volume</div>
+    <div class="value" id="totalCrawled">0</div>
+    <div class="sub">Total pages crawled today</div>
+  </div>
+  <div class="card success">
+    <div class="label">Success Rate</div>
+    <div class="value" id="successRate">0%</div>
+    <div class="sub"><span id="successCount">0</span> success / <span id="failCount">0</span> failed</div>
+    <div class="progress-bar"><div class="fill" id="successBar" style="width:0%;background:#22c55e"></div></div>
+  </div>
+  <div class="card time">
+    <div class="label">Avg Response Time</div>
+    <div class="value" id="avgResponseTime">0s</div>
+    <div class="sub">Average HTTP response latency</div>
+  </div>
+  <div class="card queue">
+    <div class="label">Pending Tasks</div>
+    <div class="value" id="pendingTasks">0</div>
+    <div class="sub"><span id="resultQueue">0</span> in result queue</div>
+  </div>
+  <div class="card proxy">
+    <div class="label">Proxy Pool</div>
+    <div class="value" id="proxyAvailable">0</div>
+    <div class="sub"><span id="proxyBlacklisted">0</span> blacklisted</div>
+  </div>
+  <div class="card clean">
+    <div class="label">Cleaned Records</div>
+    <div class="value" id="cleanedCount">0</div>
+    <div class="sub">Data ETL processed today</div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-card">
+    <h3>Crawl Timeline (Recent Updates)</h3>
+    <canvas id="timeline"></canvas>
+  </div>
+</div>
+
+<div class="footer">Distributed Crawler Platform v1.0 &mdash; Real-time WebSocket Dashboard</div>
+
+<script>
+const history = {labels:[],total:[],success:[],fail:[]};
+const MAX_POINTS = 60;
+
+function initChart(){
+  const canvas = document.getElementById('timeline');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.clientWidth - 48;
+  canvas.height = 200;
+  drawChart(ctx, canvas);
+  window.addEventListener('resize', () => {
+    canvas.width = canvas.parentElement.clientWidth - 48;
+    drawChart(ctx, canvas);
+  });
+}
+
+function drawChart(ctx, canvas){
+  const w = canvas.width, h = canvas.height;
+  const pad = {top:20,right:20,bottom:30,left:50};
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(0,0,w,h);
+
+  const maxVal = Math.max(10, ...history.total, ...history.success);
+
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  for(let i=0;i<=4;i++){
+    const y = pad.top + (ch/4)*i;
+    ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(w-pad.right,y);ctx.stroke();
+    ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(maxVal - (maxVal/4)*i), pad.left-8, y+4);
+  }
+
+  if(history.labels.length > 1){
+    const n = history.labels.length;
+    const step = cw / Math.max(n-1, 1);
+
+    const drawLine = (data, color) => {
+      ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;
+      data.forEach((v,i) => {
+        const x = pad.left + i * step;
+        const y = pad.top + ch - (v / maxVal) * ch;
+        i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+    };
+    drawLine(history.total, '#38bdf8');
+    drawLine(history.success, '#22c55e');
+  }
+
+  if(history.labels.length > 0){
+    const n = history.labels.length;
+    const step = cw / Math.max(n-1, 1);
+    ctx.fillStyle='#64748b';ctx.font='10px sans-serif';ctx.textAlign='center';
+    const showEvery = Math.max(1, Math.floor(n / 8));
+    history.labels.forEach((l,i) => {
+      if(i % showEvery === 0){
+        const x = pad.left + i * step;
+        ctx.fillText(l, x, h - 8);
+      }
+    });
+  }
+
+  ctx.fillStyle='#38bdf8';ctx.fillRect(pad.left, h-12, 10, 3);
+  ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='left';
+  ctx.fillText('Total', pad.left+14, h-8);
+  ctx.fillStyle='#22c55e';ctx.fillRect(pad.left+60, h-12, 10, 3);
+  ctx.fillStyle='#94a3b8';ctx.fillText('Success', pad.left+74, h-8);
+}
+
+let ws = null;
+let reconnectDelay = 1000;
+
+function connect(){
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const url = `${proto}//${location.host}/ws/dashboard`;
+  ws = new WebSocket(url);
+
+  ws.onopen = () => {
+    document.getElementById('wsDot').classList.add('connected');
+    document.getElementById('wsStatus').textContent = 'Connected';
+    reconnectDelay = 1000;
+  };
+
+  ws.onclose = () => {
+    document.getElementById('wsDot').classList.remove('connected');
+    document.getElementById('wsStatus').textContent = 'Disconnected';
+    setTimeout(() => { reconnectDelay = Math.min(reconnectDelay * 2, 30000); connect(); }, reconnectDelay);
+  };
+
+  ws.onerror = () => { ws.close(); };
+
+  ws.onmessage = (event) => {
+    try {
+      const d = JSON.parse(event.data);
+      updateDashboard(d);
+    } catch(e) {}
+  };
+}
+
+function updateDashboard(d){
+  const fmt = (n) => n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n);
+  document.getElementById('totalCrawled').textContent = fmt(d.total_crawled || 0);
+  document.getElementById('successRate').textContent = (d.success_rate || 0).toFixed(1) + '%';
+  document.getElementById('successCount').textContent = d.success_count || 0;
+  document.getElementById('failCount').textContent = d.fail_count || 0;
+  document.getElementById('avgResponseTime').textContent = (d.avg_response_time || 0).toFixed(3) + 's';
+  document.getElementById('pendingTasks').textContent = fmt(d.pending_tasks || 0);
+  document.getElementById('resultQueue').textContent = d.result_queue_size || 0;
+  document.getElementById('proxyAvailable').textContent = d.proxy_available || 0;
+  document.getElementById('proxyBlacklisted').textContent = d.proxy_blacklisted || 0;
+  document.getElementById('cleanedCount').textContent = fmt(d.cleaned_count || 0);
+  document.getElementById('successBar').style.width = (d.success_rate || 0) + '%';
+
+  const now = new Date();
+  const ts = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+  history.labels.push(ts);
+  history.total.push(d.total_crawled || 0);
+  history.success.push(d.success_count || 0);
+  history.fail.push(d.fail_count || 0);
+  if(history.labels.length > MAX_POINTS){
+    history.labels.shift();history.total.shift();history.success.shift();history.fail.shift();
+  }
+  const canvas = document.getElementById('timeline');
+  drawChart(canvas.getContext('2d'), canvas);
+}
+
+document.addEventListener('DOMContentLoaded', () => { initChart(); connect(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "molecule-3d-editor",
+  "version": "1.0.0",
+  "description": "分子结构3D交互可视化编辑器",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

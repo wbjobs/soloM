@@ -1,0 +1,9 @@
+@echo off
+echo Starting RAG Frontend Server...
+cd /d %~dp0
+
+echo Installing dependencies...
+call npm install
+
+echo Starting Next.js dev server on http://localhost:3000...
+npm run dev

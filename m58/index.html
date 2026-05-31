@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分子结构 3D 交互可视化编辑器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="toolbar">
+            <h1>🔬 分子结构 3D 编辑器</h1>
+            <div class="toolbar-controls">
+                <label class="file-upload-btn">
+                    📁 导入文件
+                    <input type="file" id="fileInput" accept=".pdb,.xyz,.xtc,.trr,.bin" multiple>
+                </label>
+                <button id="resetBtn" class="control-btn">🔄 重置视图</button>
+                <button id="clearBtn" class="control-btn">🗑️ 清除</button>
+            </div>
+        </div>
+
+        <div id="main-container">
+            <div id="sidebar">
+                <div class="panel">
+                    <h3>📊 分子信息</h3>
+                    <div id="moleculeInfo">
+                        <p class="placeholder">请导入 .pdb 或 .xyz 文件</p>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h3>⚛️ 元素信息</h3>
+                    <div id="elementInfo">
+                        <p class="placeholder">点击原子查看详细信息</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>🎮 操作说明</h3>
+                    <ul class="help-list">
+                        <li>🖱️ <strong>拖拽</strong>：旋转视角</li>
+                        <li>📜 <strong>滚轮</strong>：缩放视图</li>
+                        <li>👆 <strong>点击原子</strong>：查看元素信息</li>
+                    </ul>
+                </div>
+
+                <div class="panel">
+                    <h3>🧪 示例分子</h3>
+                    <div class="example-buttons">
+                        <button class="example-btn" data-molecule="water">💧 水 (H2O)</button>
+                        <button class="example-btn" data-molecule="methane">🔥 甲烷 (CH4)</button>
+                        <button class="example-btn" data-molecule="ethanol">🍷 乙醇 (C2H6O)</button>
+                        <button class="example-btn" data-molecule="benzene">💎 苯 (C6H6)</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>⚡ 性能测试</h3>
+                    <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">生成大分子测试性能</p>
+                    <div class="example-buttons">
+                        <button class="test-btn" data-count="1000">🔬 1,000 原子</button>
+                        <button class="test-btn" data-count="5000">🔬 5,000 原子</button>
+                        <button class="test-btn" data-count="10000">🔬 10,000 原子</button>
+                        <button class="test-btn" data-count="20000">🔬 20,000 原子</button>
+                    </div>
+                </div>
+
+                <div id="trajectoryPanel" class="panel" style="display: none;">
+                    <div id="trajectoryContainer"></div>
+                </div>
+
+                <div class="panel">
+                    <h3>🎬 轨迹动画示例</h3>
+                    <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">加载动态轨迹演示</p>
+                    <div class="example-buttons">
+                        <button class="trajectory-demo-btn" data-demo="vibration">🔄 分子振动</button>
+                        <button class="trajectory-demo-btn" data-demo="rotation">🌀 分子旋转</button>
+                        <button class="trajectory-demo-btn" data-demo="unfolding">📖 蛋白去折叠</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="canvas-container">
+                <canvas id="threeCanvas"></canvas>
+                <div id="loadingOverlay" class="hidden">
+                    <div class="spinner"></div>
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
