@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package voxel;
+
+option go_package = "github.com/voxelviewer/backend/proto;voxel";
+
+service VoxelService {
+  rpc GetRegion(RegionRequest) returns (RegionData);
+  rpc GetChunk(ChunkRequest) returns (ChunkData);
+  rpc StreamRegion(RegionRequest) returns (stream ChunkData);
+}
+
+message RegionRequest {
+  int32 region_x = 1;
+  int32 region_z = 2;
+  string world_path = 3;
+}
+
+message ChunkRequest {
+  int32 chunk_x = 1;
+  int32 chunk_z = 2;
+  string world_path = 3;
+}
+
+message RegionData {
+  int32 region_x = 1;
+  int32 region_z = 2;
+  repeated ChunkData chunks = 3;
+}
+
+message ChunkData {
+  int32 chunk_x = 1;
+  int32 chunk_z = 2;
+  repeated Block blocks = 3;
+  bool loaded = 4;
+}
+
+message Block {
+  int32 x = 1;
+  int32 y = 2;
+  int32 z = 3;
+  int32 block_id = 4;
+}
