@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码库智能问答助手</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>代码库智能问答助手</h1>
+                    <p class="subtitle">Code RAG Assistant</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="stats-badge" id="statsBadge">
+                    <span class="dot" id="statusDot"></span>
+                    <span id="statsText">加载中...</span>
+                </div>
+                <button class="icon-btn" id="refreshBtn" title="刷新统计">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="settingsBtn" title="设置">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>索引信息</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">文档总数</span>
+                            <span class="info-value" id="totalDocs">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">文件总数</span>
+                            <span class="info-value" id="totalFiles">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">代码目录</span>
+                            <span class="info-value code-dir" id="codeDir">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">LLM 提供商</span>
+                            <span class="info-value" id="llmProvider">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>操作</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="reindexBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6"></path>
+                                <path d="M1 20v-6h6"></path>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                            </svg>
+                            重新索引
+                        </button>
+                        <button class="action-btn" id="clearBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            清空索引
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>已索引文件</h3>
+                    <div class="file-list" id="fileList">
+                        <div class="empty-state">加载中...</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>最近变更</h3>
+                    <div class="change-list" id="changeList">
+                        <div class="empty-state">暂无变更</div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant-message">
+                        <div class="message-avatar">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-name">代码助手</span>
+                            </div>
+                            <div class="message-text">
+                                <p>你好！我是你的代码库智能问答助手。我可以帮你：</p>
+                                <ul>
+                                    <li>解释代码的功能和实现逻辑</li>
+                                    <li>查找特定的函数或类</li>
+                                    <li>分析代码架构和设计模式</li>
+                                    <li>回答关于代码库的任何问题</li>
+                                </ul>
+                                <p>请在下方输入你的问题，我会基于代码库为你提供准确的回答。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea
+                            id="messageInput"
+                            placeholder="输入你的问题..."
+                            rows="1"
+                            autocomplete="off"
+                        ></textarea>
+                        <button class="send-btn" id="sendBtn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="streamToggle" checked>
+                            <span>流式输出</span>
+                        </label>
+                        <span class="shortcut-hint">按 Enter 发送，Shift + Enter 换行</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>设置</h2>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>代码目录</label>
+                    <input type="text" id="settingsCodeDir" placeholder="./example_code">
+                </div>
+                <div class="form-group">
+                    <label>LLM 提供商</label>
+                    <select id="settingsProvider">
+                        <option value="ollama">Ollama（本地）</option>
+                        <option value="openai">OpenAI</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>检索结果数量</label>
+                    <input type="number" id="settingsK" value="5" min="1" max="20">
+                </div>
+                <div class="form-group">
+                    <label>相似度阈值</label>
+                    <input type="number" id="settingsThreshold" value="0.5" min="0" max="1" step="0.05">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSettings">取消</button>
+                <button class="btn-primary" id="saveSettings">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
