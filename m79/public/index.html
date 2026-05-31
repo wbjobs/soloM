@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋在线对战</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>🎮 五子棋在线对战</h1>
+
+            <div v-if="!roomJoined" class="room-section">
+                <div class="room-input">
+                    <input v-model="roomIdInput" placeholder="输入房间号或留空创建新房间">
+                    <button @click="joinOrCreateRoom" class="btn btn-primary">加入/创建房间</button>
+                </div>
+                <div class="room-info" v-if="currentRoom">
+                    当前房间号: <strong>{{ currentRoom }}</strong>
+                    <button @click="copyRoomId" class="btn btn-small">复制</button>
+                </div>
+            </div>
+
+            <div v-if="roomJoined" class="game-section">
+                <div class="game-info">
+                    <div class="player-info">
+                        <span>你是: </span>
+                        <span :class="['player', 'player-' + playerId]">
+                            {{ playerId === 1 ? '黑棋' : '白棋' }}
+                        </span>
+                    </div>
+                    <div class="turn-info">
+                        当前回合: 
+                        <span :class="['turn', 'turn-' + currentTurn]">
+                            {{ currentTurn === 1 ? '黑棋' : '白棋' }}
+                        </span>
+                    </div>
+                    <div class="player-count">在线玩家: {{ playerCount }}</div>
+                </div>
+
+                <div v-if="gameOver" class="game-over">
+                    🎉 {{ winner === 1 ? '黑棋' : '白棋' }} 获胜!
+                </div>
+
+                <div v-if="undoRequestVisible" class="undo-dialog">
+                    <div class="undo-dialog-content">
+                        <p>{{ undoRequestFrom === 1 ? '黑棋' : '白棋' }}方请求悔棋</p>
+                        <div class="undo-dialog-actions">
+                            <button @click="respondUndo(true)" class="btn btn-accept">✅ 同意</button>
+                            <button @click="respondUndo(false)" class="btn btn-reject">❌ 拒绝</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="undoWaiting" class="undo-waiting">
+                    ⏳ 等待对手确认悔棋...
+                </div>
+
+                <div class="board-container">
+                    <canvas ref="boardCanvas" width="570" height="570" @click="handleBoardClick"></canvas>
+                    <div v-if="lastMove && !isReplaying" class="last-move-indicator" 
+                         :style="{ left: lastMove.x * 36 + 15 + 'px', top: lastMove.y * 36 + 15 + 'px' }">
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button @click="requestUndo" :disabled="!canUndo || gameOver" class="btn">
+                        ↩️ {{ undoWaiting ? '等待中...' : '悔棋' }}
+                    </button>
+                    <button @click="restartGame" class="btn">
+                        🔄 重新开始
+                    </button>
+                    <button @click="toggleReplay" class="btn">
+                        📽️ {{ isReplaying ? '停止复盘' : '复盘' }}
+                    </button>
+                </div>
+
+                <div v-if="isReplaying" class="replay-section">
+                    <div class="replay-progress">
+                        <input type="range" ref="replaySlider" 
+                               :min="0" :max="history.length" 
+                               v-model.number="replayIndex"
+                               @input="onSliderInput"
+                               class="replay-slider">
+                        <div class="replay-info">
+                            第 {{ replayIndex }} / {{ history.length }} 步
+                        </div>
+                    </div>
+                    <div class="replay-controls">
+                        <button @click="replayPrev" class="btn btn-small" :disabled="replayIndex <= 0">⏮ 上一步</button>
+                        <button @click="autoReplay" class="btn btn-small">{{ autoReplaying ? '⏸ 暂停' : '▶ 自动播放' }}</button>
+                        <button @click="replayNext" class="btn btn-small" :disabled="replayIndex >= history.length">下一步 ⏭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
