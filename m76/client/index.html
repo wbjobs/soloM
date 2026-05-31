@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加密笔记</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>📝 笔记列表</h2>
+        <button id="newNoteBtn" class="btn btn-primary">+ 新建笔记</button>
+      </div>
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索笔记...">
+        <div class="search-options">
+          <label class="search-option">
+            <input type="checkbox" id="useBlindIndex" checked>
+            <span>快速搜索</span>
+          </label>
+        </div>
+      </div>
+      <div id="searchResults" class="search-results hidden"></div>
+      <div id="notesList" class="notes-list"></div>
+    </div>
+    
+    <div class="main-content">
+      <div class="toolbar">
+        <input type="text" id="noteTitle" class="note-title" placeholder="笔记标题...">
+        <div class="toolbar-actions">
+          <button id="saveBtn" class="btn btn-success">💾 保存</button>
+          <button id="syncBtn" class="btn btn-info">☁️ 同步</button>
+          <button id="deleteBtn" class="btn btn-danger">🗑️ 删除</button>
+        </div>
+      </div>
+      
+      <div class="editor-container">
+        <div class="editor-tabs">
+          <button id="editTab" class="tab-btn active">编辑</button>
+          <button id="previewTab" class="tab-btn">预览</button>
+        </div>
+        <textarea id="editor" class="editor" placeholder="开始编写 Markdown 笔记..."></textarea>
+        <div id="preview" class="preview hidden"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h2>🔐 输入密码</h2>
+      <p>请输入加密密码以解锁笔记</p>
+      <input type="password" id="passwordInput" class="password-input" placeholder="输入密码...">
+      <div class="modal-actions">
+        <button id="passwordSubmit" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="syncModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>☁️ 同步设置</h2>
+      <div class="form-group">
+        <label>服务器地址:</label>
+        <input type="text" id="serverUrl" class="form-input" placeholder="http://localhost:3000">
+      </div>
+      <div class="form-group">
+        <label>用户ID:</label>
+        <input type="text" id="userId" class="form-input" placeholder="default">
+      </div>
+      <div class="modal-actions">
+        <button id="syncCancel" class="btn btn-secondary">取消</button>
+        <button id="syncSubmit" class="btn btn-primary">开始同步</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="toast" class="toast hidden"></div>
+  
+  <script src="renderer.js"></script>
+</body>
+</html>
