@@ -1,0 +1,16 @@
+{
+  "name": "cicd-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/server",
+    "packages/cli",
+    "packages/web"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev:server": "npm run dev --workspace=packages/server",
+    "dev:cli": "npm run dev --workspace=packages/cli",
+    "dev:web": "npm run dev --workspace=packages/web"
+  }
+}

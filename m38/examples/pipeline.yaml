@@ -1,0 +1,47 @@
+pipeline:
+  name: my-project
+  triggers:
+    - event: push
+      branch: main
+  steps:
+    - name: clone
+      image: alpine/git:v2.36.3
+      commands:
+        - git clone $REPO_URL .
+        - git checkout $BRANCH
+    - name: install
+      image: node:18-alpine
+      cache:
+        - key: node-modules
+          path: /workspace/node_modules
+          hashFiles:
+            - /workspace/package-lock.json
+            - /workspace/package.json
+      commands:
+        - npm install
+    - name: build
+      image: node:18-alpine
+      cache:
+        - key: node-modules
+          path: /workspace/node_modules
+          hashFiles:
+            - /workspace/package-lock.json
+            - /workspace/package.json
+      commands:
+        - npm run build
+    - name: test
+      image: node:18-alpine
+      cache:
+        - key: node-modules
+          path: /workspace/node_modules
+          hashFiles:
+            - /workspace/package-lock.json
+            - /workspace/package.json
+      commands:
+        - npm test
+    - name: deploy
+      image: docker:latest
+      commands:
+        - echo "Deploy step - customize as needed"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
