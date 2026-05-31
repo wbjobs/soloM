@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPH 流体物理模拟器</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="sidebar">
+        <h1>SPH 流体模拟器</h1>
+        <div class="render-mode-indicator">
+          <span id="render-mode" class="badge">检测中...</span>
+        </div>
+        <div class="control-panel">
+          <div class="section">
+            <h3>模拟参数</h3>
+            <div class="control">
+              <label>粒子数量: <span id="particleCountValue">100000</span></label>
+              <input type="range" id="particleCount" min="1000" max="200000" step="1000" value="100000">
+            </div>
+            <div class="control">
+              <label>重力: <span id="gravityValue">-9.8</span></label>
+              <input type="range" id="gravity" min="-20" max="0" step="0.1" value="-9.8">
+            </div>
+            <div class="control">
+              <label>粘度: <span id="viscosityValue">0.05</span></label>
+              <input type="range" id="viscosity" min="0" max="0.5" step="0.01" value="0.05">
+            </div>
+            <div class="control">
+              <label>粒子半径: <span id="radiusValue">0.025</span></label>
+              <input type="range" id="radius" min="0.01" max="0.1" step="0.005" value="0.025">
+            </div>
+            <div class="control">
+              <label>静止密度: <span id="restDensityValue">1000</span></label>
+              <input type="range" id="restDensity" min="500" max="2000" step="50" value="1000">
+            </div>
+          </div>
+          <div class="section">
+            <h3>模拟控制</h3>
+            <button id="startBtn" class="btn primary">开始模拟</button>
+            <button id="pauseBtn" class="btn">暂停</button>
+            <button id="resetBtn" class="btn">重置</button>
+            <button id="applyParamsBtn" class="btn secondary">应用参数</button>
+          </div>
+          <div class="section">
+            <h3>渲染模式</h3>
+            <button id="switchModeBtn" class="btn">切换渲染模式</button>
+          </div>
+          <div class="section">
+            <h3>导出</h3>
+            <button id="exportBtn" class="btn success">导出 PLY 点云</button>
+            <button id="fetchParamsBtn" class="btn">从服务器获取参数</button>
+          </div>
+          <div class="section">
+            <h3>快照管理</h3>
+            <button id="saveSnapshotBtn" class="btn primary">保存快照</button>
+            <button id="refreshSnapshotsBtn" class="btn">刷新快照列表</button>
+            <div class="snapshot-list" id="snapshotList">
+              <div class="empty-message">暂无快照</div>
+            </div>
+          </div>
+          <div class="section stats">
+            <h3>状态信息</h3>
+            <div>FPS: <span id="fps">0</span></div>
+            <div>粒子数: <span id="currentParticles">0</span></div>
+            <div>计算时间: <span id="computeTime">0</span>ms</div>
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div id="fallback-message" class="fallback-message hidden">
+          <span></span>
+        </div>
+        <canvas id="webgpu-canvas"></canvas>
+        <div id="error-message" class="error-message hidden">
+          您的浏览器不支持 WebGPU，请使用最新版本的 Chrome 或 Edge 浏览器。
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
