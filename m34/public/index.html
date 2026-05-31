@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRTC 屏幕共享与白板协作</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div id="login" class="login-panel">
+      <h1>WebRTC 屏幕共享与白板协作</h1>
+      <div class="form-group">
+        <label for="roomId">房间号:</label>
+        <input type="text" id="roomId" placeholder="输入房间号" value="default">
+      </div>
+      <div class="form-group">
+        <label for="userId">用户名:</label>
+        <input type="text" id="userId" placeholder="输入用户名">
+      </div>
+      <button id="joinBtn" class="btn btn-primary">加入房间</button>
+    </div>
+
+    <div id="main" class="main-panel hidden">
+      <div class="header">
+        <h2>房间: <span id="currentRoom"></span> | 用户: <span id="currentUser"></span></h2>
+        <button id="leaveBtn" class="btn btn-danger">离开房间</button>
+      </div>
+
+      <div class="network-dashboard">
+        <div class="metric-card">
+          <div class="metric-label">网络延迟</div>
+          <div class="metric-value" id="rttValue">--</div>
+          <div class="metric-unit">ms</div>
+          <div class="metric-gauge">
+            <div class="gauge-fill" id="rttGauge"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">丢包率</div>
+          <div class="metric-value" id="packetLossValue">--</div>
+          <div class="metric-unit">%</div>
+          <div class="metric-gauge">
+            <div class="gauge-fill" id="packetLossGauge"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">可用带宽</div>
+          <div class="metric-value" id="bandwidthValue">--</div>
+          <div class="metric-unit">kbps</div>
+          <div class="metric-gauge">
+            <div class="gauge-fill" id="bandwidthGauge"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">网络质量</div>
+          <div class="metric-value" id="qualityValue">--</div>
+          <div class="metric-unit">/100</div>
+          <div class="quality-badge" id="qualityBadge">检测中</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">抖动</div>
+          <div class="metric-value" id="jitterValue">--</div>
+          <div class="metric-unit">ms</div>
+          <div class="metric-gauge">
+            <div class="gauge-fill" id="jitterGauge"></div>
+          </div>
+        </div>
+        <div class="metric-card throttle-info">
+          <div class="metric-label">发送节流</div>
+          <div class="metric-value" id="throttleInterval">--</div>
+          <div class="metric-unit">ms</div>
+          <div class="throttle-status" id="throttleStatus">正常</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="whiteboard">白板</button>
+        <button class="tab-btn" data-tab="screenshare">屏幕共享</button>
+        <button class="tab-btn" data-tab="peers">参与者 (<span id="peerCount">0</span>)</button>
+      </div>
+
+      <div id="whiteboard" class="tab-content active">
+        <div class="toolbar">
+          <div class="tool-group">
+            <label>颜色:</label>
+            <input type="color" id="strokeColor" value="#000000">
+          </div>
+          <div class="tool-group">
+            <label>粗细:</label>
+            <input type="range" id="strokeWidth" min="1" max="20" value="3">
+            <span id="widthValue">3</span>
+          </div>
+          <div class="tool-group">
+            <label>工具:</label>
+            <select id="tool">
+              <option value="pen">画笔</option>
+              <option value="eraser">橡皮擦</option>
+              <option value="line">直线</option>
+              <option value="rect">矩形</option>
+              <option value="circle">圆形</option>
+            </select>
+          </div>
+          <button id="clearBtn" class="btn btn-secondary">清空画布</button>
+        </div>
+        <div class="canvas-container">
+          <canvas id="whiteboardCanvas"></canvas>
+        </div>
+      </div>
+
+      <div id="screenshare" class="tab-content">
+        <div class="screen-controls">
+          <button id="startScreenShare" class="btn btn-primary">开始屏幕共享</button>
+          <button id="stopScreenShare" class="btn btn-danger hidden">停止屏幕共享</button>
+        </div>
+        <div class="screens-container">
+          <div id="myScreen" class="screen-item hidden">
+            <h3>我的屏幕</h3>
+            <video autoplay playsinline muted></video>
+          </div>
+          <div id="peerScreens" class="peer-screens"></div>
+        </div>
+      </div>
+
+      <div id="peers" class="tab-content">
+        <div id="peersList" class="peers-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/webrtc.js"></script>
+  <script src="js/whiteboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
