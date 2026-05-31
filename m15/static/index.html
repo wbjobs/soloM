@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物流配送路径优化系统 - 带时间窗约束</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 15px;
+        }
+
+        .control-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .panel-title {
+            font-size: 1.15em;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.85em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .status-panel {
+            margin-top: 20px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .status-panel h3 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .status-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            color: #666;
+        }
+
+        .status-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .status-value.overdue {
+            color: #e74c3c;
+        }
+
+        .status-value.success {
+            color: #27ae60;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e1e1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.15s;
+        }
+
+        .visualization-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .viz-title {
+            font-size: 1.15em;
+            color: #333;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .legend-warehouse {
+            background: #e74c3c;
+        }
+
+        .legend-delivery {
+            background: #3498db;
+        }
+
+        .legend-overdue {
+            background: #f39c12;
+            border: 2px solid #e74c3c;
+        }
+
+        .legend-route {
+            width: 20px;
+            height: 2px;
+            background: #2ecc71;
+            border-radius: 1px;
+        }
+
+        #map-container {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #fafafa;
+            position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .route-line {
+            fill: none;
+            stroke: #2ecc71;
+            stroke-width: 1.5;
+            stroke-opacity: 0.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .warehouse {
+            fill: #e74c3c;
+            stroke: #c0392b;
+            stroke-width: 2;
+        }
+
+        .delivery-point {
+            fill: #3498db;
+            stroke: #2980b9;
+            stroke-width: 1;
+        }
+
+        .delivery-point.overdue {
+            fill: #f39c12;
+            stroke: #e74c3c;
+            stroke-width: 2.5;
+        }
+
+        .delivery-point.very-overdue {
+            fill: #e74c3c;
+            stroke: #c0392b;
+            stroke-width: 3;
+        }
+
+        .point-label {
+            font-size: 9px;
+            fill: #333;
+            pointer-events: none;
+            font-weight: 500;
+        }
+
+        .point-label.overdue {
+            fill: #e74c3c;
+            font-weight: bold;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1000;
+            max-width: 250px;
+            line-height: 1.5;
+        }
+
+        .tooltip .tooltip-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 4px;
+        }
+
+        .tooltip .overdue-warning {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .convergence-chart {
+            margin-top: 15px;
+            height: 120px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: #e74c3c;
+            stroke-width: 1.5;
+        }
+
+        .chart-area {
+            fill: rgba(231, 76, 60, 0.1);
+        }
+
+        .perf-warning {
+            color: #f39c12;
+            font-size: 11px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .time-window-info {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #8d6e63;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e1e1e1;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #888;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚚 物流配送路径优化系统</h1>
+            <p>带时间窗约束的遗传算法 | VRPTW实时可视化求解</p>
+        </div>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h2 class="panel-title">⚙️ 算法参数设置</h2>
+                
+                <div class="form-group">
+                    <label>配送点数量 (10-500)</label>
+                    <input type="number" id="numPoints" value="50" min="10" max="500">
+                    <div class="perf-warning" id="perfWarning">⚠️ 超过100个点时自动优化性能</div>
+                </div>
+
+                <div class="form-group">
+                    <label>时间窗宽松程度</label>
+                    <input type="number" id="timeWindowTightness" value="1.0" min="0.3" max="3.0" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>惩罚系数</label>
+                    <input type="number" id="penaltyMultiplier" value="1000" min="10" max="10000" step="10">
+                </div>
+
+                <div class="form-group">
+                    <label>种群大小</label>
+                    <input type="number" id="populationSize" value="100" min="20" max="300">
+                </div>
+
+                <div class="form-group">
+                    <label>变异率</label>
+                    <input type="number" id="mutationRate" value="0.02" min="0.001" max="0.1" step="0.001">
+                </div>
+
+                <div class="form-group">
+                    <label>迭代次数</label>
+                    <input type="number" id="generations" value="500" min="100" max="3000">
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="use2opt" checked>
+                    <label>启用2-opt局部搜索</label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="showLabels" checked>
+                    <label>显示点编号</label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="enableTimeWindows" checked>
+                    <label>启用时间窗约束</label>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="generateBtn">🎲 随机生成</button>
+                    <button class="btn btn-primary" id="startBtn">▶️ 开始优化</button>
+                </div>
+
+                <div class="time-window-info" id="timeWindowInfo">
+                    <strong>⏰ 时间窗说明：</strong><br>
+                    每个配送点有最早和最晚送达时间。<br>
+                    超时将产生高额惩罚，算法会优先满足时间约束。
+                </div>
+
+                <div class="status-panel">
+                    <h3>📊 运行状态</h3>
+                    <div class="status-item">
+                        <span class="status-label">状态:</span>
+                        <span class="status-value" id="status">就绪</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">当前代数:</span>
+                        <span class="status-value" id="currentGen">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">总代数:</span>
+                        <span class="status-value" id="totalGen">500</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">路径距离:</span>
+                        <span class="status-value" id="distance">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">超时惩罚:</span>
+                        <span class="status-value" id="penalty">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">超时配送点:</span>
+                        <span class="status-value" id="overdueCount">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">总成本:</span>
+                        <span class="status-value" id="totalCost">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">FPS:</span>
+                        <span class="status-value" id="fps">--</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualization-panel">
+                <div class="viz-header">
+                    <h2 class="viz-title">🗺️ 路径可视化</h2>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color legend-warehouse"></div>
+                            <span>仓库</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-delivery"></div>
+                            <span>准时</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-overdue"></div>
+                            <span>超时</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-route"></div>
+                            <span>路径</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTotalPoints">0</div>
+                        <div class="stat-label">配送点总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statOverdue">0</div>
+                        <div class="stat-label">超时点</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statOnTime">0</div>
+                        <div class="stat-label">准时点</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statAvgTime">--</div>
+                        <div class="stat-label">平均到达时间</div>
+                    </div>
+                </div>
+                
+                <div id="map-container" style="margin-top: 15px;">
+                    <svg id="map-svg"></svg>
+                    <div class="tooltip" id="tooltip"></div>
+                </div>
+
+                <h3 style="color: #333; margin: 15px 0 8px; font-size: 1em;">📈 收敛曲线</h3>
+                <div class="convergence-chart">
+                    <svg id="chart-svg"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let warehouse = null;
+        let deliveryPoints = [];
+        let ws = null;
+        let isRunning = false;
+        let convergenceData = [];
+        let currentRoute = null;
+        let pendingUpdate = false;
+        let frameCount = 0;
+        let fpsUpdateTime = 0;
+        let currentFPS = 0;
+        let highPerformanceMode = false;
+        let currentPointInfo = {};
+        let currentOverduePoints = new Set();
+
+        const container = document.getElementById('map-container');
+        const width = container.clientWidth;
+        const height = 500;
+        const padding = 40;
+
+        const svg = d3.select('#map-svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('shape-rendering', 'geometricPrecision');
+
+        const chartWidth = document.querySelector('.convergence-chart').clientWidth;
+        const chartHeight = 120;
+
+        const chartSvg = d3.select('#chart-svg')
+            .attr('viewBox', `0 0 ${chartWidth} ${chartHeight}`);
+
+        const gRoute = svg.append('g').attr('class', 'route-group');
+        const gPoints = svg.append('g').attr('class', 'points-group');
+        const gLabels = svg.append('g').attr('class', 'labels-group');
+
+        const pathElement = gRoute.append('path')
+            .attr('class', 'route-line')
+            .attr('id', 'route-line');
+
+        function checkPerformanceMode(numPoints) {
+            highPerformanceMode = numPoints > 100;
+            document.getElementById('perfWarning').style.display = highPerformanceMode ? 'block' : 'none';
+            if (highPerformanceMode) {
+                document.getElementById('showLabels').checked = false;
+            }
+        }
+
+        function generateTimeWindows(pointIndex, totalPoints, tightness = 1.0) {
+            const enableTW = document.getElementById('enableTimeWindows').checked;
+            if (!enableTW) {
+                return { earliest_time: 0, latest_time: 1e9 };
+            }
+            
+            const avgDistance = (width + height) / 4;
+            const totalEstimatedTime = avgDistance * totalPoints / 50;
+            
+            const earliestBase = (pointIndex / totalPoints) * totalEstimatedTime * 0.8;
+            const windowSize = (totalEstimatedTime / totalPoints) * 5 * tightness;
+            
+            const earliest = Math.max(0, earliestBase - windowSize * 0.3);
+            const latest = earliest + windowSize;
+            
+            return {
+                earliest_time: parseFloat(earliest.toFixed(1)),
+                latest_time: parseFloat(latest.toFixed(1))
+            };
+        }
+
+        function generateRandomPoints(numPoints) {
+            warehouse = { x: width / 2, y: height / 2 };
+            checkPerformanceMode(numPoints);
+            
+            const tightness = parseFloat(document.getElementById('timeWindowTightness').value);
+            
+            deliveryPoints = [];
+            const minDist = 25;
+            
+            for (let i = 0; i < numPoints; i++) {
+                let x, y, valid, attempts = 0;
+                do {
+                    x = padding + Math.random() * (width - 2 * padding);
+                    y = padding + Math.random() * (height - 2 * padding);
+                    const distToWarehouse = Math.sqrt(
+                        Math.pow(x - warehouse.x, 2) + Math.pow(y - warehouse.y, 2)
+                    );
+                    valid = distToWarehouse > minDist;
+                    attempts++;
+                } while (!valid && attempts < 50);
+                
+                const timeWindows = generateTimeWindows(i, numPoints, tightness);
+                
+                deliveryPoints.push({
+                    x, y,
+                    id: i,
+                    earliest_time: timeWindows.earliest_time,
+                    latest_time: timeWindows.latest_time
+                });
+            }
+            
+            currentOverduePoints.clear();
+            currentPointInfo = {};
+            drawMap();
+            updateStats();
+        }
+
+        function drawMap() {
+            const showLabels = document.getElementById('showLabels').checked;
+            
+            gPoints.selectAll('*').remove();
+            gLabels.selectAll('*').remove();
+            
+            const pointRadius = deliveryPoints.length > 150 ? 3 : (deliveryPoints.length > 100 ? 4 : 5);
+            
+            const points = gPoints.selectAll('.delivery-point')
+                .data(deliveryPoints)
+                .enter()
+                .append('circle')
+                .attr('class', d => getPointClass(d.id))
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', pointRadius)
+                .on('mouseover', function(event, d) {
+                    showTooltip(event, d);
+                })
+                .on('mouseout', hideTooltip);
+
+            if (showLabels && !highPerformanceMode) {
+                gLabels.selectAll('.point-label')
+                    .data(deliveryPoints)
+                    .enter()
+                    .append('text')
+                    .attr('class', d => 'point-label' + (currentOverduePoints.has(d.id) ? ' overdue' : ''))
+                    .attr('x', d => d.x + pointRadius + 5)
+                    .attr('y', d => d.y + 3)
+                    .text(d => d.id);
+            }
+
+            gPoints.append('circle')
+                .attr('class', 'warehouse')
+                .attr('cx', warehouse.x)
+                .attr('cy', warehouse.y)
+                .attr('r', 10)
+                .on('mouseover', function(event) {
+                    showTooltip(event, { id: -1, isWarehouse: true });
+                })
+                .on('mouseout', hideTooltip);
+
+            if (showLabels) {
+                gLabels.append('text')
+                    .attr('class', 'point-label')
+                    .attr('x', warehouse.x + 15)
+                    .attr('y', warehouse.y + 3)
+                    .style('font-weight', 'bold')
+                    .style('font-size', '11px')
+                    .text('仓库');
+            }
+            
+            currentRoute = null;
+        }
+
+        function getPointClass(pointId) {
+            let className = 'delivery-point';
+            if (currentOverduePoints.has(pointId)) {
+                const info = currentPointInfo[pointId];
+                if (info && info.overdue_amount > 50) {
+                    className += ' very-overdue';
+                } else {
+                    className += ' overdue';
+                }
+            }
+            return className;
+        }
+
+        function updatePointColors() {
+            gPoints.selectAll('.delivery-point')
+                .attr('class', d => getPointClass(d.id));
+            
+            const showLabels = document.getElementById('showLabels').checked;
+            if (showLabels && !highPerformanceMode) {
+                gLabels.selectAll('.point-label')
+                    .attr('class', d => 'point-label' + (currentOverduePoints.has(d.id) ? ' overdue' : ''));
+            }
+        }
+
+        function updateFPS() {
+            const now = performance.now();
+            frameCount++;
+            
+            if (now - fpsUpdateTime >= 1000) {
+                currentFPS = Math.round(frameCount * 1000 / (now - fpsUpdateTime));
+                document.getElementById('fps').textContent = currentFPS;
+                frameCount = 0;
+                fpsUpdateTime = now;
+            }
+        }
+
+        function updateRoute(routeCoords) {
+            if (!routeCoords || routeCoords.length < 2) return;
+            
+            currentRoute = routeCoords;
+            
+            if (pendingUpdate) return;
+            pendingUpdate = true;
+            
+            requestAnimationFrame(() => {
+                pendingUpdate = false;
+                updateFPS();
+                
+                if (!currentRoute) return;
+                
+                const lineGenerator = d3.line()
+                    .x(d => d[0])
+                    .y(d => d[1]);
+
+                pathElement.datum(currentRoute)
+                    .attr('d', lineGenerator);
+            });
+        }
+
+        function showTooltip(event, d) {
+            const tooltip = document.getElementById('tooltip');
+            let html = '';
+            
+            if (d.isWarehouse) {
+                html = `<div class="tooltip-title">🏭 仓库</div>
+                        坐标: (${warehouse.x.toFixed(1)}, ${warehouse.y.toFixed(1)})<br>
+                        时间: 0.0 (出发)`;
+            } else {
+                const info = currentPointInfo[d.id];
+                let timeInfo = '';
+                let warning = '';
+                
+                if (info) {
+                    const arrival = info.arrival_time.toFixed(1);
+                    const earliest = info.earliest_time.toFixed(1);
+                    const latest = info.latest_time.toFixed(1);
+                    
+                    timeInfo = `到达时间: ${arrival}<br>
+                               时间窗: [${earliest}, ${latest}]`;
+                    
+                    if (info.is_overdue) {
+                        warning = `<div class="overdue-warning">⚠️ 超时 ${info.overdue_amount.toFixed(1)}</div>`;
+                    } else if (info.arrival_time < info.earliest_time) {
+                        const wait = (info.earliest_time - info.arrival_time).toFixed(1);
+                        warning = `<div style="color: #3498db;">⏳ 等待 ${wait}</div>`;
+                    }
+                } else {
+                    timeInfo = `时间窗: [${d.earliest_time.toFixed(1)}, ${d.latest_time.toFixed(1)}]`;
+                }
+                
+                html = `<div class="tooltip-title">配送点 #${d.id}</div>
+                        坐标: (${d.x.toFixed(1)}, ${d.y.toFixed(1)})<br>
+                        ${timeInfo}
+                        ${warning}`;
+            }
+            
+            tooltip.innerHTML = html;
+            const rect = container.getBoundingClientRect();
+            tooltip.style.left = (event.clientX - rect.left + 10) + 'px';
+            tooltip.style.top = (event.clientY - rect.top + 10) + 'px';
+            tooltip.style.opacity = 1;
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').style.opacity = 0;
+        }
+
+        function updateStats() {
+            const total = deliveryPoints.length;
+            const overdue = currentOverduePoints.size;
+            const onTime = total - overdue;
+            
+            document.getElementById('statTotalPoints').textContent = total;
+            document.getElementById('statOverdue').textContent = overdue;
+            document.getElementById('statOnTime').textContent = onTime;
+            
+            const times = Object.values(currentPointInfo).map(p => p.arrival_time);
+            if (times.length > 0) {
+                const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
+                document.getElementById('statAvgTime').textContent = avgTime.toFixed(1);
+            }
+        }
+
+        let chartUpdatePending = false;
+        function updateConvergenceChart() {
+            if (chartUpdatePending || convergenceData.length < 2) return;
+            chartUpdatePending = true;
+            
+            requestAnimationFrame(() => {
+                chartUpdatePending = false;
+                
+                const maxPoints = 200;
+                let dataToShow = convergenceData;
+                if (convergenceData.length > maxPoints) {
+                    const step = Math.ceil(convergenceData.length / maxPoints);
+                    dataToShow = convergenceData.filter((_, i) => i % step === 0);
+                }
+                
+                chartSvg.selectAll('*').remove();
+
+                const xScale = d3.scaleLinear()
+                    .domain(d3.extent(dataToShow, d => d.gen))
+                    .range([35, chartWidth - 5]);
+
+                const minDist = d3.min(dataToShow, d => d.cost);
+                const maxDist = d3.max(dataToShow, d => d.cost);
+                const yPadding = (maxDist - minDist) * 0.05 || 1;
+                
+                const yScale = d3.scaleLinear()
+                    .domain([minDist - yPadding, maxDist + yPadding])
+                    .range([chartHeight - 15, 5]);
+
+                const area = d3.area()
+                    .x(d => xScale(d.gen))
+                    .y0(chartHeight - 15)
+                    .y1(d => yScale(d.cost))
+                    .curve(d3.curveMonotoneX);
+
+                const line = d3.line()
+                    .x(d => xScale(d.gen))
+                    .y(d => yScale(d.cost))
+                    .curve(d3.curveMonotoneX);
+
+                chartSvg.append('path')
+                    .attr('class', 'chart-area')
+                    .datum(dataToShow)
+                    .attr('d', area);
+
+                chartSvg.append('path')
+                    .attr('class', 'chart-line')
+                    .datum(dataToShow)
+                    .attr('d', line);
+
+                chartSvg.append('g')
+                    .attr('transform', `translate(0, ${chartHeight - 15})`)
+                    .call(d3.axisBottom(xScale).ticks(5).tickFormat(d3.format('d')))
+                    .selectAll('text')
+                    .style('font-size', '9px');
+
+                chartSvg.append('g')
+                    .attr('transform', 'translate(35, 0)')
+                    .call(d3.axisLeft(yScale).ticks(3).tickFormat(d3.format('.0f')))
+                    .selectAll('text')
+                    .style('font-size', '9px');
+            });
+        }
+
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/optimize`;
+            
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = function() {
+                console.log('WebSocket连接已建立');
+                fpsUpdateTime = performance.now();
+                frameCount = 0;
+            };
+
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'progress') {
+                    document.getElementById('currentGen').textContent = data.generation;
+                    document.getElementById('distance').textContent = data.distance.toFixed(2);
+                    document.getElementById('totalGen').textContent = data.total_generations;
+                    document.getElementById('penalty').textContent = data.penalty.toFixed(1);
+                    document.getElementById('totalCost').textContent = data.total_cost.toFixed(2);
+                    
+                    const overdueEl = document.getElementById('overdueCount');
+                    overdueEl.textContent = data.overdue_count;
+                    overdueEl.className = 'status-value ' + (data.overdue_count > 0 ? 'overdue' : 'success');
+                    
+                    const progress = (data.generation / data.total_generations) * 100;
+                    document.getElementById('progressFill').style.width = progress + '%';
+
+                    convergenceData.push({ gen: data.generation, cost: data.total_cost });
+                    
+                    currentOverduePoints = new Set(data.overdue_points || []);
+                    currentPointInfo = data.point_info || {};
+                    
+                    updatePointColors();
+                    updateStats();
+                    
+                    if (data.route_coordinates) {
+                        updateRoute(data.route_coordinates);
+                    }
+                    
+                    if (data.generation % 10 === 0) {
+                        updateConvergenceChart();
+                    }
+                } else if (data.type === 'completed') {
+                    document.getElementById('status').textContent = '完成';
+                    document.getElementById('distance').textContent = data.best_distance.toFixed(2);
+                    document.getElementById('penalty').textContent = data.penalty.toFixed(1);
+                    document.getElementById('totalCost').textContent = data.total_cost.toFixed(2);
+                    document.getElementById('progressFill').style.width = '100%';
+                    
+                    const overdueEl = document.getElementById('overdueCount');
+                    overdueEl.textContent = data.overdue_count;
+                    overdueEl.className = 'status-value ' + (data.overdue_count > 0 ? 'overdue' : 'success');
+                    
+                    currentOverduePoints = new Set(data.overdue_points || []);
+                    currentPointInfo = data.point_info || {};
+                    
+                    updatePointColors();
+                    updateStats();
+                    updateRoute(data.route_coordinates);
+                    updateConvergenceChart();
+                    
+                    isRunning = false;
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('startBtn').textContent = '▶️ 开始优化';
+                    document.getElementById('generateBtn').disabled = false;
+                    
+                    ws.close();
+                } else if (data.type === 'error') {
+                    document.getElementById('status').textContent = '错误: ' + data.message;
+                    isRunning = false;
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('generateBtn').disabled = false;
+                }
+            };
+
+            ws.onclose = function() {
+                console.log('WebSocket连接已关闭');
+            };
+
+            ws.onerror = function(error) {
+                console.error('WebSocket错误:', error);
+                document.getElementById('status').textContent = '连接错误';
+            };
+        }
+
+        function startOptimization() {
+            if (isRunning) return;
+            if (deliveryPoints.length === 0) {
+                alert('请先生成配送点！');
+                return;
+            }
+
+            isRunning = true;
+            convergenceData = [];
+            currentRoute = null;
+            currentOverduePoints.clear();
+            currentPointInfo = {};
+            
+            document.getElementById('status').textContent = '优化中...';
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('startBtn').textContent = '⏳ 运行中...';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('progressFill').style.width = '0%';
+
+            connectWebSocket();
+
+            ws.onopen = function() {
+                const enableTW = document.getElementById('enableTimeWindows').checked;
+                const penaltyMultiplier = parseFloat(document.getElementById('penaltyMultiplier').value);
+                
+                const request = {
+                    warehouse: [warehouse.x, warehouse.y],
+                    delivery_points: deliveryPoints.map(p => ({
+                        x: p.x,
+                        y: p.y,
+                        earliest_time: enableTW ? p.earliest_time : 0,
+                        latest_time: enableTW ? p.latest_time : 1e9
+                    })),
+                    population_size: parseInt(document.getElementById('populationSize').value),
+                    mutation_rate: parseFloat(document.getElementById('mutationRate').value),
+                    crossover_rate: 0.8,
+                    generations: parseInt(document.getElementById('generations').value),
+                    use_2opt: document.getElementById('use2opt').checked,
+                    speed: 1.0,
+                    penalty_multiplier: penaltyMultiplier
+                };
+                ws.send(JSON.stringify(request));
+            };
+        }
+
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const numPoints = parseInt(document.getElementById('numPoints').value);
+            generateRandomPoints(numPoints);
+            convergenceData = [];
+            updateConvergenceChart();
+            document.getElementById('status').textContent = '就绪';
+            document.getElementById('currentGen').textContent = '0';
+            document.getElementById('distance').textContent = '--';
+            document.getElementById('penalty').textContent = '--';
+            document.getElementById('totalCost').textContent = '--';
+            document.getElementById('overdueCount').textContent = '--';
+            document.getElementById('fps').textContent = '--';
+            document.getElementById('progressFill').style.width = '0%';
+        });
+
+        document.getElementById('startBtn').addEventListener('click', startOptimization);
+
+        document.getElementById('showLabels').addEventListener('change', function() {
+            if (deliveryPoints.length > 0) {
+                drawMap();
+                if (currentRoute) {
+                    updateRoute(currentRoute);
+                }
+            }
+        });
+
+        document.getElementById('enableTimeWindows').addEventListener('change', function() {
+            const enabled = this.checked;
+            document.getElementById('timeWindowInfo').style.opacity = enabled ? '1' : '0.5';
+            document.getElementById('penaltyMultiplier').disabled = !enabled;
+            document.getElementById('timeWindowTightness').disabled = !enabled;
+        });
+
+        window.addEventListener('load', function() {
+            generateRandomPoints(50);
+        });
+
+        window.addEventListener('resize', function() {
+            if (!isRunning && deliveryPoints.length > 0) {
+                drawMap();
+                if (currentRoute) {
+                    updateRoute(currentRoute);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
