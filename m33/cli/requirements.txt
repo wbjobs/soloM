@@ -1,0 +1,4 @@
+PyYAML>=6.0
+kubernetes>=28.0
+deepdiff>=6.0
+requests>=2.31

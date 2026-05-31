@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitOps Drift Detection Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">
+                    <span class="logo-icon">&#9678;</span>
+                    GitOps Drift Detection
+                </h1>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary" onclick="refreshAll()">
+                    &#8635; Refresh
+                </button>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab" data-tab="drifts" onclick="switchTab('drifts')">Drifts</button>
+            <button class="tab" data-tab="sync" onclick="switchTab('sync')">Sync Jobs</button>
+            <button class="tab" data-tab="audit" onclick="switchTab('audit')">Audit Logs</button>
+            <button class="tab" data-tab="scans" onclick="switchTab('scans')">Scan History</button>
+            <button class="tab" data-tab="clusters" onclick="switchTab('clusters')">Clusters</button>
+        </nav>
+
+        <main class="content">
+            <section id="tab-overview" class="tab-content active">
+                <div class="summary-cards">
+                    <div class="card card-clusters">
+                        <div class="card-label">Clusters</div>
+                        <div class="card-value" id="summary-clusters">0</div>
+                    </div>
+                    <div class="card card-drifts">
+                        <div class="card-label">Unresolved Drifts</div>
+                        <div class="card-value" id="summary-unresolved">0</div>
+                    </div>
+                    <div class="card card-total">
+                        <div class="card-label">Total Drifts</div>
+                        <div class="card-value" id="summary-total">0</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Drifts by Resource Kind</h2>
+                    <div class="chart-bar" id="chart-kind"></div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Drifts by Cluster</h2>
+                    <div class="chart-bar" id="chart-cluster"></div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Recent Scans</h2>
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-recent-scans">
+                            <thead>
+                                <tr>
+                                    <th>Scan ID</th>
+                                    <th>Cluster</th>
+                                    <th>Time</th>
+                                    <th>Resources</th>
+                                    <th>Drifts</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-drifts" class="tab-content">
+                <div class="filters">
+                    <select id="filter-cluster" onchange="loadDrifts()">
+                        <option value="">All Clusters</option>
+                    </select>
+                    <select id="filter-kind" onchange="loadDrifts()">
+                        <option value="">All Kinds</option>
+                    </select>
+                    <select id="filter-namespace" onchange="loadDrifts()">
+                        <option value="">All Namespaces</option>
+                    </select>
+                    <select id="filter-drift-type" onchange="loadDrifts()">
+                        <option value="">All Types</option>
+                        <option value="configuration_drift">Configuration Drift</option>
+                        <option value="missing_in_cluster">Missing in Cluster</option>
+                    </select>
+                    <select id="filter-resolved" onchange="loadDrifts()">
+                        <option value="0">Unresolved</option>
+                        <option value="1">Resolved</option>
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-drifts">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Kind</th>
+                                    <th>Namespace/Name</th>
+                                    <th>Type</th>
+                                    <th>File</th>
+                                    <th>Cluster</th>
+                                    <th>Detected At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="drifts-pagination"></div>
+                </div>
+            </section>
+
+            <section id="tab-scans" class="tab-content">
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-scans">
+                            <thead>
+                                <tr>
+                                    <th>Scan ID</th>
+                                    <th>Cluster</th>
+                                    <th>Time</th>
+                                    <th>Resources</th>
+                                    <th>Drifts</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-clusters" class="tab-content">
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-clusters">
+                            <thead>
+                                <tr>
+                                    <th>Cluster</th>
+                                    <th>Last Scan</th>
+                                    <th>Last Drift Count</th>
+                                    <th>Total Scans</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-sync" class="tab-content">
+                <div class="filters">
+                    <select id="filter-sync-cluster" onchange="loadSyncJobs()">
+                        <option value="">All Clusters</option>
+                    </select>
+                    <select id="filter-sync-status" onchange="loadSyncJobs()">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="picked">Picked</option>
+                        <option value="running">Running</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="loadSyncJobs()">
+                        &#8635; Refresh
+                    </button>
+                </div>
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-sync">
+                            <thead>
+                                <tr>
+                                    <th>Job ID</th>
+                                    <th>Status</th>
+                                    <th>Resource</th>
+                                    <th>Cluster</th>
+                                    <th>Created By</th>
+                                    <th>Created At</th>
+                                    <th>Completed At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="sync-pagination"></div>
+                </div>
+            </section>
+
+            <section id="tab-audit" class="tab-content">
+                <div class="filters">
+                    <select id="filter-audit-cluster" onchange="loadAuditLogs()">
+                        <option value="">All Clusters</option>
+                    </select>
+                    <select id="filter-audit-action" onchange="loadAuditLogs()">
+                        <option value="">All Actions</option>
+                        <option value="sync.create">Sync Created</option>
+                        <option value="sync.completed">Sync Completed</option>
+                        <option value="sync.failed">Sync Failed</option>
+                        <option value="drift.resolve">Drift Resolved</option>
+                    </select>
+                    <select id="filter-audit-user" onchange="loadAuditLogs()">
+                        <option value="">All Users</option>
+                    </select>
+                </div>
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table class="data-table" id="table-audit">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                    <th>User</th>
+                                    <th>Cluster</th>
+                                    <th>Resource</th>
+                                    <th>IP</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="audit-pagination"></div>
+                </div>
+            </section>
+        </main>
+
+        <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+            <div class="modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2 id="modal-title">Drift Detail</h2>
+                    <button class="btn-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

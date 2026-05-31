@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: drift
+      POSTGRES_PASSWORD: drift123
+      POSTGRES_DB: drift_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drift -d drift_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://drift:drift123@postgres:5432/drift_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app/frontend:ro
+
+  cli:
+    build:
+      context: ./cli
+      dockerfile: Dockerfile
+    environment:
+      KUBECONFIG: /kube/config
+    volumes:
+      - ~/.kube/config:/kube/config:ro
+    depends_on:
+      - backend
+    profiles:
+      - cli
+
+volumes:
+  pgdata:
