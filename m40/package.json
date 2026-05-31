@@ -1,0 +1,19 @@
+{
+  "name": "lan-share",
+  "version": "1.0.0",
+  "description": "Cross-platform LAN file sharing and clipboard sync",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.0",
+    "vite": "^5.0.0"
+  }
+}

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAN Share - 局域网共享</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      opacity: 0.9;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .card h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .device-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .device-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .device-item:hover {
+      background: #e9ecef;
+      transform: translateX(4px);
+    }
+    .device-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .device-name {
+      font-weight: 600;
+      color: #333;
+    }
+    .device-ip {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .device-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      background: #d4edda;
+      color: #155724;
+    }
+    .file-drop-zone {
+      border: 2px dashed #667eea;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+    .file-drop-zone:hover, .file-drop-zone.dragover {
+      background: #f0f4ff;
+      border-color: #764ba2;
+    }
+    .file-drop-zone svg {
+      width: 48px;
+      height: 48px;
+      fill: #667eea;
+      margin-bottom: 12px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-secondary {
+      background: #6c757d;
+    }
+    .btn-success {
+      background: #28a745;
+    }
+    .file-list {
+      margin-top: 20px;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.3s;
+    }
+    .clipboard-section {
+      margin-top: 20px;
+    }
+    .clipboard-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch.active {
+      background: #667eea;
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .toggle-switch.active::after {
+      transform: translateX(24px);
+    }
+    .clipboard-preview {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 100px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-top: 20px;
+      color: white;
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #28a745;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      background: #333;
+      color: white;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .toast.success {
+      background: #28a745;
+    }
+    .toast.error {
+      background: #dc3545;
+    }
+    .transfer-log {
+      max-height: 150px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+    .log-item {
+      padding: 4px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .log-item:last-child {
+      border-bottom: none;
+    }
+    .secure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: #d4edda;
+      color: #155724;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .unsecure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: #f8d7da;
+      color: #721c24;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal h3 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+    .qr-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .qr-container img {
+      width: 256px;
+      height: 256px;
+      image-rendering: pixelated;
+    }
+    .pair-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .pair-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .pair-device-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .pair-device-btn:hover {
+      background: #218838;
+    }
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌐 LAN Share</h1>
+      <p>局域网文件传输 & 剪贴板同步</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>📱 在线设备</h2>
+        <div id="deviceList" class="device-list">
+          <p style="color: #999; text-align: center; padding: 40px;">正在搜索设备...</p>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+          <button class="btn" style="flex: 1;" onclick="refreshDevices()">
+            🔄 刷新
+          </button>
+          <button class="btn btn-secondary" style="flex: 1;" onclick="showQrCode()">
+            📱 我的二维码
+          </button>
+        </div>
+        <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="showPairModal()">
+          � 扫码配对
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>📁 文件传输</h2>
+        <div id="fileDropZone" class="file-drop-zone">
+          <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+          <p>拖拽文件到此处或点击选择</p>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">支持多个文件</p>
+        </div>
+        <input type="file" id="fileInput" multiple style="display: none;" />
+        <div id="selectedFiles" class="file-list"></div>
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+          <select id="targetDevice" class="btn" style="flex: 1; background: #f8f9fa; color: #333; text-align: left;">
+            <option value="">选择目标设备</option>
+          </select>
+          <button class="btn btn-success" onclick="sendFiles()" id="sendBtn" disabled>
+            📤 发送
+          </button>
+        </div>
+        <div class="transfer-log" id="transferLog" style="margin-top: 16px;">
+          <div style="color: #999; text-align: center;">暂无传输记录</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h2>📋 剪贴板同步</h2>
+      <div class="clipboard-toggle">
+        <div>
+          <strong>自动同步剪贴板</strong>
+          <p style="font-size: 0.85rem; color: #666; margin-top: 4px;">开启后，剪贴板内容将自动同步到局域网内的其他设备</p>
+        </div>
+        <div id="clipboardToggle" class="toggle-switch" onclick="toggleClipboardSync()"></div>
+      </div>
+      <div class="clipboard-section">
+        <p style="margin-bottom: 8px; font-weight: 500;">当前剪贴板内容：</p>
+        <div id="clipboardContent" class="clipboard-preview">（空）</div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>服务运行中</span>
+      </div>
+      <div>
+        <span id="securityStatus">🔒 未配对设备</span>
+        <span id="myInfo" style="margin-left: 10px;">本机: -</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="qrModal" class="modal-overlay">
+    <div class="modal">
+      <h3>📱 我的二维码</h3>
+      <p style="color: #666; margin-bottom: 16px;">使用其他设备扫描此二维码进行配对</p>
+      <div class="qr-container" id="qrContainer">
+        <div style="color: #999;">生成中...</div>
+      </div>
+      <p id="qrFingerprint" style="font-size: 0.8rem; color: #666; margin-bottom: 16px; font-family: monospace;"></p>
+      <button class="btn" onclick="closeQrModal()">关闭</button>
+    </div>
+  </div>
+
+  <div id="pairModal" class="modal-overlay">
+    <div class="modal">
+      <h3>🔗 配对设备</h3>
+      <p style="color: #666; margin-bottom: 16px;">粘贴扫码得到的配对数据</p>
+      <textarea id="pairData" class="pair-input" placeholder="在此粘贴配对 JSON 数据"></textarea>
+      <div class="modal-buttons">
+        <button class="btn" onclick="closePairModal()">取消</button>
+        <button class="btn btn-success" onclick="doPair()">确认配对</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { invoke } from '@tauri-apps/api/tauri';
+    import { listen } from '@tauri-apps/api/event';
+
+    window.invoke = invoke;
+    window.listen = listen;
+
+    let selectedFiles = [];
+    let devices = [];
+    let clipboardSyncEnabled = false;
+    let fileTransferProgress = new Map();
+    const CHUNK_SIZE = 1024 * 1024;
+
+    async function init() {
+      try {
+        const deviceName = await invoke('get_device_name');
+        const deviceIp = await invoke('get_device_ip');
+        const allIps = await invoke('get_all_ips');
+        document.getElementById('myInfo').textContent = `本机: ${deviceName} (${deviceIp})${allIps.length > 1 ? ` [${allIps.length}个网卡]` : ''}`;
+        
+        await refreshDevices();
+        await updateClipboardContent();
+        updateSecurityStatus();
+        
+        await listen('device-discovered', (event) => {
+          console.log('Device discovered:', event.payload);
+          refreshDevices();
+        });
+
+        await listen('device-paired', (event) => {
+          console.log('Device paired:', event.payload);
+          showToast(`设备已配对: ${event.payload.device_name}`, 'success');
+          refreshDevices();
+          updateSecurityStatus();
+        });
+
+        await listen('file-received', (event) => {
+          const encrypted = event.payload.encrypted ? ' [加密]' : '';
+          showToast(`收到文件: ${event.payload.filename}${encrypted}`, 'success');
+          addTransferLog(`收到: ${event.payload.filename} (${formatSize(event.payload.size)})${encrypted}`);
+        });
+
+        await listen('clipboard-received', (event) => {
+          showToast('剪贴板已同步', 'success');
+          updateClipboardContent();
+        });
+
+        await listen('transfer-progress', (event) => {
+          console.log('Transfer progress:', event.payload);
+        });
+
+      } catch (e) {
+        console.error('Init error:', e);
+        showToast('初始化失败: ' + e, 'error');
+      }
+    }
+
+    function updateSecurityStatus() {
+      const pairedCount = devices.filter(d => d.paired).length;
+      const statusEl = document.getElementById('securityStatus');
+      if (pairedCount > 0) {
+        statusEl.innerHTML = `🔐 ${pairedCount} 个安全连接`;
+        statusEl.style.color = '#d4edda';
+      } else {
+        statusEl.innerHTML = '🔒 未配对设备';
+        statusEl.style.color = '#ffcccc';
+      }
+    }
+
+    window.refreshDevices = async function() {
+      try {
+        devices = await invoke('discover_devices');
+        renderDeviceList();
+        renderDeviceSelect();
+        updateSecurityStatus();
+      } catch (e) {
+        console.error('Discover error:', e);
+      }
+    };
+
+    function renderDeviceList() {
+      const container = document.getElementById('deviceList');
+      if (devices.length === 0) {
+        container.innerHTML = '<p style="color: #999; text-align: center; padding: 40px;">暂无在线设备</p>';
+        return;
+      }
+      container.innerHTML = devices.map(d => `
+        <div class="device-item">
+          <div class="device-info">
+            <span class="device-name">${d.name}
+              ${d.paired ? '<span class="secure-badge">🔐 安全</span>' : '<span class="unsecure-badge">⚠ 未配对</span>'}
+            </span>
+            <span class="device-ip">${d.ip}:${d.port}</span>
+          </div>
+          ${!d.paired ? `
+            <button class="pair-device-btn" onclick="pairWithIp('${d.ip}')">配对</button>
+          ` : '<span class="device-status">在线</span>'}
+        </div>
+      `).join('');
+    }
+
+    function renderDeviceSelect() {
+      const select = document.getElementById('targetDevice');
+      select.innerHTML = '<option value="">选择目标设备</option>' + 
+        devices.map(d => `<option value="${d.ip}:${d.port}" ${d.paired ? '' : 'disabled'}>${d.name} (${d.ip}) ${d.paired ? '🔐' : '[未配对不可用]'}</option>`).join('');
+    }
+
+    const dropZone = document.getElementById('fileDropZone');
+    const fileInput = document.getElementById('fileInput');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      selectedFiles = Array.from(files).map(f => ({
+        file: f,
+        progress: 0,
+        status: 'pending'
+      }));
+      renderSelectedFiles();
+      document.getElementById('sendBtn').disabled = selectedFiles.length === 0;
+    }
+
+    function renderSelectedFiles() {
+      const container = document.getElementById('selectedFiles');
+      if (selectedFiles.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+      container.innerHTML = selectedFiles.map((f, i) => {
+        const progress = f.progress || 0;
+        const statusText = {
+          'pending': '等待发送',
+          'checking': '检查断点...',
+          'sending': `发送中 ${progress.toFixed(1)}%`,
+          'paused': '已暂停',
+          'completed': '已完成',
+          'error': '发送失败'
+        }[f.status] || f.status;
+        
+        return `
+        <div class="file-item" id="file-item-${i}">
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>📄 ${f.file.name} (${formatSize(f.file.size)})</span>
+              <span style="font-size: 0.85rem; color: #666;">${statusText}</span>
+            </div>
+            ${f.status === 'sending' || f.status === 'paused' ? `
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progress}%"></div>
+            </div>
+            ` : ''}
+          </div>
+          ${f.status === 'pending' || f.status === 'error' ? `
+          <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem; margin-left: 10px;" onclick="removeFile(${i})">移除</button>
+          ` : ''}
+        </div>
+      `}).join('');
+    }
+
+    window.removeFile = function(index) {
+      selectedFiles.splice(index, 1);
+      renderSelectedFiles();
+      document.getElementById('sendBtn').disabled = selectedFiles.length === 0;
+    };
+
+    async function sendFileWithResume(fileItem, ip, port, fingerprint, index) {
+      const file = fileItem.file;
+      const fileSize = file.size;
+      const filename = file.name;
+      
+      fileItem.status = 'checking';
+      renderSelectedFiles();
+      
+      try {
+        const status = await invoke('get_file_status', {
+          ip,
+          port: parseInt(port),
+          filename,
+          fileSize
+        });
+        
+        let offset = 0;
+        if (status.exists && status.received_bytes > 0) {
+          offset = status.received_bytes;
+          addTransferLog(`断点续传: ${filename} (已接收 ${formatSize(offset)}/${formatSize(fileSize)})`);
+        }
+        
+        fileItem.status = 'sending';
+        fileItem.progress = (offset / fileSize) * 100;
+        renderSelectedFiles();
+        
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        
+        while (offset < fileSize) {
+          const end = Math.min(offset + CHUNK_SIZE, fileSize);
+          const chunk = bytes.slice(offset, end);
+          
+          const result = await invoke('send_file_chunk', {
+            ip,
+            port: parseInt(port),
+            filename,
+            fileSize,
+            offset,
+            data: Array.from(chunk),
+            fingerprint: fingerprint || null
+          });
+          
+          if (!result.success) {
+            throw new Error(result.message || '发送失败');
+          }
+          
+          offset = result.received_bytes;
+          fileItem.progress = (offset / fileSize) * 100;
+          renderSelectedFiles();
+          
+          if (result.completed) {
+            break;
+          }
+        }
+        
+        fileItem.status = 'completed';
+        fileItem.progress = 100;
+        renderSelectedFiles();
+        
+        const encrypted = fingerprint ? ' [加密]' : '';
+        showToast(`发送成功: ${filename}${encrypted}`, 'success');
+        addTransferLog(`已发送: ${filename} (${formatSize(fileSize)})${encrypted}`);
+        
+        return true;
+      } catch (e) {
+        fileItem.status = 'error';
+        renderSelectedFiles();
+        showToast(`发送失败: ${e}`, 'error');
+        addTransferLog(`失败: ${filename} - ${e}`);
+        return false;
+      }
+    }
+
+    window.sendFiles = async function() {
+      const target = document.getElementById('targetDevice').value;
+      if (!target) {
+        showToast('请选择目标设备', 'error');
+        return;
+      }
+      if (selectedFiles.length === 0) {
+        showToast('请选择文件', 'error');
+        return;
+      }
+
+      const [ip, port] = target.split(':');
+      const device = devices.find(d => d.ip === ip);
+      const fingerprint = device && device.paired ? device.fingerprint : null;
+      
+      document.getElementById('sendBtn').disabled = true;
+      
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const fileItem = selectedFiles[i];
+        if (fileItem.status === 'pending' || fileItem.status === 'error') {
+          await sendFileWithResume(fileItem, ip, port, fingerprint, i);
+        }
+      }
+      
+      const allCompleted = selectedFiles.every(f => f.status === 'completed');
+      if (allCompleted) {
+        setTimeout(() => {
+          selectedFiles = [];
+          renderSelectedFiles();
+        }, 2000);
+      }
+      
+      document.getElementById('sendBtn').disabled = selectedFiles.length === 0;
+    };
+
+    window.showQrCode = async function() {
+      const modal = document.getElementById('qrModal');
+      const container = document.getElementById('qrContainer');
+      const fingerprintEl = document.getElementById('qrFingerprint');
+      
+      modal.classList.add('show');
+      container.innerHTML = '<div style="color: #999;">生成中...</div>';
+      
+      try {
+        const qrData = await invoke('get_qr_code_data');
+        const imgBytes = await invoke('generate_qr_image', { data: qrData });
+        const blob = new Blob([new Uint8Array(imgBytes)], { type: 'image/png' });
+        const url = URL.createObjectURL(blob);
+        
+        const qrInfo = JSON.parse(qrData);
+        fingerprintEl.textContent = `指纹: ${qrInfo.fingerprint.substring(0, 16)}...`;
+        
+        container.innerHTML = `<img src="${url}" alt="QR Code" />`;
+        container.dataset.qrData = qrData;
+      } catch (e) {
+        container.innerHTML = `<div style="color: #dc3545;">生成失败: ${e}</div>`;
+      }
+    };
+
+    window.closeQrModal = function() {
+      document.getElementById('qrModal').classList.remove('show');
+    };
+
+    window.showPairModal = function() {
+      document.getElementById('pairModal').classList.add('show');
+      document.getElementById('pairData').value = '';
+    };
+
+    window.closePairModal = function() {
+      document.getElementById('pairModal').classList.remove('show');
+    };
+
+    window.doPair = async function() {
+      const qrData = document.getElementById('pairData').value.trim();
+      if (!qrData) {
+        showToast('请输入配对数据', 'error');
+        return;
+      }
+      
+      try {
+        await invoke('pair_with_device', { qr_data: qrData });
+        showToast('配对成功！', 'success');
+        closePairModal();
+        await refreshDevices();
+      } catch (e) {
+        showToast(`配对失败: ${e}`, 'error');
+      }
+    };
+
+    window.pairWithIp = async function(ip) {
+      const device = devices.find(d => d.ip === ip);
+      if (!device) {
+        showToast('设备不存在', 'error');
+        return;
+      }
+      showToast('请使用"扫码配对"功能输入对方的配对数据', 'info');
+      showPairModal();
+    };
+
+    window.toggleClipboardSync = async function() {
+      clipboardSyncEnabled = !clipboardSyncEnabled;
+      const toggle = document.getElementById('clipboardToggle');
+      toggle.classList.toggle('active', clipboardSyncEnabled);
+      
+      try {
+        await invoke('set_clipboard_sync', { enabled: clipboardSyncEnabled });
+        showToast(clipboardSyncEnabled ? '剪贴板同步已开启' : '剪贴板同步已关闭', 'success');
+      } catch (e) {
+        showToast('操作失败: ' + e, 'error');
+      }
+    };
+
+    async function updateClipboardContent() {
+      try {
+        const content = await invoke('get_clipboard_content');
+        document.getElementById('clipboardContent').textContent = content || '(空)';
+      } catch (e) {
+        console.error('Get clipboard error:', e);
+      }
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function addTransferLog(message) {
+      const log = document.getElementById('transferLog');
+      const time = new Date().toLocaleTimeString();
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.textContent = `[${time}] ${message}`;
+      
+      if (log.firstChild.textContent === '暂无传输记录') {
+        log.innerHTML = '';
+      }
+      log.insertBefore(item, log.firstChild);
+    }
+
+    function showToast(message, type = '') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show ' + type;
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    init();
+  </script>
+</body>
+</html>
