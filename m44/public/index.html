@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维流体动力学模拟平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>二维流体动力学模拟平台</h1>
+            <p class="subtitle">Navier-Stokes Solver - 基于稳定流体方法</p>
+        </header>
+
+        <div class="main-content">
+            <div class="canvas-container">
+                <canvas id="fluidCanvas"></canvas>
+                <canvas id="velocityCanvas" class="overlay-canvas"></canvas>
+            </div>
+
+            <div class="controls">
+                <div class="control-section">
+                    <h3>模拟参数</h3>
+                    <div class="control-group">
+                        <label for="viscosity">粘度: <span id="viscosityValue">0.0001</span></label>
+                        <input type="range" id="viscosity" min="0" max="0.001" step="0.00001" value="0.0001">
+                    </div>
+                    <div class="control-group">
+                        <label for="diffusion">扩散率: <span id="diffusionValue">0.00001</span></label>
+                        <input type="range" id="diffusion" min="0" max="0.0001" step="0.000001" value="0.00001">
+                    </div>
+                    <div class="control-group">
+                        <label for="dt">时间步长: <span id="dtValue">0.2</span></label>
+                        <input type="range" id="dt" min="0.01" max="1" step="0.01" value="0.2">
+                    </div>
+                    <div class="control-group">
+                        <label for="resolution">分辨率: <span id="resolutionValue">128</span></label>
+                        <input type="range" id="resolution" min="64" max="512" step="32" value="128">
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>交互设置</h3>
+                    <div class="control-group">
+                        <label for="brushSize">笔刷大小: <span id="brushSizeValue">10</span></label>
+                        <input type="range" id="brushSize" min="2" max="30" step="1" value="10">
+                    </div>
+                    <div class="control-group">
+                        <label for="densityAmount">密度强度: <span id="densityAmountValue">100</span></label>
+                        <input type="range" id="densityAmount" min="10" max="500" step="10" value="100">
+                    </div>
+                    <div class="control-group">
+                        <label for="velocityAmount">速度强度: <span id="velocityAmountValue">10</span></label>
+                        <input type="range" id="velocityAmount" min="1" max="50" step="1" value="10">
+                    </div>
+                    <div class="control-group">
+                        <label for="obstacleSize">障碍物大小: <span id="obstacleSizeValue">5</span></label>
+                        <input type="range" id="obstacleSize" min="2" max="20" step="1" value="5">
+                    </div>
+                    <div class="control-group checkbox">
+                        <input type="checkbox" id="obstacleMode">
+                        <label for="obstacleMode">障碍物绘制模式 (右键添加)</label>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>显示选项</h3>
+                    <div class="control-group checkbox">
+                        <input type="checkbox" id="showVelocity" checked>
+                        <label for="showVelocity">显示速度场</label>
+                    </div>
+                    <div class="control-group checkbox">
+                        <input type="checkbox" id="colorMode" checked>
+                        <label for="colorMode">彩色模式</label>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>操作</h3>
+                    <div class="button-group">
+                        <button id="resetBtn">重置流体</button>
+                        <button id="clearObstaclesBtn">清除障碍物</button>
+                        <button id="resetAllBtn">全部重置</button>
+                        <button id="pauseBtn">暂停</button>
+                        <button id="saveConfigBtn">保存配置</button>
+                        <button id="screenshotBtn">截图</button>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>预设场景</h3>
+                    <div class="button-group">
+                        <button id="presetJet">喷射流</button>
+                        <button id="presetVortex">漩涡</button>
+                        <button id="presetExplosion">爆炸</button>
+                        <button id="presetDamBreak">溃坝</button>
+                    </div>
+                </div>
+
+                <div class="control-section info">
+                    <h3>信息</h3>
+                    <p>FPS: <span id="fps">0</span></p>
+                    <p>网格数: <span id="gridInfo">128x128</span></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>左键拖动添加流体（速度+密度） | 右键绘制障碍物（黑色静态障碍物会使流体绕过流动</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
