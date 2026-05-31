@@ -1,0 +1,161 @@
+.diff-view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #1e1e1e;
+  overflow: hidden;
+}
+
+.diff-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background-color: #252526;
+  border-bottom: 1px solid #3c3c3c;
+  flex-shrink: 0;
+}
+
+.diff-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.diff-title-icon {
+  font-size: 20px;
+}
+
+.diff-labels {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.diff-label {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.diff-label-original {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.diff-label-modified {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.diff-label-arrow {
+  color: #888;
+  font-size: 16px;
+}
+
+.conflicts-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: rgba(243, 156, 18, 0.15);
+  border-bottom: 1px solid rgba(243, 156, 18, 0.3);
+  color: #f39c12;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.conflicts-icon {
+  font-size: 16px;
+}
+
+.diff-editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.diff-editor {
+  height: 100%;
+  width: 100%;
+}
+
+.merge-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background-color: #252526;
+  border-top: 1px solid #3c3c3c;
+  flex-shrink: 0;
+}
+
+.merge-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.merge-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: #3c3c3c;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.merge-btn:hover {
+  background-color: #4f4f4f;
+}
+
+.merge-btn.active {
+  background-color: rgba(0, 122, 204, 0.2);
+  border-color: #007acc;
+  color: #007acc;
+}
+
+.merge-confirm-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.merge-confirm-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+.merge-confirm-btn:disabled {
+  background-color: #3c3c3c;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.diff-view-container :global(.monaco-diff-editor) {
+  height: 100% !important;
+}
+
+.diff-view-container :global(.monaco-diff-editor .diffOverview) {
+  background: transparent;
+}
+
+.diff-view-container :global(.monaco-editor .margin) {
+  background-color: #1e1e1e;
+}

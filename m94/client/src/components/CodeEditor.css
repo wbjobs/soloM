@@ -1,0 +1,46 @@
+.code-editor-container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  font-size: 14px;
+}
+
+.yRemoteSelection {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.3;
+  border-radius: 2px;
+}
+
+.yRemoteSelectionHead {
+  position: absolute;
+  pointer-events: none;
+  height: 100%;
+  width: 2px;
+}
+
+.yRemoteSelectionHead::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.monaco-editor .yRemoteSelection {
+  z-index: 0;
+}
+
+.monaco-editor .yRemoteSelectionHead {
+  z-index: 1;
+}

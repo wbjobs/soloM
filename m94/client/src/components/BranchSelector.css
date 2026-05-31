@@ -1,0 +1,266 @@
+.branch-selector {
+  position: relative;
+}
+
+.branch-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #3c3c3c;
+  border: 1px solid #3c3c3c;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.branch-toggle-btn:hover {
+  background-color: #4f4f4f;
+  border-color: #007acc;
+}
+
+.branch-icon {
+  font-size: 14px;
+}
+
+.branch-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow {
+  font-size: 10px;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.branch-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 320px;
+  background-color: #252526;
+  border: 1px solid #3c3c3c;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #2d2d30;
+  border-bottom: 1px solid #3c3c3c;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.create-branch-btn {
+  padding: 6px 12px;
+  background-color: #007acc;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-branch-btn:hover {
+  background-color: #005a9e;
+}
+
+.create-branch-form {
+  padding: 12px 16px;
+  background-color: rgba(0, 122, 204, 0.1);
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.create-branch-form input {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #1e1e1e;
+  border: 1px solid #3c3c3c;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.create-branch-form input:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background-color: #3c3c3c;
+  color: #e0e0e0;
+}
+
+.cancel-btn:hover {
+  background-color: #4f4f4f;
+}
+
+.confirm-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background-color: #27ae60;
+}
+
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.branch-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.branch-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid rgba(60, 60, 60, 0.5);
+}
+
+.branch-item:last-child {
+  border-bottom: none;
+}
+
+.branch-item:hover {
+  background-color: #2d2d30;
+}
+
+.branch-item.active {
+  background-color: rgba(0, 122, 204, 0.15);
+}
+
+.branch-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.branch-type-icon {
+  font-size: 14px;
+}
+
+.branch-name-text {
+  font-size: 13px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.active-badge {
+  padding: 2px 8px;
+  background-color: #007acc;
+  border-radius: 10px;
+  font-size: 10px;
+  color: white;
+  font-weight: 600;
+}
+
+.branch-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.branch-item:hover .branch-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+  background-color: #3c3c3c;
+}
+
+.diff-btn:hover {
+  background-color: rgba(0, 122, 204, 0.3);
+}
+
+.merge-btn:hover {
+  background-color: rgba(46, 204, 113, 0.3);
+}
+
+.delete-btn:hover {
+  background-color: rgba(231, 76, 60, 0.3);
+}
+
+.branch-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.branch-list::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.branch-list::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 3px;
+}
