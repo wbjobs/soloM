@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像频域滤波器 - WebAssembly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .mode-tab {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .mode-tab.active {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        .upload-btn input {
+            display: none;
+        }
+
+        .slider-container {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .process-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0ea5e9 100%);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .process-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .convolution-controls {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .convolution-controls.active {
+            display: block;
+        }
+
+        .convolution-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .kernel-size-selector {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .kernel-size-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .kernel-size-btn.active {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .preset-select {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .preset-select option {
+            background: #1e293b;
+            color: white;
+        }
+
+        .preview-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .preview-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #7c3aed;
+        }
+
+        .kernel-grid-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .kernel-grid {
+            display: grid;
+            gap: 6px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .kernel-grid.size-3 {
+            grid-template-columns: repeat(3, 70px);
+        }
+
+        .kernel-grid.size-5 {
+            grid-template-columns: repeat(5, 56px);
+        }
+
+        .kernel-input {
+            width: 100%;
+            padding: 10px 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s ease;
+        }
+
+        .kernel-input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .kernel-input::-webkit-outer-spin-button,
+        .kernel-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .kernel-input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .canvas-grid.conv-mode {
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        }
+
+        .canvas-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .canvas-card h3 {
+            margin-bottom: 16px;
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .canvas-wrapper {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder {
+            color: #64748b;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .placeholder svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .status-bar {
+            margin-top: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .status-bar.success {
+            color: #10b981;
+        }
+
+        .status-bar.error {
+            color: #ef4444;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00d4ff;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 图像频域滤波器</h1>
+            <p class="subtitle">基于 Rust + WebAssembly 的高性能 FFT 低通滤波 & 卷积运算</p>
+        </header>
+
+        <div class="controls">
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="fft">FFT 低通滤波</button>
+                <button class="mode-tab" data-mode="conv">卷积运算</button>
+            </div>
+
+            <div class="control-row">
+                <label class="upload-btn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    上传图片
+                    <input type="file" id="imageUpload" accept="image/*">
+                </label>
+
+                <div class="slider-container" id="fftControls">
+                    <div class="slider-label">
+                        <span>截止频率</span>
+                        <span id="cutoffValue">50%</span>
+                    </div>
+                    <input type="range" id="cutoffSlider" min="5" max="95" value="50">
+                </div>
+
+                <button class="process-btn" id="processBtn" disabled>
+                    应用滤波
+                </button>
+            </div>
+
+            <div class="convolution-controls" id="convControls">
+                <div class="convolution-options">
+                    <div class="kernel-size-selector">
+                        <button class="kernel-size-btn active" data-size="3">3 × 3</button>
+                        <button class="kernel-size-btn" data-size="5">5 × 5</button>
+                    </div>
+
+                    <select class="preset-select" id="presetSelect">
+                        <option value="">-- 选择预设 --</option>
+                        <option value="identity">恒等变换</option>
+                        <option value="box_blur">均值模糊</option>
+                        <option value="gaussian_blur_3">高斯模糊 (3x3)</option>
+                        <option value="gaussian_blur_5">高斯模糊 (5x5)</option>
+                        <option value="sharpen">锐化</option>
+                        <option value="edge_detect">边缘检测</option>
+                        <option value="edge_detect_2">边缘检测 (强)</option>
+                        <option value="outline">轮廓提取</option>
+                        <option value="emboss">浮雕</option>
+                        <option value="sobel_x">Sobel X</option>
+                        <option value="sobel_y">Sobel Y</option>
+                    </select>
+
+                    <label class="preview-toggle">
+                        <input type="checkbox" id="realtimePreview" checked>
+                        实时预览
+                    </label>
+                </div>
+
+                <div class="kernel-grid-wrapper">
+                    <div class="kernel-grid size-3" id="kernelGrid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-grid" id="canvasGrid">
+            <div class="canvas-card">
+                <h3>
+                    原图
+                    <span class="badge" id="originalInfo">-</span>
+                </h3>
+                <div class="canvas-wrapper">
+                    <div class="placeholder" id="originalPlaceholder">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p>请上传图片</p>
+                    </div>
+                    <canvas id="originalCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <div class="canvas-card" id="spectrumCard">
+                <h3>
+                    频谱图
+                    <span class="badge">FFT</span>
+                </h3>
+                <div class="canvas-wrapper">
+                    <div class="placeholder" id="spectrumPlaceholder">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <p>等待处理...</p>
+                    </div>
+                    <canvas id="spectrumCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <div class="canvas-card">
+                <h3 id="resultTitle">
+                    滤波结果
+                    <span class="badge" id="resultBadge">低通</span>
+                </h3>
+                <div class="canvas-wrapper">
+                    <div class="placeholder" id="filteredPlaceholder">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                        <p>等待处理...</p>
+                    </div>
+                    <canvas id="filteredCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <div class="canvas-card" id="filteredSpectrumCard">
+                <h3>
+                    滤波后频谱
+                    <span class="badge">FFT</span>
+                </h3>
+                <div class="canvas-wrapper">
+                    <div class="placeholder" id="filteredSpectrumPlaceholder">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <p>等待处理...</p>
+                    </div>
+                    <canvas id="filteredSpectrumCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar" id="statusBar">
+            正在加载 WebAssembly 模块...
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
