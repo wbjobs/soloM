@@ -1,0 +1,20 @@
+{
+  "name": "iot-command-queue",
+  "version": "1.0.0",
+  "description": "Distributed IoT device command queue and simulation gateway",
+  "private": true,
+  "scripts": {
+    "start:api": "node src/api-gateway/index.js",
+    "start:scheduler": "node src/scheduler/index.js",
+    "start:device": "node src/device-gateway/index.js",
+    "start:all": "concurrently \"npm:start:api\" \"npm:start:scheduler\" \"npm:start:device\"",
+    "init:db": "node src/shared/init-db.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "pg": "^8.11.3",
+    "uuid": "^9.0.0",
+    "concurrently": "^8.2.2"
+  }
+}
