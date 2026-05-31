@@ -1,0 +1,33 @@
+{
+  "name": "git-commit-ai",
+  "version": "1.0.0",
+  "description": "私有化 Git Commit Message 自动生成 CLI 工具，基于本地 LLM 生成符合 Conventional Commits 规范的提交信息",
+  "main": "src/cli.js",
+  "bin": {
+    "git-commit-ai": "./src/cli.js",
+    "gca": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "install:git": "node scripts/install-git-hook.js",
+    "uninstall:git": "node scripts/uninstall-git-hook.js"
+  },
+  "keywords": [
+    "git",
+    "commit",
+    "ai",
+    "llm",
+    "ollama",
+    "conventional-commits"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6"
+  }
+}

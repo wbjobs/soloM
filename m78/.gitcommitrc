@@ -1,0 +1,24 @@
+# .gitcommitrc 配置文件示例
+# 支持 INI 风格或 JSON 格式
+
+[commit]
+# Commit Message 语言: zh-CN (中文) 或 en (英文)
+language = zh-CN
+# 标题最大长度
+maxLength = 72
+
+[filter]
+# 忽略的文件扩展名 (带点或不带点都可以)
+excludeExtensions = .md, .log, .txt
+# 忽略的文件路径模式 (支持正则或简单字符串匹配)
+excludePatterns = node_modules/, dist/, build/
+
+# 也可以使用 JSON 格式，例如:
+# {
+#   "commit": {
+#     "language": "en"
+#   },
+#   "filter": {
+#     "excludeExtensions": [".md", ".log"]
+#   }
+# }
