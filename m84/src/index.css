@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #0a0e1a;
+  }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #e6f1ff;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  canvas {
+    display: block;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+  }
+}
+
+@layer components {
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
+
+  input[type='range']::-webkit-slider-track {
+    height: 6px;
+    background: #1e293b;
+    border-radius: 3px;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #22d3ee, #6366f1);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -5px;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  input[type='range']::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.8);
+  }
+
+  input[type='range']::-moz-range-track {
+    height: 6px;
+    background: #1e293b;
+    border-radius: 3px;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #22d3ee, #6366f1);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
