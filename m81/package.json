@@ -1,0 +1,17 @@
+{
+  "name": "dicom-viewer",
+  "version": "1.0.0",
+  "description": "Browser-based DICOM medical image viewer using cornerstone.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["dicom", "medical-imaging", "cornerstone", "webassembly"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

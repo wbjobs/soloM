@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DICOM 医学影像查看器</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/cornerstone-core@2.6.1/dist/cornerstone.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cornerstone-wado-image-loader@4.12.0/dist/cornerstoneWADOImageLoader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cornerstone-tools@6.0.9/dist/cornerstoneTools.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dicom-parser@1.8.21/dist/dicomParser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vtk.js@28.7.0/dist/vtk.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="header-content">
+        <div>
+          <h1>DICOM 医学影像查看器</h1>
+          <p class="subtitle">基于 cornerstone.js + vtk.js WebGL</p>
+        </div>
+        <div class="view-mode-toggle">
+          <button id="mode2D" class="mode-btn active">2D 视图</button>
+          <button id="modeMPR" class="mode-btn">MPR 三视图</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>文件加载</h2>
+          <div class="file-input-wrapper">
+            <label for="dicomFile" class="file-label">
+              <span class="file-icon">📁</span>
+              <span>选择 DICOM 文件</span>
+              <span class="file-hint">支持多文件序列</span>
+            </label>
+            <input type="file" id="dicomFile" accept=".dcm" multiple />
+          </div>
+          <div id="fileInfo" class="file-info"></div>
+        </div>
+
+        <div class="panel" id="mprControls" style="display: none;">
+          <h2>MPR 切片导航</h2>
+          <div class="control-group">
+            <label>轴状位 (Axial) <span id="axialSliceInfo">0/0</span></label>
+            <input type="range" id="axialSlider" min="0" max="0" value="0" class="slice-slider" />
+          </div>
+          <div class="control-group">
+            <label>冠状位 (Coronal) <span id="coronalSliceInfo">0/0</span></label>
+            <input type="range" id="coronalSlider" min="0" max="0" value="0" class="slice-slider" />
+          </div>
+          <div class="control-group">
+            <label>矢状位 (Sagittal) <span id="sagittalSliceInfo">0/0</span></label>
+            <input type="range" id="sagittalSlider" min="0" max="0" value="0" class="slice-slider" />
+          </div>
+          <div class="mpr-buttons">
+            <button id="playAxial" class="play-btn">▶ 轴状位</button>
+            <button id="playCoronal" class="play-btn">▶ 冠状位</button>
+            <button id="playSagittal" class="play-btn">▶ 矢状位</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>窗宽窗位调节</h2>
+          <div class="control-group">
+            <label>窗宽 (Window Width)</label>
+            <div class="slider-row">
+              <input type="range" id="windowWidth" min="1" max="4000" value="2000" step="1" />
+              <span id="windowWidthValue">2000</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>窗位 (Window Level)</label>
+            <div class="slider-row">
+              <input type="range" id="windowLevel" min="-1000" max="2000" value="500" step="1" />
+              <span id="windowLevelValue">500</span>
+            </div>
+          </div>
+          <div class="preset-buttons">
+            <button data-preset="lung">肺窗</button>
+            <button data-preset="mediastinum">纵隔窗</button>
+            <button data-preset="bone">骨窗</button>
+            <button data-preset="brain">脑窗</button>
+            <button data-preset="reset">重置</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>操作提示</h2>
+          <ul class="tips">
+            <li>🖱️ 左键拖动：调整窗宽窗位</li>
+            <li>🔍 滚轮：切换切片 / 缩放</li>
+            <li>✋ 右键拖动：平移图像</li>
+            <li>🔄 双击：重置视图</li>
+            <li>📐 MPR模式：实时三视图重建</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h2>图像信息</h2>
+          <div id="imageInfo" class="image-info">
+            <p class="placeholder">加载 DICOM 文件后显示信息</p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="viewer-area">
+        <div id="viewerContainer2D" class="viewer-container active">
+          <div class="viewer-placeholder" id="viewerPlaceholder">
+            <div class="placeholder-content">
+              <div class="placeholder-icon">🩺</div>
+              <p>请选择 DICOM (.dcm) 文件开始查看</p>
+              <p class="small">选择多个文件可启用 MPR 三视图</p>
+            </div>
+          </div>
+          <div id="dicomViewer" class="dicom-viewer"></div>
+        </div>
+
+        <div id="viewerContainerMPR" class="viewer-container mpr-container">
+          <div class="mpr-placeholder" id="mprPlaceholder">
+            <div class="placeholder-content">
+              <div class="placeholder-icon">🧊</div>
+              <p>请选择多个 DICOM 文件序列</p>
+              <p class="small">系统将自动构建 3D 体数据</p>
+            </div>
+          </div>
+          <div class="mpr-view">
+            <div class="mpr-view-header">
+              <span>轴状位 (Axial)</span>
+              <span id="axialInfo" class="slice-indicator"></span>
+            </div>
+            <div id="axialView" class="mpr-view-port"></div>
+          </div>
+          <div class="mpr-view">
+            <div class="mpr-view-header">
+              <span>冠状位 (Coronal)</span>
+              <span id="coronalInfo" class="slice-indicator"></span>
+            </div>
+            <div id="coronalView" class="mpr-view-port"></div>
+          </div>
+          <div class="mpr-view">
+            <div class="mpr-view-header">
+              <span>矢状位 (Sagittal)</span>
+              <span id="sagittalInfo" class="slice-indicator"></span>
+            </div>
+            <div id="sagittalView" class="mpr-view-port"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <p>DICOM Viewer © 2024 | Powered by cornerstone.js + vtk.js</p>
+        <span id="memoryStatus" class="memory-status"></span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
