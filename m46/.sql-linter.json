@@ -1,0 +1,20 @@
+{
+  "databaseType": "mysql",
+  "rules": {
+    "select-no-asterisk": "error",
+    "table-name-backtick": "error",
+    "column-name-backtick": "warning",
+    "keyword-uppercase": "warning",
+    "indentation": {
+      "enabled": true,
+      "severity": "warning",
+      "options": {
+        "indentSize": 2
+      }
+    },
+    "no-trailing-whitespace": "warning",
+    "single-query-per-line": false,
+    "where-required": false,
+    "insert-explicit-columns": "warning"
+  }
+}

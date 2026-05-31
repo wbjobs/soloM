@@ -1,0 +1,26 @@
+{
+  "name": "sql-ast-linter",
+  "version": "1.0.0",
+  "description": "基于 AST 的自定义 SQL 语法检查与自动格式化 Linter",
+  "main": "src/index.js",
+  "bin": {
+    "sql-linter": "./bin/sql-linter.js"
+  },
+  "scripts": {
+    "lint": "node ./bin/sql-linter.js",
+    "test": "node ./bin/sql-linter.js examples/*.sql"
+  },
+  "keywords": [
+    "sql",
+    "linter",
+    "ast",
+    "formatter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "glob": "^10.4.5",
+    "node-sql-parser": "^4.18.0"
+  }
+}
