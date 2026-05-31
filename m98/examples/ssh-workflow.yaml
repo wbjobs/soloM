@@ -1,0 +1,74 @@
+workflow:
+  name: "Distributed Deployment Workflow"
+  description: "Deploy application to multiple servers using SSH"
+  version: "1.0.0"
+
+  tasks:
+    - name: "check_local_dependencies"
+      description: "Verify local tools are available"
+      executor: "local"
+      command: "echo 'Checking local dependencies...' && git --version"
+      timeout: "30s"
+
+    - name: "build_application"
+      description: "Build the application locally"
+      executor: "local"
+      depends_on:
+        - "check_local_dependencies"
+      command: "echo 'Building application...' && sleep 3 && echo 'Build complete'"
+      timeout: "5m"
+      retry_policy:
+        max_attempts: 2
+        delay: "30s"
+
+    - name: "deploy_to_server1"
+      description: "Deploy application to production server 1"
+      executor: "ssh"
+      node: "production_server1"
+      depends_on:
+        - "build_application"
+      command: "cd /var/www/app && git pull && systemctl restart app"
+      timeout: "2m"
+      retry_policy:
+        max_attempts: 3
+        delay: "10s"
+      env:
+        NODE_ENV: "production"
+
+    - name: "deploy_to_server2"
+      description: "Deploy application to production server 2"
+      executor: "ssh"
+      node: "production_server2"
+      depends_on:
+        - "build_application"
+      command: "cd /var/www/app && git pull && systemctl restart app"
+      timeout: "2m"
+      retry_policy:
+        max_attempts: 3
+        delay: "10s"
+      env:
+        NODE_ENV: "production"
+
+    - name: "health_check"
+      description: "Verify all servers are healthy"
+      executor: "local"
+      depends_on:
+        - "deploy_to_server1"
+        - "deploy_to_server2"
+      command: "echo 'Running health checks...' && echo 'All servers healthy!'"
+      timeout: "1m"
+
+nodes:
+  - name: "production_server1"
+    type: "ssh"
+    host: "server1.example.com"
+    port: 22
+    user: "deploy"
+    key_file: "~/.ssh/id_rsa"
+
+  - name: "production_server2"
+    type: "ssh"
+    host: "server2.example.com"
+    port: 22
+    user: "deploy"
+    key_file: "~/.ssh/id_rsa"

@@ -1,0 +1,39 @@
+workflow:
+  name: "Windows Demo Workflow"
+  description: "A workflow compatible with Windows system"
+  version: "1.0.0"
+
+  tasks:
+    - name: "task1_setup"
+      description: "First task - setup"
+      executor: "local"
+      command: "echo Task 1: Setting up..."
+      timeout: "30s"
+      retry_policy:
+        max_attempts: 3
+        delay: "2s"
+
+    - name: "task2_parallel_a"
+      description: "Parallel task A"
+      executor: "local"
+      depends_on:
+        - "task1_setup"
+      command: "echo Task 2A: Running parallel..."
+      timeout: "1m"
+
+    - name: "task2_parallel_b"
+      description: "Parallel task B"
+      executor: "local"
+      depends_on:
+        - "task1_setup"
+      command: "echo Task 2B: Running parallel..."
+      timeout: "1m"
+
+    - name: "task3_final"
+      description: "Final task after all parallel tasks"
+      executor: "local"
+      depends_on:
+        - "task2_parallel_a"
+        - "task2_parallel_b"
+      command: "echo Task 3: All tasks completed successfully!"
+      timeout: "30s"

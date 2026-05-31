@@ -1,0 +1,58 @@
+workflow:
+  name: "Basic Data Processing Pipeline"
+  description: "A simple workflow demonstrating task dependencies and parallel execution"
+  version: "1.0.0"
+  variables:
+    environment: "development"
+    log_level: "info"
+
+  tasks:
+    - name: "setup_environment"
+      description: "Initialize the working environment"
+      executor: "local"
+      command: "echo 'Setting up environment...' && mkdir -p output"
+      timeout: "30s"
+      retry_policy:
+        max_attempts: 3
+        delay: "5s"
+
+    - name: "fetch_data_a"
+      description: "Fetch dataset A from source"
+      executor: "local"
+      depends_on:
+        - "setup_environment"
+      command: "echo 'Fetching data A...' && sleep 2 && echo 'data_a_content' > output/data_a.txt"
+      timeout: "1m"
+      retry_policy:
+        max_attempts: 2
+        delay: "10s"
+
+    - name: "fetch_data_b"
+      description: "Fetch dataset B from source"
+      executor: "local"
+      depends_on:
+        - "setup_environment"
+      command: "echo 'Fetching data B...' && sleep 2 && echo 'data_b_content' > output/data_b.txt"
+      timeout: "1m"
+      retry_policy:
+        max_attempts: 2
+        delay: "10s"
+
+    - name: "process_data"
+      description: "Process fetched data"
+      executor: "local"
+      depends_on:
+        - "fetch_data_a"
+        - "fetch_data_b"
+      command: "echo 'Processing data...' && type output\\data_a.txt output\\data_b.txt > output\\processed.txt"
+      timeout: "2m"
+      retry_policy:
+        max_attempts: 1
+
+    - name: "cleanup"
+      description: "Clean up temporary files"
+      executor: "local"
+      depends_on:
+        - "process_data"
+      command: "echo 'Cleanup complete! Workflow finished successfully.'"
+      timeout: "30s"

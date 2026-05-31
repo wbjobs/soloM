@@ -1,0 +1,54 @@
+workflow:
+  name: "TUI Demo Workflow"
+  description: "Demonstrates the interactive terminal UI with long-running tasks"
+  version: "1.0.0"
+
+  tasks:
+    - name: "initialize"
+      description: "Initialize the workflow"
+      executor: "local"
+      command: "echo Initializing workflow..."
+      timeout: "30s"
+
+    - name: "download_data"
+      description: "Simulate downloading data"
+      executor: "local"
+      depends_on:
+        - "initialize"
+      command: "echo 'Downloading data... (simulated)' && ping -n 4 127.0.0.1 >nul && echo Download complete"
+      timeout: "1m"
+      retry_policy:
+        max_attempts: 2
+        delay: "5s"
+
+    - name: "process_data"
+      description: "Simulate data processing"
+      executor: "local"
+      depends_on:
+        - "download_data"
+      command: "echo 'Processing data... (simulated)' && ping -n 4 127.0.0.1 >nul && echo Processing complete"
+      timeout: "1m"
+
+    - name: "validate_results"
+      description: "Validate processed results"
+      executor: "local"
+      depends_on:
+        - "process_data"
+      command: "echo 'Validating results...' && echo Validation passed"
+      timeout: "30s"
+
+    - name: "generate_report"
+      description: "Generate final report"
+      executor: "local"
+      depends_on:
+        - "validate_results"
+      command: "echo 'Generating report...' && echo Report generated successfully"
+      timeout: "30s"
+
+    - name: "notify_complete"
+      description: "Send completion notification"
+      executor: "local"
+      depends_on:
+        - "generate_report"
+      command: "echo 'Sending notification...' && echo Workflow completed successfully!"
+      timeout: "30s"
