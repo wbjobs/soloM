@@ -1,0 +1,22 @@
+{
+  "name": "vue2-to-vue3-converter",
+  "version": "1.0.0",
+  "description": "Convert Vue2 Options API to Vue3 Composition API with <script setup>",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "vue2-to-vue3": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
+    "@babel/generator": "^7.24.0",
+    "@babel/types": "^7.24.0",
+    "@vue/compiler-sfc": "^3.4.0",
+    "commander": "^12.0.0",
+    "prettier": "^3.2.0"
+  }
+}
