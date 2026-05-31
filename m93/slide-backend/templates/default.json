@@ -1,0 +1,5 @@
+{
+  "name": "默认演示",
+  "description": "基础 Markdown 幻灯片模板",
+  "content": "---\ntitle: \"我的演示\"\nauthor: \"作者\"\ntheme: dark\n---\n\n# 标题幻灯片\n\n### 副标题内容\n\n> 引言或说明文字\n\n---\n\n## 第一部分\n\n- 要点一\n- 要点二\n- 要点三\n\n---\n\n## 代码展示\n\n```python\ndef hello():\n    print(\"Hello, World!\")\n```\n\n---\n\n# 谢谢！"
+}

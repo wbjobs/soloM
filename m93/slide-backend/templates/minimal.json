@@ -1,0 +1,5 @@
+{
+  "name": "极简风格",
+  "description": "简约的白色背景演示模板",
+  "content": "---\ntitle: \"极简演示\"\nauthor: \"\"\ntheme: light\n---\n\n<!-- slide: background=#ffffff color=#333333 -->\n\n# 简约\n\n> 少即是多\n\n---\n\n## 核心观点\n\n1. 第一个要点\n2. 第二个要点\n3. 第三个要点\n\n---\n\n## 数据\n\n关键指标增长了 **150%**\n\n---\n\n# 完"
+}

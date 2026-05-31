@@ -1,0 +1,5 @@
+{
+  "name": "暗夜主题",
+  "description": "深色背景技术演示模板",
+  "content": "---\ntitle: \"技术分享\"\nauthor: \"工程师\"\ntheme: dark\n---\n\n<!-- slide: background=#0a0a1a color=#00ff88 -->\n\n# 🚀 技术分享\n\n### 深入探索核心技术\n\n---\n\n## 架构设计\n\n```\n┌─────────┐    ┌─────────┐    ┌─────────┐\n│  Client  │───▶│  Server  │───▶│   DB    │\n└─────────┘    └─────────┘    └─────────┘\n```\n\n---\n\n<!-- slide: background=#0a0a1a color=#ff6b6b -->\n\n## 性能对比\n\n| 指标 | 优化前 | 优化后 |\n|------|--------|--------|\n| QPS  | 1000   | 5000   |\n| 延迟 | 50ms   | 10ms   |\n\n---\n\n# Q & A 💡"
+}

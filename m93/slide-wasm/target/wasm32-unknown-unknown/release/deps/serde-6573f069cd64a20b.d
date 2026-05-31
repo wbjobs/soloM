@@ -1,0 +1,14 @@
+E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\deps\serde-6573f069cd64a20b.d: C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\lib.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\integer128.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\mod.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\de.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\ser.rs E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\build\serde-0be877be5f84d295\out/private.rs
+
+E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\deps\libserde-6573f069cd64a20b.rlib: C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\lib.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\integer128.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\mod.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\de.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\ser.rs E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\build\serde-0be877be5f84d295\out/private.rs
+
+E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\deps\libserde-6573f069cd64a20b.rmeta: C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\lib.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\integer128.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\mod.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\de.rs C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\ser.rs E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\build\serde-0be877be5f84d295\out/private.rs
+
+C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\lib.rs:
+C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\integer128.rs:
+C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\mod.rs:
+C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\de.rs:
+C:\Users\Lenovo\.cargo\registry\src\mirrors.ustc.edu.cn-38d0e5eb5da2abae\serde-1.0.228\src\private\ser.rs:
+E:\soloM\m93\slide-wasm\target\wasm32-unknown-unknown\release\build\serde-0be877be5f84d295\out/private.rs:
+
+# env-dep:OUT_DIR=E:\\soloM\\m93\\slide-wasm\\target\\wasm32-unknown-unknown\\release\\build\\serde-0be877be5f84d295\\out
