@@ -1,0 +1,12 @@
+node_modules/
+frontend/dist/
+frontend/pkg/
+target/
+*.log
+.env
+.env.local
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store

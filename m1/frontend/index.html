@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DICOM 医学影像查看器</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>DICOM 医学影像查看器</h1>
+      <p>Rust/Wasm + WebGL 3D + Go 后端</p>
+      <div class="view-toggle">
+        <button id="btn2D" class="toggle-btn active">2D 切片</button>
+        <button id="btn3D" class="toggle-btn">3D 容积渲染</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>文件上传</h2>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="fileInput" accept=".dcm" multiple hidden />
+            <p>拖拽 DICOM 文件到此处或点击选择</p>
+            <p class="upload-hint">支持多文件上传用于 3D 重建</p>
+          </div>
+          <div id="fileList" class="file-list"></div>
+        </div>
+
+        <div class="panel" id="controlsPanel" style="display: none;">
+          <h2>窗宽窗位调节</h2>
+          <div class="control-group">
+            <label>窗位 (Window Center): <span id="wcValue">0</span></label>
+            <input type="range" id="wcSlider" min="-1000" max="3000" step="1" value="0" />
+            <div class="input-row">
+              <input type="number" id="wcInput" value="0" />
+              <button id="wcPreset">预设</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>窗宽 (Window Width): <span id="wwValue">255</span></label>
+            <input type="range" id="wwSlider" min="1" max="4000" step="1" value="255" />
+            <div class="input-row">
+              <input type="number" id="wwInput" value="255" />
+              <button id="wwPreset">预设</button>
+            </div>
+          </div>
+          <div class="preset-buttons">
+            <button data-preset="lung">肺部</button>
+            <button data-preset="mediastinum">纵隔</button>
+            <button data-preset="bone">骨骼</button>
+            <button data-preset="brain">脑部</button>
+            <button data-preset="abdomen">腹部</button>
+            <button data-preset="reset">重置</button>
+          </div>
+        </div>
+
+        <div class="panel" id="volumePanel" style="display: none;">
+          <h2>3D 容积渲染</h2>
+          <button id="buildVolumeBtn" class="primary full-width">构建 3D 体积</button>
+          <div id="volumeStatus" class="status" style="margin-top: 0.5rem;"></div>
+
+          <div id="volumeControls" style="display: none;">
+            <div class="control-group">
+              <label>渲染模式</label>
+              <select id="renderMode">
+                <option value="0">标准容积渲染</option>
+                <option value="1">窗宽窗位模式</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label>传输函数预设</label>
+              <select id="tfPreset">
+                <option value="default">默认</option>
+                <option value="bone">骨骼</option>
+                <option value="soft">软组织</option>
+                <option value="mip">MIP 最大密度投影</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label>步长 (质量): <span id="stepValue">0.008</span></label>
+              <input type="range" id="stepSlider" min="0.002" max="0.02" step="0.001" value="0.008" />
+            </div>
+            <div class="control-group">
+              <label>不透明度: <span id="opacityValue">1.0</span></label>
+              <input type="range" id="opacitySlider" min="0.1" max="3.0" step="0.1" value="1.0" />
+            </div>
+            <div class="control-group">
+              <label>阈值: <span id="thresholdValue">0.02</span></label>
+              <input type="range" id="thresholdSlider" min="0.0" max="0.5" step="0.01" value="0.02" />
+            </div>
+            <div class="control-group">
+              <label>环境光: <span id="ambientValue">0.3</span></label>
+              <input type="range" id="ambientSlider" min="0.0" max="1.0" step="0.05" value="0.3" />
+            </div>
+            <div class="control-group">
+              <label>漫反射: <span id="diffuseValue">0.6</span></label>
+              <input type="range" id="diffuseSlider" min="0.0" max="1.0" step="0.05" value="0.6" />
+            </div>
+            <div class="control-group">
+              <label>镜面反射: <span id="specularValue">0.2</span></label>
+              <input type="range" id="specularSlider" min="0.0" max="1.0" step="0.05" value="0.2" />
+            </div>
+            <div class="control-group">
+              <label>窗位 (3D): <span id="volWCValue">128</span></label>
+              <input type="range" id="volWCSlider" min="0" max="255" step="1" value="128" />
+            </div>
+            <div class="control-group">
+              <label>窗宽 (3D): <span id="volWWValue">256</span></label>
+              <input type="range" id="volWWSlider" min="1" max="512" step="1" value="256" />
+            </div>
+            <button id="resetViewBtn">重置视角</button>
+          </div>
+        </div>
+
+        <div class="panel" id="infoPanel" style="display: none;">
+          <h2>影像信息</h2>
+          <div id="metadata" class="metadata"></div>
+        </div>
+
+        <div class="panel" id="actionsPanel" style="display: none;">
+          <h2>操作</h2>
+          <div class="action-buttons">
+            <button id="uploadBtn" class="primary">上传到服务器</button>
+            <button id="downloadBtn">下载 PNG</button>
+          </div>
+          <div id="uploadStatus" class="status"></div>
+        </div>
+      </aside>
+
+      <section class="viewer">
+        <div class="canvas-container" id="viewer2D">
+          <canvas id="dicomCanvas"></canvas>
+          <div id="loadingOverlay" class="overlay hidden">
+            <div class="spinner"></div>
+            <p>加载中...</p>
+          </div>
+          <div id="dropHint" class="overlay hint">
+            <p>拖拽 DICOM 文件到此处查看</p>
+            <p class="hint-sub">多文件可进行 3D 容积重建</p>
+          </div>
+        </div>
+        <div class="canvas-container" id="viewer3D" style="display: none;">
+          <canvas id="volumeCanvas"></canvas>
+          <div id="volumeOverlay" class="overlay hint">
+            <p>请加载多个 DICOM 切片后构建 3D 体积</p>
+          </div>
+        </div>
+        <div class="viewer-footer">
+          <span id="viewModeInfo">模式: 2D 切片</span>
+          <span id="mouseInfo">位置: (0, 0)</span>
+          <span id="cacheInfo"></span>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
