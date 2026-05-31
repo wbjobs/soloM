@@ -1,0 +1,31 @@
+{
+  "servers": [
+    {
+      "name": "web-server-01",
+      "host": "192.168.1.101",
+      "port": 22,
+      "user": "admin",
+      "password": "your_password_here",
+      "key_file": "",
+      "key_password": ""
+    },
+    {
+      "name": "database-server",
+      "host": "192.168.1.102",
+      "port": 22,
+      "user": "root",
+      "password": "",
+      "key_file": "/path/to/your/private_key.pem",
+      "key_password": "key_passphrase_if_needed"
+    },
+    {
+      "name": "cache-server",
+      "host": "10.0.0.50",
+      "port": 2222,
+      "user": "monitor",
+      "password": "secret",
+      "key_file": "",
+      "key_password": ""
+    }
+  ]
+}
