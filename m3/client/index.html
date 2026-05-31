@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>协同画布 - Collaborative Canvas</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1>协同画布</h1>
+      <div class="user-info">
+        <span id="connectionStatus" class="status disconnected">未连接</span>
+        <span id="versionInfo">版本: 0</span>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <div class="toolbar-section">
+          <h3>绘图工具</h3>
+          <div class="tool-buttons">
+            <button class="tool-btn active" data-tool="rectangle" title="矩形">
+              <span class="tool-icon">▢</span>
+            </button>
+            <button class="tool-btn" data-tool="circle" title="圆形">
+              <span class="tool-icon">○</span>
+            </button>
+            <button class="tool-btn" data-tool="bezier" title="贝塞尔曲线">
+              <span class="tool-icon">⌒</span>
+            </button>
+            <button class="tool-btn" data-tool="select" title="选择">
+              <span class="tool-icon">🖱</span>
+            </button>
+            <button class="tool-btn" data-tool="eraser" title="橡皮擦">
+              <span class="tool-icon">🗑</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-section">
+          <h3>颜色设置</h3>
+          <div class="color-settings">
+            <label>
+              <span>边框颜色</span>
+              <input type="color" id="strokeColor" value="#000000">
+            </label>
+            <label>
+              <span>填充颜色</span>
+              <input type="color" id="fillColor" value="#ffffff">
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="transparentFill" checked>
+              <span>透明填充</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="toolbar-section">
+          <h3>线条宽度</h3>
+          <div class="line-width-setting">
+            <input type="range" id="lineWidth" min="1" max="20" value="2">
+            <span id="lineWidthValue">2px</span>
+          </div>
+        </div>
+
+        <div class="toolbar-section">
+          <h3>画布设置</h3>
+          <div class="canvas-settings">
+            <label>
+              <span>画布ID</span>
+              <input type="text" id="canvasId" value="default-canvas">
+            </label>
+            <label>
+              <span>用户名</span>
+              <input type="text" id="userName" value="用户">
+            </label>
+            <button id="joinBtn" class="action-btn">加入画布</button>
+          </div>
+        </div>
+
+        <div class="toolbar-section">
+          <h3>在线用户</h3>
+          <div id="userList" class="user-list">
+            <p class="empty">暂无用户</p>
+          </div>
+        </div>
+
+        <div class="toolbar-section">
+          <h3>操作说明</h3>
+          <div class="help-text">
+            <p><strong>矩形/圆形:</strong> 点击拖动绘制</p>
+            <p><strong>贝塞尔曲线:</strong> 点击4次完成绘制</p>
+            <p><strong>橡皮擦:</strong> 点击图形删除</p>
+          </div>
+        </div>
+
+        <div class="toolbar-section export-section">
+          <h3>导出</h3>
+          <div class="export-tabs">
+            <button class="export-tab active" data-tab="svg-preview">SVG 预览</button>
+            <button class="export-tab" data-tab="svg-code">SVG 代码</button>
+            <button class="export-tab" data-tab="react-code">React 组件</button>
+          </div>
+          
+          <div class="export-panels">
+            <div class="export-panel active" id="svg-preview-panel">
+              <div class="svg-preview-container">
+                <div id="svgPreview" class="svg-preview-empty">暂无图形</div>
+              </div>
+              <div class="export-actions">
+                <button id="downloadSvgBtn" class="export-btn">下载 SVG</button>
+                <button id="copySvgBtn" class="export-btn">复制代码</button>
+              </div>
+            </div>
+
+            <div class="export-panel" id="svg-code-panel">
+              <div class="code-container">
+                <pre id="svgCode" class="code-block"></pre>
+              </div>
+              <div class="export-actions">
+                <button id="copySvgCodeBtn" class="export-btn">复制代码</button>
+              </div>
+            </div>
+
+            <div class="export-panel" id="react-code-panel">
+              <div class="code-container">
+                <pre id="reactCode" class="code-block"></pre>
+              </div>
+              <div class="export-actions">
+                <button id="copyReactBtn" class="export-btn">复制代码</button>
+                <button id="downloadReactBtn" class="export-btn">下载 .tsx</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="canvas-container">
+        <canvas id="canvas" width="1200" height="800"></canvas>
+        <div id="bezierHint" class="bezier-hint hidden">
+          贝塞尔曲线: 点击第 <span id="bezierStep">1</span>/4 个点
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
