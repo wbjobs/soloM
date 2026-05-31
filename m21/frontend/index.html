@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron 任务调度中心</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏱ Cron 任务调度中心</h1>
+            <p class="subtitle">轻量级分布式任务调度管理</p>
+        </header>
+
+        <section class="add-job-section">
+            <h2>新增任务</h2>
+            <form id="addJobForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jobName">任务名称</label>
+                        <input type="text" id="jobName" placeholder="例: 数据备份" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobCron">Cron 表达式</label>
+                        <input type="text" id="jobCron" placeholder="例: */30 * * * *" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobCommand">执行命令</label>
+                        <input type="text" id="jobCommand" placeholder="例: /usr/bin/backup.sh" required>
+                    </div>
+                    <div class="form-group" style="min-width:120px;flex:0.5;">
+                        <label for="jobTimeout">超时时间（秒）</label>
+                        <input type="number" id="jobTimeout" placeholder="30" min="1" value="30" required>
+                    </div>
+                    <div class="form-group form-group-btn">
+                        <button type="submit" class="btn btn-primary">添加任务</button>
+                    </div>
+                </div>
+                <p class="cron-hint">Cron 格式: 分 时 日 月 周 &nbsp;|&nbsp; 例: <code>*/30 * * * *</code> 每30分钟 &nbsp; <code>0 8 * * *</code> 每天8:00 &nbsp; <code>0 0 1 * *</code> 每月1号</p>
+            </form>
+        </section>
+
+        <section class="jobs-section">
+            <div class="section-header">
+                <h2>任务列表</h2>
+                <button class="btn btn-secondary" id="refreshBtn">刷新</button>
+            </div>
+            <div id="jobList" class="job-list">
+                <p class="empty-state">暂无任务，请添加新任务</p>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

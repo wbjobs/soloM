@@ -1,0 +1,111 @@
+{
+  "jobs": {
+    "8dc8487e": {
+      "id": "8dc8487e",
+      "name": "快速超时任务",
+      "cron_expr": "*/1 * * * *",
+      "command": "/usr/bin/slow_task.sh",
+      "timeout": 2,
+      "paused": false,
+      "created_at": "2026-05-30T08:06:29.684122",
+      "executions": [
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:07:00.825327",
+          "finished_at": "2026-05-30T08:07:02.438483",
+          "duration_s": 1.553
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:08:00.907489",
+          "finished_at": "2026-05-30T08:08:02.925265",
+          "duration_s": 2.018
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:09:00.001140",
+          "finished_at": "2026-05-30T08:09:02.019188",
+          "duration_s": 2.018
+        },
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:10:00.094412",
+          "finished_at": "2026-05-30T08:10:00.853122",
+          "duration_s": 0.714
+        },
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:11:00.203990",
+          "finished_at": "2026-05-30T08:11:00.961605",
+          "duration_s": 0.71
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:12:00.315121",
+          "finished_at": "2026-05-30T08:12:02.330701",
+          "duration_s": 2.016
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:13:00.409158",
+          "finished_at": "2026-05-30T08:13:02.428172",
+          "duration_s": 2.019
+        },
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:14:00.520490",
+          "finished_at": "2026-05-30T08:14:00.975076",
+          "duration_s": 0.405
+        }
+      ]
+    },
+    "dece0f63": {
+      "id": "dece0f63",
+      "name": "数据备份",
+      "cron_expr": "*/1 * * * *",
+      "command": "/usr/bin/backup.sh",
+      "timeout": 30,
+      "paused": false,
+      "created_at": "2026-05-30T08:08:33.483215",
+      "executions": [
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:09:00.003146",
+          "finished_at": "2026-05-30T08:09:30.046142",
+          "duration_s": 30.043
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:10:00.095007",
+          "finished_at": "2026-05-30T08:10:30.151217",
+          "duration_s": 30.056
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:11:00.205573",
+          "finished_at": "2026-05-30T08:11:30.223290",
+          "duration_s": 30.018
+        },
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:12:00.316126",
+          "finished_at": "2026-05-30T08:12:24.654515",
+          "duration_s": 24.127
+        },
+        {
+          "status": "success",
+          "started_at": "2026-05-30T08:13:00.410696",
+          "finished_at": "2026-05-30T08:13:26.564689",
+          "duration_s": 25.904
+        },
+        {
+          "status": "timeout",
+          "started_at": "2026-05-30T08:14:00.521001",
+          "finished_at": "2026-05-30T08:14:30.544068",
+          "duration_s": 30.023
+        }
+      ]
+    }
+  },
+  "last_seen": "2026-05-30T08:14:28.922895"
+}
